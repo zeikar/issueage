@@ -2,6 +2,7 @@ import svelte from 'rollup-plugin-svelte';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
+import postcss from 'rollup-plugin-postcss';
 import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
@@ -48,6 +49,9 @@ export default {
 			},
 			preprocess: sveltePreprocess(),
 		}),
+		postcss({ extract: true,
+			// Or with custom file name, it will generate file relative to bundle.js in v3
+			extract: 'assets.css'}),
 
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
