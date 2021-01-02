@@ -17,7 +17,7 @@
         <p>
           <span class="icon">
             <i class="fas fa-clock" />
-          </span>{issue.createdAt}
+          </span>{issue.created_at}
         </p>
       </div>
     </nav>

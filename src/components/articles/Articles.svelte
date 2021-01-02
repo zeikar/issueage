@@ -5,9 +5,15 @@
 
   let issueList = [];
 
-  onMount(async () => {
-    const res = await getAllIssues();
-    issueList = res.repository.issues.nodes;
+  onMount(() => {
+    getAllIssues()
+      .then((res) => {
+        console.log(res.data);
+        issueList = res.data;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   });
 </script>
 
