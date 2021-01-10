@@ -8,3 +8,12 @@ export const getAllIssues = async () => {
     console.error(error);
   }
 };
+
+export const getIssue = async (issueNumber: number) => {
+  try {
+    const response = await Api.getIssue(issueNumber);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};
