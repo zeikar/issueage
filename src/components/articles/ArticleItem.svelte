@@ -1,8 +1,19 @@
 <script lang="ts">
+  import { push } from "svelte-spa-router";
   export let issue;
+
+  function onClickArticle() {
+    push(`/articles/${issue.number}`);
+  }
 </script>
 
-<div class="columns is-desktop">
+<style>
+  .article-wrapper {
+    cursor: pointer;
+  }
+</style>
+
+<div class="article-wrapper columns is-desktop" on:click={onClickArticle}>
   <div class="column has-text-centered">
     <img
       class="article-image"

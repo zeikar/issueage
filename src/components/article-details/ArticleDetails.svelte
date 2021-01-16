@@ -2,11 +2,11 @@
   import { onMount } from "svelte";
   import { getIssue } from "../../api";
 
-  export let issueNumber: number;
+  export let params;
   let issue = null;
 
   onMount(() => {
-    getIssue(issueNumber)
+    getIssue(params.issueNumber)
       .then((res) => {
         console.log(res.data);
         issue = res.data;

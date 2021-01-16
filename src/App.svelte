@@ -1,11 +1,11 @@
 <script lang="ts">
+  import Router from "svelte-spa-router";
+  import routes from "./routes";
+
   import Navbar from "./components/common/Navbar.svelte";
-  import Articles from "./components/articles/Articles.svelte";
-  import ArticleDetails from "./components/article-details/ArticleDetails.svelte";
   import Footer from "./components/common/Footer.svelte";
 </script>
 
 <Navbar />
-<Articles />
-<ArticleDetails issueNumber={2} />
-<Footer websiteTitle={"test"} />
+<Router {routes} />
+<Footer websiteTitle={'test'} />
