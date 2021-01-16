@@ -1,0 +1,14 @@
+{
+  "version": 3,
+  "file": "bundle.css",
+  "sources": [
+    "ArticleDetails.svelte",
+    "ArticleItem.svelte"
+  ],
+  "sourcesContent": [
+    "<script lang=\"ts\">import { onMount } from \"svelte\";\nimport { getIssue } from \"../../api\";\nexport let params;\nlet issue = null;\nonMount(() => {\n    getIssue(params.issueNumber)\n        .then((res) => {\n        console.log(res.data);\n        issue = res.data;\n    })\n        .catch((err) => {\n        console.error(err);\n    });\n});\n</script>\n\n<style>\n  .post-background {\n    background-image: url(\"https://images.pexels.com/photos/461077/pexels-photo-461077.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260\");\n  }\n  .blur-background {\n    background: rgba(12, 12, 48, 0.3);\n  }\n  .post img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    margin-top: 4rem;\n    margin-bottom: 4rem;\n    max-width: 50%;\n    background-color: #fff;\n    border-radius: 6px;\n    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);\n    color: #4a4a4a;\n  }\n</style>\n\n{#if issue}\n  <div class=\"container\">\n    <section\n      class=\"hero post-background is-medium has-text-centered has-background\">\n      <div class=\"hero-body blur-background\">\n        <div class=\"container\">\n          <h1 class=\"is-size-1 has-text-white\">{issue.title}</h1>\n          <h2 class=\"subtitle has-text-white\">{issue.updated_at}</h2>\n        </div>\n      </div>\n    </section>\n    <section class=\"section\">\n      <div class=\"content post\">{issue.body}</div>\n    </section>\n    <section class=\"section\" />\n  </div>\n{/if}\n",
+    "<script lang=\"ts\">import { push } from \"svelte-spa-router\";\nexport let issue;\nfunction onClickArticle() {\n    push(`/articles/${issue.number}`);\n}\n</script>\n\n<style>\n  .article-wrapper {\n    cursor: pointer;\n  }\n</style>\n\n<div class=\"article-wrapper columns is-desktop\" on:click={onClickArticle}>\n  <div class=\"column has-text-centered\">\n    <img\n      class=\"article-image\"\n      src=\"https://lunawood.com/wp-content/uploads/2018/02/placeholder-image.png\"\n      alt=\"article thumbnail\" />\n  </div>\n  <div class=\"column is-four-fifths\">\n    <nav class=\"level\">\n      <div class=\"content\">\n        <h2>{issue.title}</h2>\n        <p class=\"article-content\">{issue.body}</p>\n        <p>\n          <span class=\"icon\">\n            <i class=\"fas fa-clock\" />\n          </span>{issue.created_at}\n        </p>\n      </div>\n    </nav>\n  </div>\n</div>\n"
+  ],
+  "names": [],
+  "mappings": "AAiBE,gBAAgB,eAAC,CAAC,AAChB,gBAAgB,CAAE,IAAI,+GAA+G,CAAC,AACxI,CAAC,AACD,gBAAgB,eAAC,CAAC,AAChB,UAAU,CAAE,KAAK,EAAE,CAAC,CAAC,EAAE,CAAC,CAAC,EAAE,CAAC,CAAC,GAAG,CAAC,AACnC,CAAC;ACdD,gBAAgB,cAAC,CAAC,AAChB,MAAM,CAAE,OAAO,AACjB,CAAC"
+}
