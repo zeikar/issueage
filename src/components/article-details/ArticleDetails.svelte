@@ -10,12 +10,32 @@
       .then((res) => {
         console.log(res.data);
         issue = res.data;
+        return;
       })
       .catch((err) => {
         console.error(err);
       });
   });
 </script>
+
+{#if issue}
+  <div class="container">
+    <section
+      class="hero post-background is-medium has-text-centered has-background"
+    >
+      <div class="hero-body blur-background">
+        <div class="container">
+          <h1 class="is-size-1 has-text-white">{issue.title}</h1>
+          <h2 class="subtitle has-text-white">{issue.updated_at}</h2>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="content post">{issue.body}</div>
+    </section>
+    <section class="section" />
+  </div>
+{/if}
 
 <style>
   .post-background {
@@ -37,21 +57,3 @@
     color: #4a4a4a;
   }
 </style>
-
-{#if issue}
-  <div class="container">
-    <section
-      class="hero post-background is-medium has-text-centered has-background">
-      <div class="hero-body blur-background">
-        <div class="container">
-          <h1 class="is-size-1 has-text-white">{issue.title}</h1>
-          <h2 class="subtitle has-text-white">{issue.updated_at}</h2>
-        </div>
-      </div>
-    </section>
-    <section class="section">
-      <div class="content post">{issue.body}</div>
-    </section>
-    <section class="section" />
-  </div>
-{/if}

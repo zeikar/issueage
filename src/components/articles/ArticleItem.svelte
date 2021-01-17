@@ -7,18 +7,13 @@
   }
 </script>
 
-<style>
-  .article-wrapper {
-    cursor: pointer;
-  }
-</style>
-
 <div class="article-wrapper columns is-desktop" on:click={onClickArticle}>
   <div class="column has-text-centered">
     <img
       class="article-image"
       src="https://lunawood.com/wp-content/uploads/2018/02/placeholder-image.png"
-      alt="article thumbnail" />
+      alt="article thumbnail"
+    />
   </div>
   <div class="column is-four-fifths">
     <nav class="level">
@@ -34,3 +29,9 @@
     </nav>
   </div>
 </div>
+
+<style>
+  .article-wrapper {
+    cursor: pointer;
+  }
+</style>

@@ -1,6 +1,6 @@
 import Api from "./request";
 
-export const getAllIssues = async () => {
+export const getAllIssues = async (): Promise<any> => {
   try {
     const response = await Api.getAllIssues();
     return response;
@@ -9,7 +9,7 @@ export const getAllIssues = async () => {
   }
 };
 
-export const getIssue = async (issueNumber: number) => {
+export const getIssue = async (issueNumber: number): Promise<any> => {
   try {
     const response = await Api.getIssue(issueNumber);
     return response;

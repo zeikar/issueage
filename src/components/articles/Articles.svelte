@@ -10,6 +10,7 @@
       .then((res) => {
         console.log(res.data);
         issueList = res.data;
+        return;
       })
       .catch((err) => {
         console.error(err);
