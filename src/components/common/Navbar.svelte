@@ -15,7 +15,8 @@
             <input
               class="input is-rounded"
               type="search"
-              placeholder="search" />
+              placeholder="search"
+            />
           </div>
           <div class="control">
             <button class="button is-rounded">

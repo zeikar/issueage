@@ -8,4 +8,4 @@
 
 <Navbar />
 <Router {routes} />
-<Footer websiteTitle={'test'} />
+<Footer websiteTitle={"test"} />

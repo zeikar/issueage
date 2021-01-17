@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let websiteTitle: string;
+  export let websiteTitle;
 </script>
 
 <footer class="footer">
