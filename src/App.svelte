@@ -4,8 +4,11 @@
 
   import Navbar from "./components/common/Navbar.svelte";
   import Footer from "./components/common/Footer.svelte";
+
+  // global config (config.json)
+  export let Config;
 </script>
 
-<Navbar />
+<Navbar websiteTitle={Config.websiteTitle} />
 <Router {routes} />
-<Footer websiteTitle={"test"} />
+<Footer websiteTitle={Config.websiteTitle} />

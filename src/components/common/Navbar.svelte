@@ -1,6 +1,10 @@
+<script lang="ts">
+  export let websiteTitle;
+</script>
+
 <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <a href="/" class="navbar-item"> name here </a>
+    <a href="/" class="navbar-item">{websiteTitle}</a>
   </div>
 
   <div class="navbar-menu">
