@@ -1,6 +1,8 @@
 <script lang="ts">
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
   import { push } from "svelte-spa-router";
+  import { getHTMLWithoutTags } from "../../lib/marked";
+
   export let issue = null;
 
   function onClickArticle() {
@@ -33,14 +35,6 @@
         {/if}
       </h2>
 
-      <p class="article-content">
-        {#if issue}
-          {issue.body}
-        {:else}
-          <SkeletonLoader />
-        {/if}
-      </p>
-
       <p>
         {#if issue}
           <span class="icon">
@@ -48,6 +42,14 @@
           </span>{issue.created_at}
         {:else}
           <SkeletonLoader width={30} />
+        {/if}
+      </p>
+
+      <p class="article-content">
+        {#if issue}
+          {@html getHTMLWithoutTags(issue.body.substring(0, 100))}
+        {:else}
+          <SkeletonLoader />
         {/if}
       </p>
     </div>
