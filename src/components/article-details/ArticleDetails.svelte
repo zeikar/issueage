@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { getIssue } from "../../api";
+  import { getHTML } from "../../lib/marked";
 
   export let params;
   let issue = null;
@@ -31,7 +32,7 @@
       </div>
     </section>
     <section class="section">
-      <div class="content post">{issue.body}</div>
+      <div class="content post">{@html getHTML(issue.body)}</div>
     </section>
     <section class="section" />
   </div>

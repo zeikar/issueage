@@ -3,7 +3,7 @@
   import { getAllIssues } from "../../api";
   import ArticleItem from "./ArticleItem.svelte";
 
-  let issueList = [];
+  let issueList = null;
 
   onMount(() => {
     getAllIssues()
@@ -20,8 +20,14 @@
 
 <section class="section">
   <div class="container">
-    {#each issueList as issue}
-      <ArticleItem {issue} />
-    {/each}
+    {#if issueList}
+      {#each issueList as issue}
+        <ArticleItem {issue} />
+      {/each}
+    {:else}
+      {#each Array(5) as _}
+        <ArticleItem />
+      {/each}
+    {/if}
   </div>
 </section>
