@@ -11,6 +11,35 @@
 </script>
 
 <div class="article-wrapper columns is-desktop" on:click={onClickArticle}>
+  <div class="column is-four-fifths">
+    <div class="content">
+      <h2>
+        {#if issue}
+          {issue.title}
+        {:else}
+          <SkeletonLoader width={50} />
+        {/if}
+      </h2>
+
+      <p class="article-content">
+        {#if issue}
+          {@html getHTMLWithoutTags(issue.body.substring(0, 100))}
+        {:else}
+          <SkeletonLoader />
+        {/if}
+      </p>
+
+      <p>
+        {#if issue}
+          <span class="icon">
+            <i class="fas fa-clock" />
+          </span>{issue.created_at}
+        {:else}
+          <SkeletonLoader width={30} />
+        {/if}
+      </p>
+    </div>
+  </div>
   <div class="column has-text-centered">
     <figure class="image is-128x128">
       {#if issue}
@@ -23,36 +52,6 @@
         <SkeletonLoader />
       {/if}
     </figure>
-  </div>
-
-  <div class="column is-four-fifths">
-    <div class="content">
-      <h2>
-        {#if issue}
-          {issue.title}
-        {:else}
-          <SkeletonLoader width={50} />
-        {/if}
-      </h2>
-
-      <p>
-        {#if issue}
-          <span class="icon">
-            <i class="fas fa-clock" />
-          </span>{issue.created_at}
-        {:else}
-          <SkeletonLoader width={30} />
-        {/if}
-      </p>
-
-      <p class="article-content">
-        {#if issue}
-          {@html getHTMLWithoutTags(issue.body.substring(0, 100))}
-        {:else}
-          <SkeletonLoader />
-        {/if}
-      </p>
-    </div>
   </div>
 </div>
 

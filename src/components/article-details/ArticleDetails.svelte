@@ -20,31 +20,21 @@
 </script>
 
 {#if issue}
-  <div class="container">
-    <section
-      class="hero post-background is-medium has-text-centered has-background"
-    >
-      <div class="hero-body blur-background">
-        <div class="container">
-          <h1 class="is-size-1 has-text-white">{issue.title}</h1>
-          <h2 class="subtitle has-text-white">{issue.updated_at}</h2>
-        </div>
-      </div>
-    </section>
-    <section class="section">
-      <div class="content post">{@html getHTML(issue.body)}</div>
-    </section>
-    <section class="section" />
-  </div>
+  <section class="hero has-text-centered">
+    <div class="hero-body">
+      <h1 class="title">{issue.title}</h1>
+      <p class="subtitle">{issue.updated_at}</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="content">{@html getHTML(issue.body)}</div>
+    </div>
+  </section>
+  <section class="section" />
 {/if}
 
 <style>
-  .post-background {
-    background-image: url("https://images.pexels.com/photos/461077/pexels-photo-461077.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
-  }
-  .blur-background {
-    background: rgba(12, 12, 48, 0.3);
-  }
   /*.post img {
     display: block;
     margin-left: auto;
