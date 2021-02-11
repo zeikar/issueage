@@ -6,7 +6,7 @@
   export let issue = null;
 </script>
 
-<div class="article-wrapper columns is-desktop">
+<div class="columns is-desktop">
   <div class="column is-four-fifths">
     <div class="content">
       {#if issue}
@@ -50,9 +50,3 @@
     </figure>
   </div>
 </div>
-
-<style>
-  .article-wrapper {
-    cursor: pointer;
-  }
-</style>
