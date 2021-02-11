@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { getIssue } from "../../api";
   import { getHTML } from "../../lib/marked";
+  import SkeletonLoader from "../common/SkeletonLoader.svelte";
 
   export let params;
   let issue = null;
@@ -19,20 +20,42 @@
   });
 </script>
 
-{#if issue}
-  <section class="hero has-text-centered">
-    <div class="hero-body">
-      <h1 class="title">{issue.title}</h1>
-      <p class="subtitle">{issue.updated_at}</p>
-    </div>
-  </section>
-  <section class="section">
+<section class="hero has-text-centered">
+  <div class="hero-body">
     <div class="container">
-      <div class="content">{@html getHTML(issue.body)}</div>
+      <h1 class="title">
+        {#if issue}
+          {issue.title}
+        {:else}
+          <SkeletonLoader width={50} alignCenter />
+        {/if}
+      </h1>
+      <p class="subtitle">
+        {#if issue}
+          {issue.updated_at}
+        {:else}
+          <SkeletonLoader width={30} alignCenter />
+        {/if}
+      </p>
     </div>
-  </section>
-  <section class="section" />
-{/if}
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="content">
+      {#if issue}
+        {@html getHTML(issue.body)}
+      {:else}
+        {#each Array(10) as _}
+          <p>
+            <SkeletonLoader />
+          </p>
+        {/each}
+      {/if}
+    </div>
+  </div>
+</section>
+<section class="section" />
 
 <style>
   /*.post img {

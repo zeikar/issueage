@@ -1,8 +1,14 @@
 <script lang="ts">
   export let width = 100;
+  export let alignCenter = false;
+
+  let style = `width: ${width}%;`;
+  if (alignCenter) {
+    style += "margin: auto;";
+  }
 </script>
 
-<div class="placeholder-item" style="width: {width}%" />
+<div class="placeholder-item" {style} />
 
 <style>
   .placeholder-item {
