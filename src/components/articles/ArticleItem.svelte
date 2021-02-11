@@ -1,25 +1,21 @@
 <script lang="ts">
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
-  import { push } from "svelte-spa-router";
+  import { link } from "svelte-spa-router";
   import { getHTMLWithoutTags } from "../../lib/marked";
 
   export let issue = null;
-
-  function onClickArticle() {
-    push(`/articles/${issue.number}`);
-  }
 </script>
 
-<div class="article-wrapper columns is-desktop" on:click={onClickArticle}>
+<div class="article-wrapper columns is-desktop">
   <div class="column is-four-fifths">
     <div class="content">
-      <h2>
-        {#if issue}
-          {issue.title}
-        {:else}
-          <SkeletonLoader width={50} />
-        {/if}
-      </h2>
+      {#if issue}
+        <a href={`/articles/${issue.number}`} use:link>
+          <h2>{issue.title}</h2>
+        </a>
+      {:else}
+        <h2><SkeletonLoader width={50} /></h2>
+      {/if}
 
       <p class="article-content">
         {#if issue}

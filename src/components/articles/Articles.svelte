@@ -1,28 +1,12 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { getAllIssues } from "../../api";
-  import ArticleItem from "./ArticleItem.svelte";
+  import ArticleList from "./ArticleList.svelte";
+  import Profile from "./Profile.svelte";
   import TagsMenu from "./TagsMenu.svelte";
-
-  let issueList = null;
-
-  onMount(() => {
-    getAllIssues()
-      .then((res) => {
-        console.log(res.data);
-        issueList = res.data;
-        return;
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  });
 </script>
 
 <section class="hero is-medium has-text-centered">
   <div class="hero-body">
-    <p class="title">Profile name</p>
-    <p class="subtitle">Profile description</p>
+    <Profile />
   </div>
 </section>
 <section class="section">
@@ -33,15 +17,7 @@
       </div>
 
       <div class="column">
-        {#if issueList}
-          {#each issueList as issue}
-            <ArticleItem {issue} />
-          {/each}
-        {:else}
-          {#each Array(5) as _}
-            <ArticleItem />
-          {/each}
-        {/if}
+        <ArticleList />
       </div>
     </div>
   </div>
