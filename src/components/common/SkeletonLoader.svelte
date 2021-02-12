@@ -1,14 +1,15 @@
 <script lang="ts">
   export let width = 100;
   export let alignCenter = false;
-
-  let style = `width: ${width}%;`;
-  if (alignCenter) {
-    style += "margin: auto;";
-  }
+  export let rounded = false;
 </script>
 
-<div class="placeholder-item" {style} />
+<div
+  class:is-centered={alignCenter}
+  class:is-rounded={rounded}
+  class="placeholder-item"
+  style="width: {width}%"
+/>
 
 <style>
   .placeholder-item {
@@ -44,5 +45,13 @@
     to {
       left: 100%;
     }
+  }
+
+  .is-rounded {
+    border-radius: 290486px;
+  }
+
+  .is-centered {
+    margin: auto;
   }
 </style>

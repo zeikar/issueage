@@ -27,9 +27,16 @@ const getAllLabels = (): Promise<any> => {
   });
 };
 
+const getGithubProfile = (): Promise<any> => {
+  return octokit.users.getByUsername({
+    username: Config.repoOwner,
+  });
+};
+
 const API = {
   getAllIssues,
   getIssue,
   getAllLabels,
+  getGithubProfile,
 };
 export default API;
