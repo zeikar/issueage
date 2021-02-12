@@ -4,7 +4,7 @@
 
 <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <a href="." class="navbar-item">{websiteTitle}</a>
+    <a href="." class="navbar-item"><h1 class="title">{websiteTitle}</h1></a>
   </div>
 
   <div class="navbar-menu">
