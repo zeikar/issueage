@@ -17,3 +17,21 @@ export const getIssue = async (issueNumber: number): Promise<any> => {
     console.error(error);
   }
 };
+
+export const getAllLabels = async (): Promise<any> => {
+  try {
+    const response = await Api.getAllLabels();
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getGithubProfile = async (): Promise<any> => {
+  try {
+    const response = await Api.getGithubProfile();
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};

@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { getIssue } from "../../api";
   import { getHTML } from "../../lib/marked";
+  import SkeletonLoader from "../common/SkeletonLoader.svelte";
 
   export let params;
   let issue = null;
@@ -19,32 +20,44 @@
   });
 </script>
 
-{#if issue}
-  <div class="container">
-    <section
-      class="hero post-background is-medium has-text-centered has-background"
-    >
-      <div class="hero-body blur-background">
-        <div class="container">
-          <h1 class="is-size-1 has-text-white">{issue.title}</h1>
-          <h2 class="subtitle has-text-white">{issue.updated_at}</h2>
-        </div>
-      </div>
-    </section>
-    <section class="section">
-      <div class="content post">{@html getHTML(issue.body)}</div>
-    </section>
-    <section class="section" />
+<section class="hero has-text-centered">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        {#if issue}
+          {issue.title}
+        {:else}
+          <SkeletonLoader width={50} alignCenter />
+        {/if}
+      </h1>
+      <p class="subtitle">
+        {#if issue}
+          {issue.updated_at}
+        {:else}
+          <SkeletonLoader width={30} alignCenter />
+        {/if}
+      </p>
+    </div>
   </div>
-{/if}
+</section>
+<section class="section">
+  <div class="container">
+    <div class="content">
+      {#if issue}
+        {@html getHTML(issue.body)}
+      {:else}
+        {#each Array(10) as _}
+          <p>
+            <SkeletonLoader />
+          </p>
+        {/each}
+      {/if}
+    </div>
+  </div>
+</section>
+<section class="section" />
 
 <style>
-  .post-background {
-    background-image: url("https://images.pexels.com/photos/461077/pexels-photo-461077.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
-  }
-  .blur-background {
-    background: rgba(12, 12, 48, 0.3);
-  }
   /*.post img {
     display: block;
     margin-left: auto;

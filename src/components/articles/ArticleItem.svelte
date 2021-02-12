@@ -1,16 +1,41 @@
 <script lang="ts">
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
-  import { push } from "svelte-spa-router";
+  import { link } from "svelte-spa-router";
   import { getHTMLWithoutTags } from "../../lib/marked";
 
   export let issue = null;
-
-  function onClickArticle() {
-    push(`/articles/${issue.number}`);
-  }
 </script>
 
-<div class="article-wrapper columns is-desktop" on:click={onClickArticle}>
+<div class="columns is-desktop">
+  <div class="column is-four-fifths">
+    <div class="content">
+      {#if issue}
+        <a href={`/articles/${issue.number}`} use:link>
+          <h2>{issue.title}</h2>
+        </a>
+      {:else}
+        <h2><SkeletonLoader width={50} /></h2>
+      {/if}
+
+      <p class="article-content">
+        {#if issue}
+          {@html getHTMLWithoutTags(issue.body.substring(0, 100))}
+        {:else}
+          <SkeletonLoader />
+        {/if}
+      </p>
+
+      <p>
+        {#if issue}
+          <span class="icon">
+            <i class="fas fa-clock" />
+          </span>{issue.created_at}
+        {:else}
+          <SkeletonLoader width={30} />
+        {/if}
+      </p>
+    </div>
+  </div>
   <div class="column has-text-centered">
     <figure class="image is-128x128">
       {#if issue}
@@ -24,40 +49,4 @@
       {/if}
     </figure>
   </div>
-
-  <div class="column is-four-fifths">
-    <div class="content">
-      <h2>
-        {#if issue}
-          {issue.title}
-        {:else}
-          <SkeletonLoader width={50} />
-        {/if}
-      </h2>
-
-      <p>
-        {#if issue}
-          <span class="icon">
-            <i class="fas fa-clock" />
-          </span>{issue.created_at}
-        {:else}
-          <SkeletonLoader width={30} />
-        {/if}
-      </p>
-
-      <p class="article-content">
-        {#if issue}
-          {@html getHTMLWithoutTags(issue.body.substring(0, 100))}
-        {:else}
-          <SkeletonLoader />
-        {/if}
-      </p>
-    </div>
-  </div>
 </div>
-
-<style>
-  .article-wrapper {
-    cursor: pointer;
-  }
-</style>

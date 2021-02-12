@@ -20,8 +20,23 @@ const getIssue = (issueNumber: number): Promise<any> => {
   });
 };
 
+const getAllLabels = (): Promise<any> => {
+  return octokit.issues.listLabelsForRepo({
+    owner: Config.repoOwner,
+    repo: Config.repoName,
+  });
+};
+
+const getGithubProfile = (): Promise<any> => {
+  return octokit.users.getByUsername({
+    username: Config.repoOwner,
+  });
+};
+
 const API = {
   getAllIssues,
   getIssue,
+  getAllLabels,
+  getGithubProfile,
 };
 export default API;
