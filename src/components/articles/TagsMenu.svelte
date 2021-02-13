@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { getAllLabels } from "../../api";
-  import TagItem from "./TagItem.svelte";
+  import TagMenuItem from "./TagMenuItem.svelte";
 
   export let labels = null;
 
@@ -23,11 +23,11 @@
   <ul class="menu-list">
     {#if labels}
       {#each labels as label}
-        <TagItem {label} />
+        <TagMenuItem {label} />
       {/each}
     {:else}
       {#each Array(5) as _}
-        <TagItem />
+        <TagMenuItem />
       {/each}
     {/if}
   </ul>
