@@ -50,8 +50,4 @@
   .is-rounded {
     border-radius: 290486px;
   }
-
-  .is-centered {
-    margin: auto;
-  }
 </style>

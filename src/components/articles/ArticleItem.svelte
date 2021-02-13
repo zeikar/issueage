@@ -2,6 +2,8 @@
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
   import { link } from "svelte-spa-router";
   import { getHTMLWithoutTags } from "../../lib/marked";
+  import { convertLabelsToTags } from "../../lib/tags";
+  import TagList from "../tags/TagList.svelte";
 
   export let issue = null;
 </script>
@@ -51,4 +53,10 @@
       </figure>
     </div>
   </div>
+
+  {#if issue}
+    <TagList tags={convertLabelsToTags(issue.labels)} />
+  {:else}
+    <SkeletonLoader />
+  {/if}
 </div>
