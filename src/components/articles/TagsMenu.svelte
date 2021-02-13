@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { getAllLabels } from "../../api";
-  import TagMenuItem from "./TagMenuItem.svelte";
+  import TagsMenuItem from "./TagsMenuItem.svelte";
 
   export let labels = null;
 
@@ -18,17 +18,23 @@
   });
 </script>
 
-<aside class="menu">
-  <p class="menu-label">Tags</p>
-  <ul class="menu-list">
-    {#if labels}
-      {#each labels as label}
-        <TagMenuItem {label} />
-      {/each}
-    {:else}
-      {#each Array(5) as _}
-        <TagMenuItem />
-      {/each}
-    {/if}
-  </ul>
-</aside>
+<article class="panel">
+  <p class="panel-heading">Tags</p>
+  <div class="panel-block">
+    <p class="control has-icons-left">
+      <input class="input" type="text" placeholder="Search tags" />
+      <span class="icon is-left">
+        <i class="fas fa-search" aria-hidden="true" />
+      </span>
+    </p>
+  </div>
+  {#if labels}
+    {#each labels as label}
+      <TagsMenuItem {label} />
+    {/each}
+  {:else}
+    {#each Array(5) as _}
+      <TagsMenuItem />
+    {/each}
+  {/if}
+</article>
