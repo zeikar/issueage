@@ -1,12 +1,18 @@
 <script lang="ts">
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
   import { link } from "svelte-spa-router";
+  import { getTagLink } from "../../lib/tags";
 
   export let label = null;
+  export let selected = false;
 </script>
 
 {#if label}
-  <a class="panel-block" href={`/tags/${label.name}`} use:link>
+  <a
+    class="panel-block"
+    class:is-active={selected}
+    href={getTagLink(label.name)}
+    use:link>
     <span class="panel-icon">
       <i class="fas fa-tag" aria-hidden="true" />
     </span>
