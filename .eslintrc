@@ -25,7 +25,7 @@
   ],
   "rules": {
     "eqeqeq": "error",
-    // indent: ["error", 2],
+    "indent": ["error", 2],
     "quotes": ["error", "double"],
     "semi": ["error", "always"],
     "no-var": ["error"],

@@ -1,8 +1,8 @@
 <script lang="ts">
   import TagItem from "./TagItem.svelte";
 
-  export let alignCenter: boolean = false;
-  export let tags: string[] = [];
+  export let alignCenter = false;
+  export let tags = [];
 </script>
 
 <div class="tags" class:is-centered={alignCenter}>

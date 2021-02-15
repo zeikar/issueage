@@ -3,7 +3,7 @@ import Config from "../../config.json";
 
 const octokit = new Octokit();
 
-const getAllIssues = (labels): Promise<any> => {
+const getAllIssues = (labels: string): Promise<any> => {
   // https://octokit.github.io/rest.js/v18#issues-list-for-repo
   return octokit.issues.listForRepo({
     owner: Config.repoOwner,

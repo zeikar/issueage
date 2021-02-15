@@ -4,7 +4,7 @@
   import TagsMenuItem from "./TagsMenuItem.svelte";
 
   export let labels = null;
-  export let selectedTag: string = null;
+  export let selectedTag = null;
 
   onMount(() => {
     getAllLabels()
@@ -31,7 +31,7 @@
   </div>
   {#if labels}
     {#each labels as label}
-      <TagsMenuItem {label} selected={selectedTag == label.name} />
+      <TagsMenuItem {label} selected={selectedTag === label.name} />
     {/each}
   {:else}
     {#each Array(5) as _}

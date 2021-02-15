@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { getAllIssues } from "../../api";
-  import TagList from "../tags/TagList.svelte";
   import ArticleItem from "./ArticleItem.svelte";
   import TagTitle from "./TagTitle.svelte";
 
