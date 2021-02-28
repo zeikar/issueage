@@ -1,8 +1,8 @@
 import Api from "./request";
 
-export const getAllIssues = async (): Promise<any> => {
+export const getAllIssues = async (labels: string[]): Promise<any> => {
   try {
-    const response = await Api.getAllIssues();
+    const response = await Api.getAllIssues(labels.join(","));
     return response;
   } catch (error) {
     console.error(error);

@@ -2,7 +2,9 @@
   import { onMount } from "svelte";
   import { getIssue } from "../../api";
   import { getHTML } from "../../lib/marked";
+  import { convertLabelsToTags } from "../../lib/tags";
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
+  import TagList from "../tags/TagList.svelte";
 
   export let params;
   let issue = null;
@@ -37,6 +39,11 @@
           <SkeletonLoader width={30} alignCenter />
         {/if}
       </p>
+      {#if issue}
+        <TagList tags={convertLabelsToTags(issue.labels)} alignCenter />
+      {:else}
+        <SkeletonLoader width={80} alignCenter />
+      {/if}
     </div>
   </div>
 </section>
