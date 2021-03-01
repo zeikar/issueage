@@ -1,5 +1,6 @@
 <script lang="ts">
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
+  import Config from "../../../config.json";
 
   export let profile = null;
 </script>
@@ -29,3 +30,32 @@
     <SkeletonLoader width={50} alignCenter />
   {/if}
 </p>
+
+<div class="breadcrumb has-bullet-separator is-centered">
+  {#if profile}
+    <ul>
+      <li>
+        <a
+          href={`https://github.com/${Config.repoOwner}?tab=followers`}
+          target="_blank">
+          <span class="icon">
+            <i class="fas fa-users" />
+          </span>
+          <span>{profile.followers} followers</span>
+        </a>
+      </li>
+      <li>
+        <a
+          href={`https://github.com/${Config.repoOwner}?tab=following`}
+          target="_blank">
+          <span class="icon">
+            <i class="fas fa-user" />
+          </span>
+          <span>{profile.following} following</span>
+        </a>
+      </li>
+    </ul>
+  {:else}
+    <SkeletonLoader width={40} alignCenter />
+  {/if}
+</div>
