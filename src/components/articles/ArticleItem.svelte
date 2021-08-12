@@ -1,11 +1,26 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
   import { link } from "svelte-spa-router";
-  import { getHTMLWithoutTags } from "../../lib/marked";
+  import { getHTMLWithoutTags, getFirstImageUrl } from "../../lib/marked";
   import { convertLabelsToTags } from "../../lib/tags";
   import TagList from "../tags/TagList.svelte";
 
   export let issue = null;
+  let thumbnail;
+
+  onMount(() => {
+    if (issue === null) {
+      return;
+    }
+
+    const firstImageUrl = getFirstImageUrl(issue.body);
+    if (firstImageUrl === "") {
+      thumbnail = "https://bulma.io/images/placeholders/128x128.png";
+    } else {
+      thumbnail = firstImageUrl;
+    }
+  });
 </script>
 
 <div class="box">
@@ -42,11 +57,7 @@
     <div class="column has-text-centered">
       <figure class="image is-128x128">
         {#if issue}
-          <img
-            class="article-image"
-            src="https://bulma.io/images/placeholders/128x128.png"
-            alt="article thumbnail"
-          />
+          <img class="article-image" src={thumbnail} alt="article thumbnail" />
         {:else}
           <SkeletonLoader />
         {/if}
