@@ -37,7 +37,8 @@
       <li>
         <a
           href={`https://github.com/${Config.repoOwner}?tab=followers`}
-          target="_blank">
+          target="_blank"
+        >
           <span class="icon">
             <i class="fas fa-users" />
           </span>
@@ -47,7 +48,8 @@
       <li>
         <a
           href={`https://github.com/${Config.repoOwner}?tab=following`}
-          target="_blank">
+          target="_blank"
+        >
           <span class="icon">
             <i class="fas fa-user" />
           </span>

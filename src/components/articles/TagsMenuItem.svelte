@@ -12,7 +12,8 @@
     class="panel-block"
     class:is-active={selected}
     href={getTagLink(label.name)}
-    use:link>
+    use:link
+  >
     <span class="panel-icon">
       <i class="fas fa-tag" aria-hidden="true" />
     </span>
