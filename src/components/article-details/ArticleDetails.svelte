@@ -6,6 +6,7 @@
   import { convertLabelsToTags } from "../../lib/tags";
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
   import TagList from "../tags/TagList.svelte";
+  import Comments from "./Comments.svelte";
 
   export let params;
   let issue = null;
@@ -63,7 +64,9 @@
     </div>
   </div>
 </section>
-<section class="section" />
+<section class="section">
+  <Comments issueNumber={params.issueNumber} />
+</section>
 
 <style>
   /*.post img {
