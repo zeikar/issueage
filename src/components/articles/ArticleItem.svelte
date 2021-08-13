@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
   import { link } from "svelte-spa-router";
+  import { formatDate } from "../../lib/datetime";
   import { getHTMLWithoutTags, getFirstImageUrl } from "../../lib/marked";
   import { convertLabelsToTags } from "../../lib/tags";
   import TagList from "../tags/TagList.svelte";
@@ -47,7 +48,7 @@
           {#if issue}
             <span class="icon">
               <i class="fas fa-clock" />
-            </span>{issue.created_at}
+            </span>{formatDate(issue.created_at)}
           {:else}
             <SkeletonLoader width={30} />
           {/if}

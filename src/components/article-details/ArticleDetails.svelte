@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { getIssue } from "../../api";
+  import { formatDate } from "../../lib/datetime";
   import { getHTML } from "../../lib/marked";
   import { convertLabelsToTags } from "../../lib/tags";
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
@@ -34,7 +35,7 @@
       </h1>
       <p class="subtitle">
         {#if issue}
-          {issue.updated_at}
+          {formatDate(issue.created_at)}
         {:else}
           <SkeletonLoader width={30} alignCenter />
         {/if}
