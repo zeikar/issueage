@@ -10,5 +10,5 @@
 </script>
 
 <Navbar websiteTitle={Config.websiteTitle} />
-<Router {routes} />
+<Router {routes} restoreScrollState={true} />
 <Footer websiteTitle={Config.websiteTitle} />
