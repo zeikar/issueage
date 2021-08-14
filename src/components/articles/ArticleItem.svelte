@@ -49,6 +49,9 @@
             <span class="icon">
               <i class="fas fa-clock" />
             </span>{formatDate(issue.created_at)}
+            <span class="icon">
+              <i class="fas fa-comment" />
+            </span>{issue.comments} comments
           {:else}
             <SkeletonLoader width={30} />
           {/if}
