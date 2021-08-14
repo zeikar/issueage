@@ -69,6 +69,13 @@
 </section>
 
 <style>
+  div.content {
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+    word-break: keep-all;
+    word-wrap: break-word;
+  }
   /*.post img {
     display: block;
     margin-left: auto;

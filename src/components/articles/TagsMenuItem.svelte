@@ -9,7 +9,7 @@
 
 {#if label}
   <a
-    class="panel-block"
+    class="panel-block tag-item"
     class:is-active={selected}
     href={getTagLink(label.name)}
     use:link
@@ -26,6 +26,10 @@
 {/if}
 
 <style>
+  a.tag-item {
+    word-break: break-all;
+    word-wrap: break-word;
+  }
   p {
     padding: 0.5em 0.75em;
   }

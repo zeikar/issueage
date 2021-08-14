@@ -86,6 +86,10 @@
 </div>
 
 <style>
+  div.content {
+    word-break: keep-all;
+    word-wrap: break-word;
+  }
   img.article-image {
     width: 100%;
     height: 100%;
