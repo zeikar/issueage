@@ -15,18 +15,13 @@
       return;
     }
 
-    const firstImageUrl = getFirstImageUrl(issue.body);
-    if (firstImageUrl === "") {
-      thumbnail = "https://bulma.io/images/placeholders/128x128.png";
-    } else {
-      thumbnail = firstImageUrl;
-    }
+    thumbnail = getFirstImageUrl(issue.body);
   });
 </script>
 
 <div class="box">
   <div class="columns is-desktop">
-    <div class="column is-four-fifths">
+    <div class="column">
       <div class="content">
         {#if issue}
           <a href={`/articles/${issue.number}`} use:link>
@@ -58,15 +53,29 @@
         </p>
       </div>
     </div>
-    <div class="column has-text-centered">
-      <figure class="image is-128x128">
-        {#if issue}
-          <img class="article-image" src={thumbnail} alt="article thumbnail" />
-        {:else}
-          <SkeletonLoader />
-        {/if}
-      </figure>
-    </div>
+    {#if issue}
+      {#if thumbnail}
+        <div class="column">
+          <div class="is-pulled-right">
+            <figure class="image is-128x128">
+              <img
+                class="article-image"
+                src={thumbnail}
+                alt="article thumbnail"
+              />
+            </figure>
+          </div>
+        </div>
+      {/if}
+    {:else}
+      <div class="column">
+        <div class="is-pulled-right">
+          <figure class="image is-128x128">
+            <SkeletonLoader />
+          </figure>
+        </div>
+      </div>
+    {/if}
   </div>
 
   {#if issue}
@@ -75,3 +84,11 @@
     <SkeletonLoader />
   {/if}
 </div>
+
+<style>
+  img.article-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
