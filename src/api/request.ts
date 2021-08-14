@@ -21,10 +21,12 @@ const getIssue = (issueNumber: number): Promise<any> => {
   });
 };
 
-const getAllLabels = (): Promise<any> => {
+const getAllLabels = (page?: number, per_page?: number): Promise<any> => {
   return octokit.issues.listLabelsForRepo({
     owner: Config.repoOwner,
     repo: Config.repoName,
+    page,
+    per_page,
   });
 };
 
