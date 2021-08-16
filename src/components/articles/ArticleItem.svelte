@@ -90,6 +90,12 @@
     min-width: 128px;
     height: 128px;
   }
+  @media screen and (min-width: 769px) {
+    div.image-container {
+      width: 128px;
+      height: 128px;
+    }
+  }
   img.article-image {
     width: 100%;
     height: 100%;
