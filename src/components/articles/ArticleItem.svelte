@@ -20,7 +20,7 @@
 </script>
 
 <div class="box">
-  <div class="columns is-desktop">
+  <div class="columns">
     <div class="column">
       <div class="content">
         {#if issue}
@@ -55,24 +55,20 @@
     </div>
     {#if issue}
       {#if thumbnail}
-        <div class="column">
-          <div class="is-pulled-right">
-            <figure class="image is-128x128">
-              <img
-                class="article-image"
-                src={thumbnail}
-                alt="article thumbnail"
-              />
-            </figure>
+        <div class="column is-narrow">
+          <div class="image image-container">
+            <img
+              class="article-image"
+              src={thumbnail}
+              alt="article thumbnail"
+            />
           </div>
         </div>
       {/if}
     {:else}
-      <div class="column">
-        <div class="is-pulled-right">
-          <figure class="image is-128x128">
-            <SkeletonLoader />
-          </figure>
+      <div class="column is-narrow-desktop">
+        <div class="image image-container">
+          <SkeletonLoader />
         </div>
       </div>
     {/if}
@@ -89,6 +85,10 @@
   div.content {
     word-break: keep-all;
     word-wrap: break-word;
+  }
+  div.image-container {
+    min-width: 128px;
+    height: 128px;
   }
   img.article-image {
     width: 100%;
