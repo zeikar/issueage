@@ -1,7 +1,7 @@
 <script lang="ts">
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
   import { link, querystring } from "svelte-spa-router";
-  import { getTagLink } from "../../lib/tags";
+  import { getTagLink } from "../../lib/links";
 
   export let label = null;
   export let selected = false;

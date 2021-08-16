@@ -4,7 +4,6 @@ import NotFound from "./components/common/NotFound.svelte";
 
 export default {
   "/": Articles,
-  "/articles": Articles,
   "/articles/:issueNumber": ArticleDetails,
 
   // The catch-all route must always be last

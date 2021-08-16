@@ -4,5 +4,9 @@ export const generatePaginationLink = (
   queryString: string,
   page: number
 ): string => {
-  return "/articles" + updateQueryString(queryString, { page });
+  return "/" + updateQueryString(queryString, { page });
+};
+
+export const getTagLink = (qs: string, tag: string): string => {
+  return "/" + updateQueryString(qs, { tag, page: 1 });
 };

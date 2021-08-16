@@ -25,15 +25,15 @@
       <div class="content">
         {#if issue}
           <a href={`/articles/${issue.number}`} use:link>
-            <h2>{issue.title}</h2>
+            <h3>{issue.title}</h3>
           </a>
         {:else}
-          <h2><SkeletonLoader width={50} /></h2>
+          <h3><SkeletonLoader width={50} /></h3>
         {/if}
 
-        <p class="article-content">
+        <p>
           {#if issue}
-            {@html getHTMLWithoutTags(issue.body.substring(0, 100))}
+            {@html getHTMLWithoutTags(issue.body).substring(0, 100)}
           {:else}
             <SkeletonLoader />
           {/if}

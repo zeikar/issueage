@@ -28,9 +28,9 @@
       <a href="." class="navbar-item"><h1 class="title">{websiteTitle}</h1></a>
     </div>
     <div class="navbar-menu">
-      <div class="navbar-start">
+      <!--<div class="navbar-start">
         <a href="." class="navbar-item"> menu here </a>
-      </div>
+      </div>-->
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="field has-addons">

@@ -38,7 +38,7 @@
     <ArticleItem {issue} />
   {/each}
 {:else}
-  {#each Array(5) as _}
+  {#each Array(10) as _}
     <ArticleItem />
   {/each}
 {/if}
