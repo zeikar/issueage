@@ -37,14 +37,6 @@
 
 <article class="panel">
   <p class="panel-heading">Tags</p>
-  <div class="panel-block">
-    <p class="control has-icons-left">
-      <input class="input" type="text" placeholder="Search tags" />
-      <span class="icon is-left">
-        <i class="fas fa-search" aria-hidden="true" />
-      </span>
-    </p>
-  </div>
 
   {#each tags as label}
     <TagsMenuItem {label} selected={selectedTag === label.name} />
