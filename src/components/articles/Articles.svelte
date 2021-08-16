@@ -2,9 +2,19 @@
   import ArticleList from "./ArticleList.svelte";
   import Profile from "./Profile.svelte";
   import TagsMenu from "./TagsMenu.svelte";
+  import { querystring } from "svelte-spa-router";
+  import { parseQueryString } from "../../lib/querystring";
 
-  export let params = { tag: "" };
-  $: tag = params.tag;
+  let tag;
+  let page;
+
+  $: parse($querystring);
+
+  function parse(qs) {
+    const queryData = parseQueryString(qs);
+    tag = queryData.tag;
+    page = Number(queryData.page || 1);
+  }
 </script>
 
 <section class="hero is-medium has-text-centered">
@@ -20,7 +30,7 @@
       </div>
 
       <div class="column">
-        <ArticleList {tag} />
+        <ArticleList {tag} currentPage={page} />
       </div>
     </div>
   </div>

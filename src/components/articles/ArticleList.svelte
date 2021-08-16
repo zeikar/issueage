@@ -1,18 +1,27 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { getAllIssues } from "../../api";
+  import { getAllArticles } from "../../api";
   import ArticleItem from "./ArticleItem.svelte";
   import TagTitle from "./TagTitle.svelte";
+  import Pagination from "./Pagination.svelte";
 
   export let tag = "";
-  let issues = null;
+  export let currentPage = 1;
+  let articles = null;
+  let totalPages = 0;
 
-  function fetchData(tag) {
-    issues = null;
-    getAllIssues([tag])
+  function fetchData(tag, currentPage) {
+    articles = null;
+
+    let tagParam = [];
+    if (tag !== "") {
+      tagParam = [tag];
+    }
+
+    getAllArticles(tagParam, currentPage)
       .then((res) => {
         console.log(res.data);
-        issues = res.data;
+        articles = res.data.items;
+        totalPages = Math.ceil(res.data.total_count / res.data.per_page);
         return;
       })
       .catch((err) => {
@@ -20,14 +29,12 @@
       });
   }
 
-  $: fetchData(tag);
-
-  onMount(() => fetchData(tag));
+  $: fetchData(tag, currentPage);
 </script>
 
 <TagTitle {tag} />
-{#if issues}
-  {#each issues as issue}
+{#if articles}
+  {#each articles as issue}
     <ArticleItem {issue} />
   {/each}
 {:else}
@@ -35,3 +42,4 @@
     <ArticleItem />
   {/each}
 {/if}
+<Pagination {currentPage} {totalPages} />

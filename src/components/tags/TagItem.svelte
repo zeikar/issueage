@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { link } from "svelte-spa-router";
+  import { link, querystring } from "svelte-spa-router";
   import { getTagLink } from "../../lib/tags";
 
   export let tag;
 </script>
 
-<a class="tag" href={getTagLink(tag)} use:link> {tag} </a>
+<a class="tag" href={getTagLink($querystring, tag)} use:link> {tag} </a>

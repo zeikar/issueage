@@ -1,6 +1,6 @@
 <script lang="ts">
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
-  import { link } from "svelte-spa-router";
+  import { link, querystring } from "svelte-spa-router";
   import { getTagLink } from "../../lib/tags";
 
   export let label = null;
@@ -11,7 +11,7 @@
   <a
     class="panel-block tag-item"
     class:is-active={selected}
-    href={getTagLink(label.name)}
+    href={getTagLink($querystring, label.name)}
     use:link
   >
     <span class="panel-icon">

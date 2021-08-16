@@ -1,14 +1,19 @@
 import { Octokit } from "@octokit/rest";
+import { generateIssueSearchQuery } from "./query";
 import Config from "../../config.json";
 
 const octokit = new Octokit();
 
-const getAllIssues = (labels: string): Promise<any> => {
-  // https://octokit.github.io/rest.js/v18#issues-list-for-repo
-  return octokit.issues.listForRepo({
-    owner: Config.repoOwner,
-    repo: Config.repoName,
-    labels,
+const getAllIssues = (
+  labels: string[],
+  page?: number,
+  per_page?: number
+): Promise<any> => {
+  // https://octokit.github.io/rest.js/v18#search-issues-and-pull-requests
+  return octokit.search.issuesAndPullRequests({
+    q: generateIssueSearchQuery(labels),
+    page,
+    per_page,
   });
 };
 

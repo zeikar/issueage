@@ -1,9 +1,14 @@
 import Api from "./request";
 import Consts from "./consts";
 
-export const getAllIssues = async (labels: string[]): Promise<any> => {
+export const getAllArticles = async (
+  tags: string[],
+  page: number
+): Promise<any> => {
   try {
-    const response = await Api.getAllIssues(labels.join(","));
+    const response = await Api.getAllIssues(tags, page, Consts.articlesPerPage);
+    // inject some variables
+    response.data.per_page = Consts.articlesPerPage;
     return response;
   } catch (error) {
     console.error(error);
