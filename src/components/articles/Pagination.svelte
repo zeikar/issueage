@@ -6,7 +6,7 @@
   export let totalPages;
 
   function getPaginationPages(totalPages) {
-    const pages = [1];
+    let pages = [1];
 
     // current page +- 2
     for (let p = 0; p <= 4; p++) {
@@ -15,30 +15,41 @@
 
     pages.push(totalPages);
 
-    console.log([...new Set(pages.filter((p) => p >= 1 && p <= totalPages))]);
-
     // filter out of range pages, get distinct pages
-    return [...new Set(pages.filter((p) => p >= 1 && p <= totalPages))];
+    pages = [...new Set(pages.filter((p) => p >= 1 && p <= totalPages))];
+
+    // insert pagination range separators
+    const retPages = [];
+    for (let i = 0; i < pages.length; i++) {
+      if (i > 0 && pages[i] - pages[i - 1] > 1) {
+        retPages.push(-i);
+      }
+      retPages.push(pages[i]);
+    }
+
+    return retPages;
   }
 </script>
 
 {#if totalPages !== 0}
   <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-    <span class="pagination-previous">Previous</span>
-    <span class="pagination-next">Next page</span>
     <ul class="pagination-list">
       {#each getPaginationPages(totalPages) as page (page)}
-        <li>
-          <a
-            class="pagination-link"
-            aria-label="Goto page {page}"
-            class:is-current={page === currentPage}
-            href={generatePaginationLink($querystring, page)}
-            use:link
-          >
-            {page}
-          </a>
-        </li>
+        {#if page <= 0}
+          <li><span class="pagination-ellipsis">&hellip;</span></li>
+        {:else}
+          <li>
+            <a
+              class="pagination-link"
+              aria-label="Goto page {page}"
+              class:is-current={page === currentPage}
+              href={generatePaginationLink($querystring, page)}
+              use:link
+            >
+              {page}
+            </a>
+          </li>
+        {/if}
       {/each}
     </ul>
   </nav>
