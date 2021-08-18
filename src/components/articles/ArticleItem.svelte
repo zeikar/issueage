@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
   import { link } from "svelte-spa-router";
   import { formatDate } from "../../lib/datetime";
@@ -8,58 +7,60 @@
   import TagList from "../tags/TagList.svelte";
 
   export let issue = null;
-  let thumbnail;
-
-  onMount(() => {
-    if (issue === null) {
-      return;
-    }
-
-    thumbnail = getFirstImageUrl(issue.body);
-  });
 </script>
 
 <div class="box">
   <div class="columns">
     <div class="column">
-      <div class="content">
-        {#if issue}
-          <a href={`/articles/${issue.number}`} use:link>
-            <h3>{issue.title}</h3>
-          </a>
-        {:else}
-          <h3><SkeletonLoader width={50} /></h3>
-        {/if}
-
-        <p>
+      <div class="article-content">
+        <div class="content">
           {#if issue}
-            {@html getHTMLWithoutTags(issue.body).substring(0, 100)}
+            <a href={`/articles/${issue.number}`} use:link>
+              <div>
+                <p class="title is-4 is-spaced hover-underline-animation">
+                  {issue.title}
+                </p>
+                <p class="subtitle is-6">
+                  {@html getHTMLWithoutTags(issue.body, 200)}
+                </p>
+              </div>
+            </a>
           {:else}
-            <SkeletonLoader />
+            <p class="title is-4 is-spaced"><SkeletonLoader width={50} /></p>
+            <p class="subtitle is-6"><SkeletonLoader /></p>
           {/if}
-        </p>
+        </div>
 
-        <p>
+        <div class="content">
           {#if issue}
-            <span class="icon">
-              <i class="fas fa-clock" />
-            </span>{formatDate(issue.created_at)}
-            <span class="icon">
-              <i class="fas fa-comment" />
-            </span>{issue.comments} comments
+            <span class="icon-text">
+              <span class="icon">
+                <i class="fas fa-clock" />
+              </span>
+              <span>
+                {formatDate(issue.created_at)}
+              </span>
+
+              <span class="icon">
+                <i class="fas fa-comment" />
+              </span>
+              <span>
+                {issue.comments} comments
+              </span>
+            </span>
           {:else}
             <SkeletonLoader width={30} />
           {/if}
-        </p>
+        </div>
       </div>
     </div>
     {#if issue}
-      {#if thumbnail}
+      {#if getFirstImageUrl(issue.body)}
         <div class="column is-narrow">
           <div class="image image-container">
             <img
               class="article-image"
-              src={thumbnail}
+              src={getFirstImageUrl(issue.body)}
               alt="article thumbnail"
             />
           </div>
@@ -82,7 +83,7 @@
 </div>
 
 <style>
-  div.content {
+  div.article-content {
     word-break: keep-all;
     word-wrap: break-word;
   }

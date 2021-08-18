@@ -1,5 +1,24 @@
-a:hover {
-  text-decoration: underline;
+.hover-underline-animation {
+  display: inline-block;
+  position: relative;
+}
+
+.hover-underline-animation:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  background-color: #363636;
+  transform-origin: bottom left;
+  transition: transform 0.25s linear;
+}
+
+a:hover .hover-underline-animation:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
 
 .is-centered {
