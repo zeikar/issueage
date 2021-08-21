@@ -1,6 +1,6 @@
 <script lang="ts">
   import { link, querystring } from "svelte-spa-router";
-  import { generatePaginationLink } from "../../lib/links";
+  import { getPaginationLink } from "../../lib/links";
 
   export let currentPage;
   export let totalPages;
@@ -43,7 +43,7 @@
               class="pagination-link"
               aria-label="Goto page {page}"
               class:is-current={page === currentPage}
-              href={generatePaginationLink($querystring, page)}
+              href={getPaginationLink($querystring, page)}
               use:link
             >
               {page}

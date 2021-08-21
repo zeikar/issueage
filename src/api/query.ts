@@ -5,7 +5,7 @@ export const generateIssueSearchQuery = (
   search: string
 ): string => {
   const q = [];
-  if (search.length > 0) {
+  if (search && search.length > 0) {
     q.push(search);
   }
   q.push("is:issue");

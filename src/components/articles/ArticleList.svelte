@@ -15,7 +15,7 @@
     articles = null;
 
     let tagParam = [];
-    if (tag !== "") {
+    if (tag && tag !== "") {
       tagParam = [tag];
     }
 

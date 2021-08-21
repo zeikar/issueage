@@ -19,6 +19,10 @@ export const parseQueryString = (queryString: string): any => {
 export const generateQueryString = (obj: object): string => {
   const qs = [];
   for (const [key, value] of Object.entries(obj)) {
+    // skip empty values
+    if (!value) {
+      continue;
+    }
     qs.push(`${key}=${value}`);
   }
 

@@ -23,7 +23,7 @@
   }
 
   function doSearch() {
-    push(getSearchLink($querystring, search));
+    push(getSearchLink($querystring, search.trim()));
   }
 
   onMount(() => {

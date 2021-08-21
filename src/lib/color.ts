@@ -8,8 +8,6 @@ export const getTextClassFromBackgroundColor = (
 ): string => {
   const rgb = chopString(backgroundColor, 2);
 
-  console.log(rgb);
-
   // http://www.w3.org/TR/AERT#color-contrast
   const brightness = Math.round(
     (parseInt(rgb[0], 16) * 299 +
