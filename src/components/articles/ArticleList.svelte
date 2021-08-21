@@ -1,11 +1,12 @@
 <script lang="ts">
   import { getAllArticles } from "../../api";
   import ArticleItem from "./ArticleItem.svelte";
-  import TagTitle from "./TagTitle.svelte";
+  import ArticlesHeader from "./ArticlesHeader.svelte";
   import Pagination from "./Pagination.svelte";
   import ArticlesNotFound from "./ArticlesNotFound.svelte";
 
   export let tag = "";
+  export let search = "";
   export let currentPage = 1;
   let articles = null;
   let totalPages = 0;
@@ -33,7 +34,7 @@
   $: fetchData(tag, currentPage);
 </script>
 
-<TagTitle {tag} />
+<ArticlesHeader {tag} {search} />
 {#if articles}
   {#if articles.length === 0}
     <ArticlesNotFound />

@@ -7,6 +7,7 @@
 
   let tag;
   let page;
+  let search;
 
   $: parse($querystring);
 
@@ -14,6 +15,7 @@
     const queryData = parseQueryString(qs);
     tag = queryData.tag;
     page = Number(queryData.page || 1);
+    search = queryData.search;
   }
 </script>
 
@@ -30,7 +32,7 @@
       </div>
 
       <div class="column">
-        <ArticleList {tag} currentPage={page} />
+        <ArticleList {tag} {search} currentPage={page} />
       </div>
     </div>
   </div>
