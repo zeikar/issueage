@@ -11,7 +11,7 @@
   let articles = null;
   let totalPages = 0;
 
-  function fetchData(tag, currentPage) {
+  function fetchData(tag, search, currentPage) {
     articles = null;
 
     let tagParam = [];
@@ -19,7 +19,7 @@
       tagParam = [tag];
     }
 
-    getAllArticles(tagParam, currentPage)
+    getAllArticles(tagParam, search, currentPage)
       .then((res) => {
         console.log(res.data);
         articles = res.data.items;
@@ -31,7 +31,7 @@
       });
   }
 
-  $: fetchData(tag, currentPage);
+  $: fetchData(tag, search, currentPage);
 </script>
 
 <ArticlesHeader {tag} {search} />

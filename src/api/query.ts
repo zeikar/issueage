@@ -1,7 +1,13 @@
 import Config from "../../config.json";
 
-export const generateIssueSearchQuery = (labels: string[]): string => {
+export const generateIssueSearchQuery = (
+  labels: string[],
+  search: string
+): string => {
   const q = [];
+  if (search.length > 0) {
+    q.push(search);
+  }
   q.push("is:issue");
   q.push("is:open");
   if (labels.length > 0) {

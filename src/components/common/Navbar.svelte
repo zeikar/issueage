@@ -1,8 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { querystring, push } from "svelte-spa-router";
+  import { getSearchLink } from "../../lib/links";
 
   export let websiteTitle;
   let scrolled = false;
+  let search = "";
 
   function navbarShadow() {
     if (window.pageYOffset > 0) {
@@ -10,6 +13,17 @@
     } else {
       scrolled = false;
     }
+  }
+
+  function onKeyPress(event) {
+    // enter key
+    if (event.charCode === 13) {
+      doSearch();
+    }
+  }
+
+  function doSearch() {
+    push(getSearchLink($querystring, search));
   }
 
   onMount(() => {
@@ -39,10 +53,12 @@
                 class="input is-rounded"
                 type="search"
                 placeholder="search"
+                bind:value={search}
+                on:keypress={onKeyPress}
               />
             </div>
             <div class="control">
-              <button class="button is-rounded">
+              <button class="button is-rounded" on:click={doSearch}>
                 <span class="icon is-small"> <i class="fas fa-search" /> </span>
               </button>
             </div>

@@ -6,12 +6,13 @@ const octokit = new Octokit();
 
 const getAllIssues = (
   labels: string[],
+  search: string,
   page?: number,
   per_page?: number
 ): Promise<any> => {
   // https://octokit.github.io/rest.js/v18#search-issues-and-pull-requests
   return octokit.search.issuesAndPullRequests({
-    q: generateIssueSearchQuery(labels),
+    q: generateIssueSearchQuery(labels, search),
     page,
     per_page,
   });
