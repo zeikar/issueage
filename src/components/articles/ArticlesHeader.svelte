@@ -12,7 +12,7 @@
             <i class="fas fa-hashtag" />
           </span>
         </span>
-        <span class="tag is-info">{tag}</span>
+        <span class="tag is-primary">{tag}</span>
         <span class="tag is-delete" />
       </div>
     </div>
