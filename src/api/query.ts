@@ -5,7 +5,7 @@ export const generateIssueSearchQuery = (labels: string[]): string => {
   q.push("is:issue");
   q.push("is:open");
   if (labels.length > 0) {
-    q.push(`label:${labels.join(",")}`);
+    q.push(`label:${labels.map((label) => `"${label}"`).join(",")}`);
   }
   q.push(`repo:${Config.repoOwner}/${Config.repoName}`);
 
