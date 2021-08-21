@@ -3,6 +3,7 @@
   import ArticleItem from "./ArticleItem.svelte";
   import TagTitle from "./TagTitle.svelte";
   import Pagination from "./Pagination.svelte";
+  import ArticlesNotFound from "./ArticlesNotFound.svelte";
 
   export let tag = "";
   export let currentPage = 1;
@@ -34,9 +35,13 @@
 
 <TagTitle {tag} />
 {#if articles}
-  {#each articles as issue}
-    <ArticleItem {issue} />
-  {/each}
+  {#if articles.length === 0}
+    <ArticlesNotFound />
+  {:else}
+    {#each articles as issue}
+      <ArticleItem {issue} />
+    {/each}
+  {/if}
 {:else}
   {#each Array(10) as _}
     <ArticleItem />
