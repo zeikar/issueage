@@ -3,7 +3,6 @@
   import { getIssue } from "../../api";
   import { formatDate } from "../../lib/datetime";
   import { getHTML } from "../../lib/marked";
-  import { convertLabelsToTags } from "../../lib/tags";
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
   import TagList from "../tags/TagList.svelte";
   import Comments from "./Comments.svelte";
@@ -42,7 +41,7 @@
         {/if}
       </p>
       {#if issue}
-        <TagList tags={convertLabelsToTags(issue.labels)} alignCenter />
+        <TagList tags={issue.labels} alignCenter />
       {:else}
         <SkeletonLoader width={80} alignCenter />
       {/if}

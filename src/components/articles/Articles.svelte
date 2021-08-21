@@ -27,12 +27,11 @@
 <section class="section">
   <div class="container">
     <div class="columns">
-      <div class="column is-one-fifth">
-        <TagsMenu selectedTag={tag} />
-      </div>
-
       <div class="column">
         <ArticleList {tag} {search} currentPage={page} />
+      </div>
+      <div class="column is-one-quarter">
+        <TagsMenu />
       </div>
     </div>
   </div>

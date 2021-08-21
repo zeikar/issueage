@@ -5,4 +5,6 @@
   export let tag;
 </script>
 
-<a class="tag" href={getTagLink($querystring, tag)} use:link> {tag} </a>
+<a class="tag" href={getTagLink($querystring, tag.name)} use:link>
+  {tag.name}
+</a>

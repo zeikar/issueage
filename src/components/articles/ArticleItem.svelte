@@ -3,7 +3,6 @@
   import { link } from "svelte-spa-router";
   import { formatDate } from "../../lib/datetime";
   import { getHTMLWithoutTags, getFirstImageUrl } from "../../lib/marked";
-  import { convertLabelsToTags } from "../../lib/tags";
   import TagList from "../tags/TagList.svelte";
 
   export let issue = null;
@@ -76,7 +75,7 @@
   </div>
 
   {#if issue}
-    <TagList tags={convertLabelsToTags(issue.labels)} />
+    <TagList tags={issue.labels} />
   {:else}
     <SkeletonLoader />
   {/if}
