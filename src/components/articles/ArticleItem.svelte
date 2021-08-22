@@ -14,13 +14,17 @@
       <div class="article-content">
         <div class="content">
           {#if issue}
-            <a href={`/articles/${issue.number}`} use:link>
+            <a
+              class="hover-underline-animation"
+              href={`/articles/${issue.number}`}
+              use:link
+            >
               <div>
-                <p class="title is-4 is-spaced hover-underline-animation">
-                  {issue.title}
-                </p>
+                <h1 class="title is-4 is-spaced">
+                  <span>{issue.title}</span>
+                </h1>
                 <p class="subtitle is-6">
-                  {@html getHTMLWithoutTags(issue.body, 200)}
+                  {getHTMLWithoutTags(issue.body, 200)}
                 </p>
               </div>
             </a>

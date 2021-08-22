@@ -19,7 +19,7 @@
   }
 </script>
 
-<section class="hero is-medium has-text-centered">
+<section class="hero has-text-centered">
   <div class="hero-body">
     <Profile />
   </div>
