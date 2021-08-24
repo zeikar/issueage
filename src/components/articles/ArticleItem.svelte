@@ -24,7 +24,7 @@
                   <span>{issue.title}</span>
                 </h1>
                 <p class="subtitle is-6">
-                  {getHTMLWithoutTags(issue.body, 200)}
+                  {@html getHTMLWithoutTags(issue.body, 200)}
                 </p>
               </div>
             </a>

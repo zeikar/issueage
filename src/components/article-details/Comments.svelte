@@ -21,4 +21,10 @@
   });
 </script>
 
-<div bind:this={commentsContainer} />
+<div class="container is-max-desktop" bind:this={commentsContainer} />
+
+<style>
+  :global(.utterances) {
+    max-width: 100%;
+  }
+</style>

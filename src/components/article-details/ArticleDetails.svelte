@@ -2,10 +2,11 @@
   import { onMount } from "svelte";
   import { getIssue } from "../../api";
   import { formatDate } from "../../lib/datetime";
-  import { getHTML } from "../../lib/marked";
+  import { getHTML, getTableOfContentsHTML } from "../../lib/marked";
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
   import TagList from "../tags/TagList.svelte";
   import Comments from "./Comments.svelte";
+  import TableOfContents from "./TableOfContents.svelte";
 
   export let params;
   let issue = null;
@@ -49,17 +50,28 @@
   </div>
 </section>
 <section class="section">
-  <div class="container">
-    <div class="content">
-      {#if issue}
-        {@html getHTML(issue.body)}
-      {:else}
-        {#each Array(10) as _}
-          <p>
-            <SkeletonLoader />
-          </p>
-        {/each}
-      {/if}
+  <div class="container is-max-widescreen">
+    <div class="columns is-desktop">
+      <div class="column is-2-desktop">
+        <div class="sticky">
+          {#if issue}
+            <TableOfContents toc={getTableOfContentsHTML(issue.body)} />
+          {/if}
+        </div>
+      </div>
+      <div class="column is-10-desktop">
+        <div class="content">
+          {#if issue}
+            {@html getHTML(issue.body)}
+          {:else}
+            {#each Array(10) as _}
+              <p>
+                <SkeletonLoader />
+              </p>
+            {/each}
+          {/if}
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -68,8 +80,24 @@
 </section>
 
 <style>
+  @media screen and (min-width: 769px) {
+    div.sticky {
+      position: sticky;
+      top: 4rem;
+      bottom: 0;
+      max-height: 90vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+  }
+  div.sticky::-webkit-scrollbar {
+    width: 8px; /* width of the entire scrollbar */
+  }
+  div.sticky::-webkit-scrollbar-thumb {
+    background-color: lightgray; /* color of the scroll thumb */
+    border-radius: 10px; /* roundness of the scroll thumb */
+  }
   div.content {
-    max-width: 760px;
     margin-left: auto;
     margin-right: auto;
     word-break: keep-all;
