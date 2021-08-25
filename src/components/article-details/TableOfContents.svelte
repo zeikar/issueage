@@ -57,7 +57,7 @@
 
       if (i === 0) {
         path.push("M", x, y, "L", x, y + height);
-        item.pathStart = tocPath.getTotalLength() || 0;
+        item.pathStart = 0;
       } else {
         // Draw an additional line when there's a change in
         // indent levels
