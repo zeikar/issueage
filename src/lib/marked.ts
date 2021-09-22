@@ -59,6 +59,10 @@ export const getFirstImageUrl = (markdown: string): string => {
 };
 
 function preprocressToc(toc: any[]): any[] {
+  if (toc.length === 0) {
+    return null;
+  }
+
   let currentLevel = 1;
   const root = [{}];
   let currentItem = root[0];
