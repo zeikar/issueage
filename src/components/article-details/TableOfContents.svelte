@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import TableOfContentsList from "./TableOfContentsList.svelte";
 
-  export let toc = "";
+  export let toc = null;
 
   // codes are based on https://www.cssscript.com/animated-side-toc-nav-long-web-content/
   let tocContainer, tocPath, tocItems, pathLength;
@@ -12,7 +13,7 @@
     BOTTOM_MARGIN = 0.2;
 
   onMount(() => {
-    if (toc === "") {
+    if (!toc) {
       return;
     }
 
@@ -30,10 +31,8 @@
 
     // Cache element references and measurements
     tocItems = tocItems.map(function (item) {
-      const anchor = item.querySelector("a");
-      const target = document.getElementById(
-        anchor.getAttribute("href").slice(1)
-      );
+      const anchor = item.querySelector("span");
+      const target = document.getElementById(anchor.getAttribute("link"));
 
       return {
         listItem: item,
@@ -133,11 +132,13 @@
   }
 </script>
 
-{#if toc !== ""}
+{#if toc}
   <div class="toc-container">
     <aside class="menu toc">
       <p class="menu-label">On this page</p>
-      {@html toc}
+
+      <TableOfContentsList items={toc} />
+
       <svg
         class="toc-marker"
         width="200"
@@ -174,7 +175,8 @@
     padding-left: 0.5em;
   }
 
-  :global(.toc li a) {
+  :global(.toc li span) {
+    cursor: pointer;
     display: inline-block;
     color: #aaa;
     text-decoration: none;
@@ -182,7 +184,7 @@
     transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
-  :global(.toc li.visible a) {
+  :global(.toc li.visible span) {
     color: #111;
     -webkit-transform: translate(5px);
     transform: translate(5px);

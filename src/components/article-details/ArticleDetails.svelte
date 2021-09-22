@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { getIssue } from "../../api";
   import { formatDate } from "../../lib/datetime";
-  import { getHTML, getTableOfContentsHTML } from "../../lib/marked";
+  import { getHTML, getTableOfContents } from "../../lib/marked";
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
   import TagList from "../tags/TagList.svelte";
   import Comments from "./Comments.svelte";
@@ -12,7 +12,7 @@
   let issue = null;
 
   onMount(() => {
-    getIssue(params.issueNumber)
+    getIssue(params.articleNumber)
       .then((res) => {
         console.log(res.data);
         issue = res.data;
@@ -55,7 +55,7 @@
       <div class="column is-2-desktop">
         <div class="sticky">
           {#if issue}
-            <TableOfContents toc={getTableOfContentsHTML(issue.body)} />
+            <TableOfContents toc={getTableOfContents(issue.body)} />
           {/if}
         </div>
       </div>
@@ -76,7 +76,9 @@
   </div>
 </section>
 <section class="section">
-  <Comments issueNumber={params.issueNumber} />
+  {#if issue}
+    <Comments issueNumber={issue.number} />
+  {/if}
 </section>
 
 <style>

@@ -4,7 +4,7 @@ export const getHTML = (markdown: string): string => {
   return marked(markdown);
 };
 
-export const getTableOfContentsHTML = (markdown: string): string => {
+export const getTableOfContents = (markdown: string): any[] => {
   const toc = [];
 
   // Override function
@@ -20,9 +20,6 @@ export const getTableOfContentsHTML = (markdown: string): string => {
       });
       return `<h${level} id="${escapedText}" class="heading">
                 ${text}
-                <a name="${escapedText}" class="anchor" href="#${escapedText}">
-                  #
-                </a>
               </h${level}>`;
     },
   };
@@ -30,7 +27,7 @@ export const getTableOfContentsHTML = (markdown: string): string => {
   marked.use({ renderer });
   marked(markdown);
 
-  return generateHTMLFromToc(toc);
+  return preprocressToc(toc);
 };
 
 export const getHTMLWithoutTags = (
@@ -61,37 +58,36 @@ export const getFirstImageUrl = (markdown: string): string => {
   return match.groups.imageUrl;
 };
 
-function generateHTMLFromToc(toc: any[]): string {
-  const ul = '<ul class="menu_list">',
-    ulc = "</ul>",
-    li = "<li>",
-    lic = "</li>";
-  let html = "";
-  let currentLevel = 0;
+function preprocressToc(toc: any[]): any[] {
+  let currentLevel = 1;
+  const root = [{}];
+  let currentItem = root[0];
 
   for (let i = 0; i < toc.length; i++) {
     const element = toc[i];
 
     while (element.level > currentLevel) {
-      html += ul;
+      const parent = currentItem;
+      currentItem = {};
+      if (!parent["children"]) {
+        parent["children"] = [];
+      }
+      parent["children"].push(currentItem);
+      currentItem["parent"] = parent;
       currentLevel++;
     }
     while (element.level < currentLevel) {
-      html += ulc;
+      currentItem = currentItem["parent"];
       currentLevel--;
     }
 
-    html += li;
-    html += `<a href="#${element.anchor}">${element.text}</a>`;
-    html += lic;
+    if (!currentItem["children"]) {
+      currentItem["children"] = [];
+    }
+    currentItem["children"].push(element);
   }
 
-  while (currentLevel > 0) {
-    html += ulc;
-    currentLevel--;
-  }
-
-  return html;
+  return root;
 }
 
 function escapeHtml(html) {
