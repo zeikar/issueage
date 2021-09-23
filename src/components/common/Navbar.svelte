@@ -1,11 +1,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { querystring, push } from "svelte-spa-router";
+  import { link, querystring, push } from "svelte-spa-router";
   import { getSearchLink } from "../../lib/links";
 
   export let websiteTitle;
   let scrolled = false;
   let search = "";
+  let navbarOpen = false;
 
   function navbarShadow() {
     if (window.pageYOffset > 0) {
@@ -39,16 +40,31 @@
 >
   <div class="container">
     <div class="navbar-brand">
-      <a href="." class="navbar-item"><h1 class="title">{websiteTitle}</h1></a>
+      <a href="/" class="navbar-item" use:link>
+        <h1 class="title">{websiteTitle}</h1>
+      </a>
+
+      <a
+        role="button"
+        class="navbar-burger"
+        aria-label="menu"
+        aria-expanded={navbarOpen}
+        class:is-active={navbarOpen}
+        on:click={() => (navbarOpen = !navbarOpen)}
+      >
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+      </a>
     </div>
-    <div class="navbar-menu">
+    <div class="navbar-menu" class:is-active={navbarOpen}>
       <!--<div class="navbar-start">
         <a href="." class="navbar-item"> menu here </a>
       </div>-->
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="field has-addons">
-            <div class="control">
+            <div class="control is-expanded">
               <input
                 class="input is-rounded"
                 type="search"
