@@ -12,7 +12,7 @@ export const getTableOfContents = (markdown: string): any[] => {
     heading(text, level) {
       const escapedText = text
         .toLowerCase()
-        .replace(/[^\w\u4e00-\u9fa5]+/g, "-");
+        .replace(/[^\w\u1100-\udfff]+/g, "-");
       toc.push({
         anchor: escapedText,
         level: level,
