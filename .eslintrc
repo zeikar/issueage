@@ -14,8 +14,7 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:eslint-comments/recommended",
     "plugin:promise/recommended",
-    "prettier",
-    "prettier/@typescript-eslint"
+    "prettier"
   ],
   "overrides": [
     {
@@ -25,7 +24,7 @@
   ],
   "rules": {
     "eqeqeq": "error",
-    // indent: ["error", 2],
+    "indent": ["error", 2],
     "quotes": ["error", "double"],
     "semi": ["error", "always"],
     "no-var": ["error"],

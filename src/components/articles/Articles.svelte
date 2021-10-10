@@ -1,33 +1,38 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { getAllIssues } from "../../api";
-  import ArticleItem from "./ArticleItem.svelte";
+  import ArticleList from "./ArticleList.svelte";
+  import Profile from "./Profile.svelte";
+  import TagsMenu from "./TagsMenu.svelte";
+  import { querystring } from "svelte-spa-router";
+  import { parseQueryString } from "../../lib/querystring";
 
-  let issueList = null;
+  let tag;
+  let page;
+  let search;
 
-  onMount(() => {
-    getAllIssues()
-      .then((res) => {
-        console.log(res.data);
-        issueList = res.data;
-        return;
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  });
+  $: parse($querystring);
+
+  function parse(qs) {
+    const queryData = parseQueryString(qs);
+    tag = queryData.tag;
+    page = Number(queryData.page || 1);
+    search = queryData.search;
+  }
 </script>
 
+<section class="hero has-text-centered">
+  <div class="hero-body">
+    <Profile />
+  </div>
+</section>
 <section class="section">
   <div class="container">
-    {#if issueList}
-      {#each issueList as issue}
-        <ArticleItem {issue} />
-      {/each}
-    {:else}
-      {#each Array(5) as _}
-        <ArticleItem />
-      {/each}
-    {/if}
+    <div class="columns">
+      <div class="column">
+        <ArticleList {tag} {search} currentPage={page} />
+      </div>
+      <div class="column is-one-quarter">
+        <TagsMenu />
+      </div>
+    </div>
   </div>
 </section>
