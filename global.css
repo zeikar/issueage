@@ -1,5 +1,12 @@
-a:hover {
-  text-decoration: underline;
+.hover-underline-animation span {
+  background-image: linear-gradient(180deg, transparent 97.5%, #363636 0);
+  background-repeat: no-repeat;
+  background-size: 0 100%;
+  transition: background-size 0.3s ease-out;
+}
+
+.hover-underline-animation:hover span {
+  background-size: 100% 100%;
 }
 
 .is-centered {
