@@ -4,6 +4,7 @@
   import TagsMenu from "./TagsMenu.svelte";
   import { querystring } from "svelte-spa-router";
   import { parseQueryString } from "../../lib/querystring";
+  import Config from "../../../config.json";
 
   let tag;
   let page;
@@ -19,6 +20,9 @@
   }
 </script>
 
+<svelte:head>
+  <title>{Config.websiteTitle}</title>
+</svelte:head>
 <section class="hero has-text-centered">
   <div class="hero-body">
     <Profile />

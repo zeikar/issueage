@@ -8,7 +8,7 @@
 
 ![issueage_logo](https://repository-images.githubusercontent.com/304850825/bac6d700-58cf-11eb-9903-01b46181dcbc)
 
-----
+---
 
 Generate Website/Github Pages with Github Issues.
 

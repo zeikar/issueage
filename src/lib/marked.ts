@@ -1,4 +1,5 @@
 import marked from "marked";
+import hljs from "highlight.js";
 
 export const getHTML = (markdown: string): string => {
   return marked(markdown);
@@ -9,10 +10,10 @@ export const getTableOfContents = (markdown: string): any[] => {
 
   // Override function
   const renderer = {
-    heading(text, level) {
-      const escapedText = text
-        .toLowerCase()
-        .replace(/[^\w\u1100-\udfff]+/g, "-");
+    heading(text, level, _, slugger) {
+      const escapedText = slugger.slug(
+        text.toLowerCase().replace(/[^\w\u1100-\udfff]+/g, "-")
+      );
       toc.push({
         anchor: escapedText,
         level: level,
@@ -22,9 +23,29 @@ export const getTableOfContents = (markdown: string): any[] => {
                 ${text}
               </h${level}>`;
     },
+    image(href, _, text) {
+      return `<figure class="image">
+                <img src="${href}" title="${text}" alt="${text}"/>
+              </figure>`;
+    },
+    link(href, _, text) {
+      return `<a href="${href}" target="_blank" class="is-underlined"> 
+                ${text}
+              </a>`;
+    },
   };
 
   marked.use({ renderer });
+  marked.setOptions({
+    highlight: function (code, lang, _) {
+      if (hljs.getLanguage(lang)) {
+        return hljs.highlight(code, { language: lang }).value;
+      } else {
+        return hljs.highlightAuto(code).value;
+      }
+    },
+  });
+
   marked(markdown);
 
   return preprocressToc(toc);

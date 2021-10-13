@@ -24,6 +24,11 @@
   });
 </script>
 
+<svelte:head>
+  {#if issue}
+    <title>{issue.title}</title>
+  {/if}
+</svelte:head>
 <section class="hero has-text-centered">
   <div class="hero-body">
     <div class="container">
