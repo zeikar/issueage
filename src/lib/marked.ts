@@ -44,6 +44,7 @@ export const getTableOfContents = (markdown: string): any[] => {
         return hljs.highlightAuto(code).value;
       }
     },
+    breaks: true,
   });
 
   marked(markdown);
