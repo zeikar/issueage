@@ -14,6 +14,23 @@ Generate Website/Github Pages with Github Issues.
 
 # How to use
 
+## Create new Issueage based repository
+
+[Use this template](https://github.com/zeikar/issueage/generate)
+
+Create repository from this template.
+[docs](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template#creating-a-repository-from-a-template)
+
+```bash
+vi config.json
+```
+
+Configure your config.json and commit it.
+
+And set Source to gh-pages in Github Pages settings. [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+
+Then you can access your Github Pages!
+
 ## Add Issueage to existing repository
 
 Add Issueage to your repository.
@@ -43,7 +60,7 @@ git commit -m "Add issueage Github Actions script"
 git push origin <default-branch>
 ```
 
-And set Source to gh-pages in Github Pages settings. (https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+And set Source to gh-pages in Github Pages settings. [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 
 Then you can access your Github Pages!
 
