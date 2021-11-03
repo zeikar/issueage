@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { GoogleAnalytics } from "@beyonk/svelte-google-analytics";
+
   import Router from "svelte-spa-router";
   import routes from "./routes";
 
@@ -9,6 +11,7 @@
   export let Config;
 </script>
 
+<GoogleAnalytics properties={[Config.googleAnalyticsId]} />
 <Navbar websiteTitle={Config.websiteTitle} />
 <Router {routes} restoreScrollState={true} />
 <Footer websiteTitle={Config.websiteTitle} />
