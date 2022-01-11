@@ -91,6 +91,11 @@ npm run build
 
 You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
 
+# Sites using Issueage
+
+- [https://zeikar.github.io/](https://zeikar.github.io/)
+- [and many more...](https://github.com/topics/issueage)
+
 # License
 
 Distributed under the MIT License. See `LICENSE` for more information.
