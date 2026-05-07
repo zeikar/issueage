@@ -14,7 +14,7 @@ Generate Website/Github Pages with Github Issues.
 
 # Live Demo
 
-[https://zeikar.github.io/issueage/](https://zeikar.github.io/issueage/)
+[https://zeikar.dev/issueage/](https://zeikar.dev/issueage/)
 
 # How to use
 
@@ -93,7 +93,7 @@ You can run the newly built app with `npm run start`. This uses [sirv](https://g
 
 # Sites using Issueage
 
-- [https://zeikar.github.io/](https://zeikar.github.io/)
+- [https://zeikar.dev/](https://zeikar.dev/)
 - [and many more...](https://github.com/topics/issueage)
 
 # License
