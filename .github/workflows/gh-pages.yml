@@ -23,9 +23,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      # vitest and jsdom need Node 22.22.2+, 24.15+ or 26+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
       # npm
       - name: Install Dependencies
         run: npm install
+      - name: Test
+        run: npm test
       - name: Build
         run: npm run build
 

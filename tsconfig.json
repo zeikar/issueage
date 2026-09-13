@@ -4,6 +4,10 @@
   "include": ["src/**/*"],
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
   "compilerOptions": {
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    // the app runs in the browser; without this, TS 4 tries to parse the newer @types/node that vitest pulls in.
+    // @types/node used to pull in the es2018 lib (e.g. RegExp groups), so it is listed explicitly
+    "types": ["svelte"],
+    "lib": ["es2018", "dom"]
   }
 }

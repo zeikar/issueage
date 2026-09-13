@@ -21,6 +21,14 @@ Feel free to create new features, fix bugs issues.
 
 Create pull requests to contribute.
 
+### Tests
+
+Tests run with [Vitest](https://vitest.dev/) and need Node 22.22.2+, 24.15+ or 26+ (required by jsdom).
+
+```bash
+npm test
+```
+
 ### Coding style
 
 We use eslint and prettier for linting and formatting.
