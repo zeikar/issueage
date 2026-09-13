@@ -1,4 +1,4 @@
-# Issueage
+# Repozine
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -6,11 +6,11 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
-![issueage_logo](https://repository-images.githubusercontent.com/304850825/bac6d700-58cf-11eb-9903-01b46181dcbc)
+![Repozine logo](https://repository-images.githubusercontent.com/304850825/bac6d700-58cf-11eb-9903-01b46181dcbc)
 
 ---
 
-Generate Website/Github Pages with Github Issues.
+Repozine turns a GitHub repository's Issues or Discussions into a static blog, built with Astro and deployed automatically to GitHub Pages.
 
 # Live Demo
 
@@ -18,32 +18,28 @@ Generate Website/Github Pages with Github Issues.
 
 # How to use
 
-## Create new Issueage based repository
+## Use this template
 
-[Use this template](https://github.com/zeikar/issueage/generate)
-
-Create repository from this template.
+[Use this template](https://github.com/zeikar/issueage/generate) to create a repository from this template.
 [docs](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template#creating-a-repository-from-a-template)
 
 ```bash
 vi config.json
 ```
 
-Configure your config.json ([options](#configuration)) and commit it.
+Configure your `config.json` ([options](#configuration)) and commit it.
 
 ```bash
 git add config.json
-git commit -m "Apply Issueage"
+git commit -m "Configure Repozine"
 git push origin main
 ```
 
-And set Source to gh-pages in Github Pages settings. [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+Set the Pages source to **GitHub Actions** in your repository's Settings → Pages. [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 
-Then you can access your Github Pages!
+Pushing to `main` triggers the deploy workflow, which builds the site and publishes it to GitHub Pages.
 
-## Add Issueage to existing repository
-
-Add Issueage to your repository.
+## Add Repozine to an existing repository
 
 ```bash
 git remote add issueage https://github.com/zeikar/issueage
@@ -52,55 +48,60 @@ git checkout -f -b issueage issueage/main
 vi config.json
 ```
 
-Configure your config.json ([options](#configuration)) and commit it.
+Configure your `config.json` ([options](#configuration)) and commit it.
 
 ```bash
 git add config.json
-git commit -m "Apply Issueage"
+git commit -m "Configure Repozine"
 git push origin issueage
 ```
 
-And set Source to gh-pages in Github Pages settings. [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+Pushing to the `issueage` branch deploys the same way pushing to `main` does above.
 
-Then you can access your Github Pages!
+To also rebuild when issues, discussions or their comments change, copy `.github/workflows/deploy.yml` unchanged to your default branch, then set the repository variable `ISSUEAGE_REF` to `issueage` (Settings → Secrets and variables → Actions → Variables) so that workflow builds from the `issueage` branch instead of the ref that triggered it.
+
+Set the Pages source to **GitHub Actions** in your repository's Settings → Pages. [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+
+If you add a deployment branch policy to the repository's `github-pages` environment (Settings → Environments), include the `issueage` branch, or deploys from that branch will be rejected.
 
 ## Configuration
 
-| Key                 | Description                                                                                                                                       |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `websiteTitle`      | Title shown in the navbar, footer and browser tab                                                                                                 |
-| `repoOwner`         | Owner of the repository. Only issues opened by this account are shown as articles, so the repository must be owned by a user, not an organization |
-| `repoName`          | Repository whose open issues become articles                                                                                                      |
-| `googleAnalyticsId` | Google Analytics measurement ID (e.g. `G-XXXXXXXXXX`). Leave empty to disable analytics                                                           |
+| Key                  | Description                                                                                                                                                       |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `websiteTitle`       | Title shown in the navbar, footer and browser tab                                                                                                                 |
+| `repoOwner`          | Owner of the repository. Only issues or discussions authored by this account are published, so the repository must be owned by a user, not an organization        |
+| `repoName`           | Repository whose issues or discussions become posts                                                                                                               |
+| `source`             | `"issues"` or `"discussions"`                                                                                                                                     |
+| `discussionCategory` | Discussion category **slug** to publish from. Required when `source` is `"discussions"`. Use an Announcement-format category so only maintainers can create posts |
+| `googleAnalyticsId`  | Google Analytics measurement ID (e.g. `G-XXXXXXXXXX`). Leave empty to disable analytics                                                                           |
 
-# Build and run locally
+## Comments
 
-## Run in development mode
+- `source: "issues"` uses [utterances](https://utteranc.es/), bound to the issue number. Install the [utterances GitHub App](https://github.com/apps/utterances) on the repository.
+- `source: "discussions"` uses [giscus](https://giscus.app/), bound to the discussion number. Install the [giscus GitHub App](https://github.com/apps/giscus) on the repository and enable Discussions.
 
-Install the dependencies
+## Local development
+
+Posts are fetched from the GitHub GraphQL API at build time, so `npm run dev`, `npm run build` and `npm run check` all need a `GITHUB_TOKEN`.
 
 ```bash
 npm install
-npm run dev
+GITHUB_TOKEN=$(gh auth token) npm run dev
 ```
 
-Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
-
-By default, the server will only respond to requests from localhost. To allow connections from other computers, edit the `sirv` commands in package.json to include the option `--host 0.0.0.0`.
-
-If you're using [Visual Studio Code](https://code.visualstudio.com/) we recommend installing the official extension [Svelte for VS Code](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode). If you are using other editors you may need to install a plugin in order to get syntax highlighting and intellisense.
-
-## Building and running in production mode
-
-To create an optimised version of the app:
+Search is powered by a [Pagefind](https://pagefind.app/) index generated by `npm run build`, so it only works on a built site:
 
 ```bash
-npm run build
+GITHUB_TOKEN=$(gh auth token) npm run build && npm run preview
 ```
 
-You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
+# Known limitations
 
-# Sites using Issueage
+- A closed discussion is removed from the site only on the next build, because GitHub Actions has no discussion closed/reopened trigger.
+- Dates are shown in UTC.
+- Discussion comment counts include top-level comments only.
+
+# Sites using Repozine
 
 - [https://zeikar.dev/](https://zeikar.dev/)
 - [and many more...](https://github.com/topics/issueage)
