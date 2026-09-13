@@ -1,6 +1,7 @@
 ---
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { getCollection, render } from "astro:content";
+import Comments from "../../components/Comments.astro";
 import TagList from "../../components/TagList.astro";
 import Toc from "../../components/Toc";
 import Base from "../../layouts/Base.astro";
@@ -56,7 +57,9 @@ const { Content } = await render(entry);
       >
         <Content />
       </article>
-      <div data-pagefind-ignore>{/* Task 7: comments mount here */}</div>
+      <div data-pagefind-ignore>
+        <Comments number={data.number} />
+      </div>
     </div>
     {data.toc.length > 0 && (
       <aside class="lg:sticky lg:top-8 lg:self-start" data-pagefind-ignore>

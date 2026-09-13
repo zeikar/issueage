@@ -1,0 +1,76 @@
+---
+import { getEntry } from "astro:content";
+import { siteConfig } from "../lib/config";
+
+interface Props {
+  number: number;
+}
+
+const { number } = Astro.props;
+const { repoOwner, repoName, source } = siteConfig;
+
+// both widgets follow the OS color scheme, not the site's theme toggle: they are
+// cross-origin iframes, so following the toggle would need a postMessage sync
+
+// a discriminated union so the giscus branch below is typed without a non-null assertion
+type CommentsData =
+  | { mode: "issues" }
+  | {
+      mode: "discussions";
+      repoId: string;
+      category: { id: string; name: string };
+    };
+
+// utterances reads these off the script element itself, not off HTMLScriptElement's
+// known attributes, so Astro's JSX typings don't have them; a variable (not an inline
+// object literal) sidesteps the excess-property check that a literal would trigger
+const utterancesAttrs = {
+  src: "https://utteranc.es/client.js",
+  repo: `${repoOwner}/${repoName}`,
+  "issue-number": number,
+  theme: "preferred-color-scheme",
+  crossorigin: "anonymous",
+  async: true,
+};
+
+let comments: CommentsData;
+if (source === "issues") {
+  comments = { mode: "issues" };
+} else {
+  const site = await getEntry("site", "site");
+  if (site === undefined) {
+    throw new Error('the "site" collection has no "site" entry');
+  }
+  const { repoId, discussionCategory } = site.data;
+  // the loader fills both only in discussions mode; null here means the loader is broken
+  if (repoId === null || discussionCategory === null) {
+    throw new Error(
+      "discussions mode requires repoId and discussionCategory on the site entry",
+    );
+  }
+  comments = { mode: "discussions", repoId, category: discussionCategory };
+}
+---
+
+{comments.mode === "issues" ? (
+  <script is:inline {...utterancesAttrs}></script>
+) : (
+  <script
+    is:inline
+    src="https://giscus.app/client.js"
+    data-repo={`${repoOwner}/${repoName}`}
+    data-repo-id={comments.repoId}
+    data-category={comments.category.name}
+    data-category-id={comments.category.id}
+    data-mapping="number"
+    data-term={number}
+    data-strict="1"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    crossorigin="anonymous"
+    async
+  ></script>
+)}
