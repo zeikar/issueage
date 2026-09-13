@@ -1,7 +1,7 @@
 name: Deploy to Github Pages
 
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers the workflow on push to any branch except gh-pages
   push:
     branches-ignore: 
       - gh-pages

@@ -34,7 +34,7 @@ Configure your config.json ([options](#configuration)) and commit it.
 ```bash
 git add config.json
 git commit -m "Apply Issueage"
-git push origin master
+git push origin main
 ```
 
 And set Source to gh-pages in Github Pages settings. [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
@@ -48,7 +48,7 @@ Add Issueage to your repository.
 ```bash
 git remote add issueage https://github.com/zeikar/issueage
 git fetch issueage
-git checkout -f -b issueage issueage/master
+git checkout -f -b issueage issueage/main
 vi config.json
 ```
 
@@ -121,4 +121,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 [issues-shield]: https://img.shields.io/github/issues/zeikar/issueage.svg?style=for-the-badge
 [issues-url]: https://github.com/zeikar/issueage/issues
 [license-shield]: https://img.shields.io/github/license/zeikar/issueage.svg?style=for-the-badge
-[license-url]: https://github.com/zeikar/issueage/blob/master/LICENSE.txt
+[license-url]: https://github.com/zeikar/issueage/blob/main/LICENSE.txt
