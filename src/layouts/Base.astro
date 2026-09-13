@@ -1,5 +1,7 @@
 ---
 import "../styles/global.css";
+import Footer from "../components/Footer.astro";
+import Navbar from "../components/Navbar.astro";
 import { withBase } from "../lib/links";
 
 interface Props {
@@ -21,9 +23,11 @@ const { title } = Astro.props;
       href={withBase(import.meta.env.BASE_URL, "/favicon.png")}
     />
   </head>
-  <body>
-    <div class="mx-auto max-w-4xl px-4">
+  <body class="flex min-h-screen flex-col bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+    <Navbar />
+    <main class="mx-auto w-full max-w-5xl flex-1 px-4 py-8">
       <slot />
-    </div>
+    </main>
+    <Footer />
   </body>
 </html>

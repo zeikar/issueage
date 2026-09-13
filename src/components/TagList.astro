@@ -1,0 +1,35 @@
+---
+import { tagTextClass } from "../lib/color";
+import { tagPath, withBase } from "../lib/links";
+
+interface Props {
+  tags: { name: string; color: string; slug: string; count?: number }[];
+}
+
+const { tags } = Astro.props;
+---
+
+{tags.length > 0 && (
+  <ul class="flex flex-wrap gap-2">
+    {tags.map((tag) => (
+      <li>
+        <a
+          href={withBase(import.meta.env.BASE_URL, tagPath(tag.slug))}
+          class:list={[
+            "inline-block rounded-full px-2.5 py-0.5 text-xs font-medium hover:opacity-80",
+            tagTextClass(tag.color),
+          ]}
+          style={`background-color: #${tag.color}`}
+        >
+          {tag.name}
+          {tag.count !== undefined && (
+            <>
+              {" "}
+              <span>{tag.count}</span>
+            </>
+          )}
+        </a>
+      </li>
+    ))}
+  </ul>
+)}

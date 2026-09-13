@@ -1,0 +1,40 @@
+---
+import { pagePath, withBase } from "../lib/links";
+import { getPaginationPages } from "../lib/pagination";
+
+interface Props {
+  currentPage: number;
+  lastPage: number;
+  prefix: string;
+}
+
+const { currentPage, lastPage, prefix } = Astro.props;
+---
+
+{lastPage > 1 && (
+  <nav aria-label="Pagination" class="mt-8">
+    <ul class="flex flex-wrap items-center justify-center gap-1">
+      {getPaginationPages(currentPage, lastPage).map((page) => (
+        <li>
+          {page === "…" ? (
+            <span class="px-3 py-1 text-gray-500">…</span>
+          ) : (
+            <a
+              href={withBase(import.meta.env.BASE_URL, pagePath(prefix, page))}
+              aria-label={`Page ${page}`}
+              aria-current={page === currentPage ? "page" : undefined}
+              class:list={[
+                "block rounded px-3 py-1",
+                page === currentPage
+                  ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900"
+                  : "hover:bg-gray-100 dark:hover:bg-gray-800",
+              ]}
+            >
+              {page}
+            </a>
+          )}
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}

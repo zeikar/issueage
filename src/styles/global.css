@@ -1,3 +1,15 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* Shiki inlines the light theme and exposes the dark one as variables, so the dark class swaps them in */
+html.dark .shiki,
+html.dark .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+/* leave room above a heading when a fragment link scrolls to it */
+.prose :where(h1, h2, h3, h4, h5, h6) {
+  scroll-margin-top: 1rem;
+}

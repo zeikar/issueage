@@ -1,0 +1,53 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import { getCollection } from "astro:content";
+import Pagination from "../components/Pagination.astro";
+import PostCard from "../components/PostCard.astro";
+import Profile from "../components/Profile.astro";
+import TagSidebar from "../components/TagSidebar.astro";
+import Base from "../layouts/Base.astro";
+import { siteConfig } from "../lib/config";
+import { PAGE_SIZE } from "../lib/pagination";
+import { byNewest } from "../lib/posts";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = (await getCollection("posts")).sort((a, b) =>
+    byNewest(a.data, b.data),
+  );
+  return paginate(posts, { pageSize: PAGE_SIZE });
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { page } = Astro.props;
+const pageSuffix = page.currentPage > 1 ? ` - Page ${page.currentPage}` : "";
+---
+
+<Base title={`${siteConfig.websiteTitle}${pageSuffix}`}>
+  <Profile />
+  <div class="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_16rem]">
+    <div>
+      {page.data.length > 0 ? (
+        <ul class="space-y-4">
+          {page.data.map((entry) => (
+            <li>
+              <PostCard post={entry.data} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="text-center text-gray-600 dark:text-gray-400">
+          No posts yet.
+        </p>
+      )}
+      <Pagination
+        currentPage={page.currentPage}
+        lastPage={page.lastPage}
+        prefix=""
+      />
+    </div>
+    <aside>
+      <TagSidebar />
+    </aside>
+  </div>
+</Base>

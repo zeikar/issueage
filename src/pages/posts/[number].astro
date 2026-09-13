@@ -1,0 +1,58 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import { getCollection, render } from "astro:content";
+import TagList from "../../components/TagList.astro";
+import Base from "../../layouts/Base.astro";
+import { siteConfig } from "../../lib/config";
+import { formatDate } from "../../lib/datetime";
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection("posts");
+  return posts.map((entry) => ({
+    params: { number: entry.id },
+    props: { entry },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+---
+
+<Base title={`${data.title} - ${siteConfig.websiteTitle}`}>
+  <div
+    class:list={[
+      "grid gap-10",
+      data.toc.length > 0
+        ? "lg:grid-cols-[minmax(0,1fr)_14rem]"
+        : "mx-auto max-w-3xl",
+    ]}
+  >
+    <div class="min-w-0">
+      <header class="mb-8 break-keep break-words">
+        <h1 class="text-3xl font-bold">{data.title}</h1>
+        <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">
+          <time datetime={data.createdAt}>{formatDate(data.createdAt)}</time>{" "}
+          <span aria-hidden="true">·</span>{" "}
+          {`${data.commentCount} ${data.commentCount === 1 ? "comment" : "comments"}`}{" "}
+          <span aria-hidden="true">·</span>{" "}
+          <a href={data.url} class="underline hover:opacity-80">
+            View on GitHub
+          </a>
+        </p>
+        <div class="mt-3">
+          <TagList tags={data.tags} />
+        </div>
+      </header>
+      <article class="prose max-w-none break-words dark:prose-invert">
+        <Content />
+      </article>
+      {/* Task 7: comments mount here */}
+    </div>
+    {data.toc.length > 0 && (
+      <aside>{/* Task 5: table of contents mounts here */}</aside>
+    )}
+  </div>
+</Base>

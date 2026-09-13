@@ -1,0 +1,32 @@
+---
+import { getEntry } from "astro:content";
+
+const site = await getEntry("site", "site");
+if (site === undefined) {
+  throw new Error('the "site" collection has no "site" entry');
+}
+const { login, name, bio, avatarUrl, url, followers, following } =
+  site.data.profile;
+const displayName = name ?? login;
+---
+
+<section class="flex flex-col items-center text-center">
+  <img
+    src={avatarUrl}
+    alt={`${displayName} avatar`}
+    width="128"
+    height="128"
+    class="size-32 rounded-full"
+  />
+  <h1 class="mt-4 text-2xl font-bold">{displayName}</h1>
+  {bio && <p class="mt-2 text-gray-600 dark:text-gray-400">{bio}</p>}
+  <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">
+    <a href={`${url}?tab=followers`} class="hover:underline">
+      {followers.totalCount} followers
+    </a>{" "}
+    <span aria-hidden="true">·</span>{" "}
+    <a href={`${url}?tab=following`} class="hover:underline">
+      {following.totalCount} following
+    </a>
+  </p>
+</section>
