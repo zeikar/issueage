@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "check": "astro check",
     "test": "vitest run",
@@ -22,6 +22,7 @@
     "astro": "^7.3.2",
     "hast-util-to-string": "^3.0.1",
     "jsdom": "^30.0.1",
+    "pagefind": "^1.5.2",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^1.0.0",
     "react": "^19.3.0",

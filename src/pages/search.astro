@@ -1,0 +1,12 @@
+---
+import Search from "../components/Search";
+import Base from "../layouts/Base.astro";
+import { siteConfig } from "../lib/config";
+---
+
+<Base title={`Search - ${siteConfig.websiteTitle}`}>
+  <section class="mx-auto max-w-3xl">
+    <h1 class="mb-6 text-3xl font-bold">Search</h1>
+    <Search client:load base={import.meta.env.BASE_URL} />
+  </section>
+</Base>

@@ -12,6 +12,21 @@ import { withBase } from "../lib/links";
     >
       {siteConfig.websiteTitle}
     </a>
-    <ThemeToggle client:load />
+    <div class="flex items-center gap-2">
+      <form
+        method="get"
+        action={withBase(import.meta.env.BASE_URL, "/search/")}
+        role="search"
+      >
+        <input
+          name="q"
+          type="search"
+          placeholder="Search"
+          aria-label="Search posts"
+          class="w-32 rounded border border-gray-300 bg-transparent px-2 py-1 text-sm sm:w-48 dark:border-gray-700"
+        />
+      </form>
+      <ThemeToggle client:load />
+    </div>
   </nav>
 </header>

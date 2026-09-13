@@ -33,7 +33,9 @@ const { Content } = await render(entry);
   >
     <div class="min-w-0">
       <header class="mb-8 break-keep break-words">
-        <h1 class="text-3xl font-bold">{data.title}</h1>
+        <h1 class="text-3xl font-bold" data-pagefind-meta="title">
+          {data.title}
+        </h1>
         <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">
           <time datetime={data.createdAt}>{formatDate(data.createdAt)}</time>{" "}
           <span aria-hidden="true">·</span>{" "}
@@ -47,13 +49,17 @@ const { Content } = await render(entry);
           <TagList tags={data.tags} />
         </div>
       </header>
-      <article class="prose max-w-none break-words prose-code:before:content-none prose-code:after:content-none dark:prose-invert">
+      {/* only post bodies go into the search index */}
+      <article
+        class="prose max-w-none break-words prose-code:before:content-none prose-code:after:content-none dark:prose-invert"
+        data-pagefind-body
+      >
         <Content />
       </article>
-      {/* Task 7: comments mount here */}
+      <div data-pagefind-ignore>{/* Task 7: comments mount here */}</div>
     </div>
     {data.toc.length > 0 && (
-      <aside class="lg:sticky lg:top-8 lg:self-start">
+      <aside class="lg:sticky lg:top-8 lg:self-start" data-pagefind-ignore>
         <Toc items={data.toc} client:idle />
       </aside>
     )}
