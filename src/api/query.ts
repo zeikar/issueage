@@ -10,6 +10,8 @@ export const generateIssueSearchQuery = (
   }
   q.push("is:issue");
   q.push("is:open");
+  // anyone can open an issue on a public repo; only the owner's issues are articles
+  q.push(`author:${Config.repoOwner}`);
   if (labels.length > 0) {
     q.push(`label:${labels.map((label) => `"${label}"`).join(",")}`);
   }

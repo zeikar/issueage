@@ -4,6 +4,7 @@
   import ProfileItem from "./ProfileItem.svelte";
 
   let profile = null;
+  let error = null;
 
   onMount(() => {
     getGithubProfile()
@@ -14,8 +15,11 @@
       })
       .catch((err) => {
         console.error(err);
+        error = err;
       });
   });
 </script>
 
-<ProfileItem {profile} />
+{#if !error}
+  <ProfileItem {profile} />
+{/if}

@@ -1,8 +1,27 @@
 import marked from "marked";
 import hljs from "highlight.js";
+import DOMPurify from "dompurify";
+
+// articles embed YouTube videos, but an iframe from any other origin is not trusted
+const YOUTUBE_EMBED = /^https:\/\/www\.youtube(-nocookie)?\.com\/embed\//;
+DOMPurify.addHook("uponSanitizeElement", (node: Element, data) => {
+  if (data.tagName !== "iframe") {
+    return;
+  }
+  if (!YOUTUBE_EMBED.test(node.getAttribute("src") || "")) {
+    node.parentNode?.removeChild(node);
+    return;
+  }
+  // a named frame could be navigated to another origin by a link or form with target="<name>"
+  node.removeAttribute("name");
+});
 
 export const getHTML = (markdown: string): string => {
-  return marked(markdown);
+  // issue bodies are raw markdown that may contain HTML; target is dropped by default, but links rely on it
+  return DOMPurify.sanitize(marked(markdown), {
+    ADD_TAGS: ["iframe"],
+    ADD_ATTR: ["target", "allow", "allowfullscreen", "frameborder"],
+  });
 };
 
 export const getTableOfContents = (markdown: string): any[] => {
@@ -11,9 +30,10 @@ export const getTableOfContents = (markdown: string): any[] => {
   // Override function
   const renderer = {
     heading(text, level, _, slugger) {
-      const escapedText = slugger.slug(
-        text.toLowerCase().replace(/[^\w\u1100-\udfff]+/g, "-")
-      );
+      // prefixed like GitHub does: DOMPurify drops ids that shadow document properties (e.g. "title")
+      const escapedText =
+        "user-content-" +
+        slugger.slug(text.toLowerCase().replace(/[^\w\u1100-\udfff]+/g, "-"));
       toc.push({
         anchor: escapedText,
         level: level,
@@ -52,21 +72,15 @@ export const getTableOfContents = (markdown: string): any[] => {
   return preprocressToc(toc);
 };
 
-export const getHTMLWithoutTags = (
-  markdown: string,
-  limit?: number
-): string => {
-  const html = marked(markdown);
-  const replaced = html.replace(/<[^>]*>/g, "");
-  if (!limit) {
-    return replaced;
+// returns plain text: render it with {text}, never {@html}, since entities like &lt; are decoded
+export const getPlainText = (markdown: string, limit?: number): string => {
+  // DOMParser documents are inert: scripts don't run and images don't load
+  const text = new DOMParser().parseFromString(marked(markdown), "text/html")
+    .body.textContent;
+  if (!limit || text.length <= limit) {
+    return text;
   }
-
-  let ret = replaced.substring(0, limit);
-  if (replaced.length > limit) {
-    ret += "&hellip;";
-  }
-  return ret;
+  return text.substring(0, limit) + "\u2026";
 };
 
 export const getFirstImageUrl = (markdown: string): string => {

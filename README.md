@@ -29,7 +29,7 @@ Create repository from this template.
 vi config.json
 ```
 
-Configure your config.json and commit it.
+Configure your config.json ([options](#configuration)) and commit it.
 
 ```bash
 git add config.json
@@ -52,7 +52,7 @@ git checkout -f -b issueage issueage/master
 vi config.json
 ```
 
-Configure your config.json and commit it.
+Configure your config.json ([options](#configuration)) and commit it.
 
 ```bash
 git add config.json
@@ -63,6 +63,15 @@ git push origin issueage
 And set Source to gh-pages in Github Pages settings. [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 
 Then you can access your Github Pages!
+
+## Configuration
+
+| Key                 | Description                                                                                                                                       |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `websiteTitle`      | Title shown in the navbar, footer and browser tab                                                                                                 |
+| `repoOwner`         | Owner of the repository. Only issues opened by this account are shown as articles, so the repository must be owned by a user, not an organization |
+| `repoName`          | Repository whose open issues become articles                                                                                                      |
+| `googleAnalyticsId` | Google Analytics measurement ID (e.g. `G-XXXXXXXXXX`). Leave empty to disable analytics                                                           |
 
 # Build and run locally
 

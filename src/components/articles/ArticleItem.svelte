@@ -2,7 +2,7 @@
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
   import { link } from "svelte-spa-router";
   import { formatDate } from "../../lib/datetime";
-  import { getHTMLWithoutTags, getFirstImageUrl } from "../../lib/marked";
+  import { getPlainText, getFirstImageUrl } from "../../lib/marked";
   import TagList from "../tags/TagList.svelte";
 
   export let issue = null;
@@ -24,7 +24,7 @@
                   <span>{issue.title}</span>
                 </h1>
                 <p class="subtitle is-6">
-                  {@html getHTMLWithoutTags(issue.body, 200)}
+                  {getPlainText(issue.body, 200)}
                 </p>
               </div>
             </a>

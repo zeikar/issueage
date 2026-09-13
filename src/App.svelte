@@ -11,7 +11,9 @@
   export let Config;
 </script>
 
-<GoogleAnalytics properties={[Config.googleAnalyticsId]} />
+{#if Config.googleAnalyticsId}
+  <GoogleAnalytics properties={[Config.googleAnalyticsId]} />
+{/if}
 <Navbar websiteTitle={Config.websiteTitle} />
 <Router {routes} restoreScrollState={true} />
 <Footer websiteTitle={Config.websiteTitle} />

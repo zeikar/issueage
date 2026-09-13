@@ -4,22 +4,31 @@
   import { formatDate } from "../../lib/datetime";
   import { getHTML, getTableOfContents } from "../../lib/marked";
   import SkeletonLoader from "../common/SkeletonLoader.svelte";
+  import NotFound from "../common/NotFound.svelte";
+  import ErrorMessage from "../common/ErrorMessage.svelte";
   import TagList from "../tags/TagList.svelte";
   import Comments from "./Comments.svelte";
   import TableOfContents from "./TableOfContents.svelte";
 
   export let params;
   let issue = null;
+  let notFound = false;
+  let error = null;
 
   onMount(() => {
     getIssue(params.articleNumber)
       .then((res) => {
+        if (!res) {
+          notFound = true;
+          return;
+        }
         console.log(res.data);
         issue = res.data;
         return;
       })
       .catch((err) => {
         console.error(err);
+        error = err;
       });
   });
 </script>
@@ -29,62 +38,72 @@
     <title>{issue.title}</title>
   {/if}
 </svelte:head>
-<section class="hero has-text-centered">
-  <div class="hero-body">
-    <div class="container">
-      <h1 class="title">
-        {#if issue}
-          {issue.title}
-        {:else}
-          <SkeletonLoader width={50} alignCenter />
-        {/if}
-      </h1>
-      <p class="subtitle">
-        {#if issue}
-          {formatDate(issue.created_at)}
-        {:else}
-          <SkeletonLoader width={30} alignCenter />
-        {/if}
-      </p>
-      {#if issue}
-        <TagList tags={issue.labels} alignCenter />
-      {:else}
-        <SkeletonLoader width={80} alignCenter />
-      {/if}
+{#if notFound}
+  <NotFound />
+{:else if error}
+  <section class="section">
+    <div class="container is-max-desktop">
+      <ErrorMessage {error} />
     </div>
-  </div>
-</section>
-<section class="section">
-  <div class="container is-max-widescreen">
-    <div class="columns is-desktop">
-      <div class="column is-2-desktop">
-        <div class="sticky">
+  </section>
+{:else}
+  <section class="hero has-text-centered">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
           {#if issue}
-            <TableOfContents toc={getTableOfContents(issue.body)} />
-          {/if}
-        </div>
-      </div>
-      <div class="column is-10-desktop">
-        <div class="content">
-          {#if issue}
-            {@html getHTML(issue.body)}
+            {issue.title}
           {:else}
-            {#each Array(10) as _}
-              <p>
-                <SkeletonLoader />
-              </p>
-            {/each}
+            <SkeletonLoader width={50} alignCenter />
           {/if}
+        </h1>
+        <p class="subtitle">
+          {#if issue}
+            {formatDate(issue.created_at)}
+          {:else}
+            <SkeletonLoader width={30} alignCenter />
+          {/if}
+        </p>
+        {#if issue}
+          <TagList tags={issue.labels} alignCenter />
+        {:else}
+          <SkeletonLoader width={80} alignCenter />
+        {/if}
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container is-max-widescreen">
+      <div class="columns is-desktop">
+        <div class="column is-2-desktop">
+          <div class="sticky">
+            {#if issue}
+              <TableOfContents toc={getTableOfContents(issue.body)} />
+            {/if}
+          </div>
+        </div>
+        <div class="column is-10-desktop">
+          <div class="content">
+            {#if issue}
+              {@html getHTML(issue.body)}
+            {:else}
+              {#each Array(10) as _}
+                <p>
+                  <SkeletonLoader />
+                </p>
+              {/each}
+            {/if}
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-<section class="section">
-  {#if issue}
-    <Comments issueNumber={issue.number} />
-  {/if}
-</section>
+  </section>
+  <section class="section">
+    {#if issue}
+      <Comments issueNumber={issue.number} />
+    {/if}
+  </section>
+{/if}
 
 <style>
   @media screen and (min-width: 769px) {
