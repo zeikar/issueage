@@ -1,0 +1,29 @@
+---
+import "../styles/global.css";
+import { withBase } from "../lib/links";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href={withBase(import.meta.env.BASE_URL, "/favicon.png")}
+    />
+  </head>
+  <body>
+    <div class="mx-auto max-w-4xl px-4">
+      <slot />
+    </div>
+  </body>
+</html>

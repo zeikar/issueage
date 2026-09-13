@@ -1,1 +1,4 @@
 *.txt
+dist
+.astro
+package-lock.json

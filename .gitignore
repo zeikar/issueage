@@ -1,5 +1,7 @@
 /node_modules/
-/public/build/
+dist/
+.astro/
+.env*
 
 .DS_Store
 
