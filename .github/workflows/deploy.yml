@@ -1,0 +1,78 @@
+name: Deploy to GitHub Pages
+
+on:
+  # main is this repo's default branch; issueage lets downstream repos push
+  # template updates straight to their tracked branch and have it deploy.
+  push:
+    branches: [main, issueage]
+  issues:
+    types: [opened, edited, deleted, closed, reopened, labeled, unlabeled, transferred]
+  # comment counts are rendered at build time, so new/removed comments must
+  # trigger a rebuild; pull-request comments are filtered out in the job below
+  issue_comment:
+    types: [created, deleted]
+  discussion:
+    types: [created, edited, deleted, transferred, category_changed, labeled, unlabeled]
+  discussion_comment:
+    types: [created, deleted]
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    # only the repo owner's issues/discussions render as posts, so events on
+    # anyone else's issue or discussion (including PR comments) are a no-op
+    if: >-
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      (contains(fromJSON('["issues","issue_comment"]'), github.event_name) &&
+      !github.event.issue.pull_request &&
+      github.event.issue.user.login == github.repository_owner) ||
+      (contains(fromJSON('["discussion","discussion_comment"]'), github.event_name) &&
+      github.event.discussion.user.login == github.repository_owner)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+      discussions: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # empty ISSUEAGE_REF checks out the triggering ref; downstream repos
+          # set it to "issueage" to build from their tracked branch
+          ref: ${{ vars.ISSUEAGE_REF }}
+
+      # vitest and jsdom need Node 22.22.2+, 24.15+ or 26+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+      - name: Test
+        run: npm test
+      - name: Build
+        run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
