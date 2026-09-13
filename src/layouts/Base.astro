@@ -22,6 +22,24 @@ const { title } = Astro.props;
       type="image/png"
       href={withBase(import.meta.env.BASE_URL, "/favicon.png")}
     />
+    <script is:inline>
+      // runs before the stylesheet loads, so the page never paints the wrong theme first;
+      // localStorage can throw (e.g. Safari's "Block all cookies"), and a stored value could be anything, so guard both;
+      // the block scopes these names, since inline scripts otherwise share one global scope and a later one could redeclare them
+      {
+        let stored;
+        try {
+          stored = localStorage.theme;
+        } catch {}
+        const theme =
+          stored === "dark" || stored === "light"
+            ? stored
+            : matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        document.documentElement.classList.toggle("dark", theme === "dark");
+      }
+    </script>
   </head>
   <body class="flex min-h-screen flex-col bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100">
     <Navbar />

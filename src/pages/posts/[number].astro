@@ -2,6 +2,7 @@
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { getCollection, render } from "astro:content";
 import TagList from "../../components/TagList.astro";
+import Toc from "../../components/Toc";
 import Base from "../../layouts/Base.astro";
 import { siteConfig } from "../../lib/config";
 import { formatDate } from "../../lib/datetime";
@@ -46,13 +47,15 @@ const { Content } = await render(entry);
           <TagList tags={data.tags} />
         </div>
       </header>
-      <article class="prose max-w-none break-words dark:prose-invert">
+      <article class="prose max-w-none break-words prose-code:before:content-none prose-code:after:content-none dark:prose-invert">
         <Content />
       </article>
       {/* Task 7: comments mount here */}
     </div>
     {data.toc.length > 0 && (
-      <aside>{/* Task 5: table of contents mounts here */}</aside>
+      <aside class="lg:sticky lg:top-8 lg:self-start">
+        <Toc items={data.toc} client:idle />
+      </aside>
     )}
   </div>
 </Base>
