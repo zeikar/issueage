@@ -34,6 +34,9 @@ const { Content } = await render(entry);
   >
     <div class="min-w-0">
       <header class="mb-8 break-keep break-words">
+        {/* Pagefind 1.5.2 also indexes this title metadata, so title-only searches still match even
+        though the h1 sits outside data-pagefind-body; adding that attribute here would pull the title
+        into excerpts below */}
         <h1 class="text-3xl font-bold" data-pagefind-meta="title">
           {data.title}
         </h1>

@@ -61,7 +61,9 @@ export const parseSiteConfig = (
 
 export const siteConfig: SiteConfig = parseSiteConfig(rawConfig);
 
-// GitHub Pages serves <owner>.github.io repositories from the domain root and every other repository under /<repoName>
-export const basePathFor = (repoName: string): string => {
-  return repoName.toLowerCase().endsWith(".github.io") ? "/" : `/${repoName}`;
+// GitHub Pages serves a repository from the domain root only when its name matches <repoOwner>.github.io; every other repository is served under /<repoName>
+export const basePathFor = (repoOwner: string, repoName: string): string => {
+  return repoName.toLowerCase() === `${repoOwner}.github.io`.toLowerCase()
+    ? "/"
+    : `/${repoName}`;
 };

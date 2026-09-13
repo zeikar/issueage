@@ -4,7 +4,7 @@ import { defineConfig } from "astro/config";
 import { basePathFor, siteConfig } from "./src/lib/config";
 
 export default defineConfig({
-  base: basePathFor(siteConfig.repoName),
+  base: basePathFor(siteConfig.repoOwner, siteConfig.repoName),
   integrations: [react()],
   vite: { plugins: [tailwindcss()] },
 });

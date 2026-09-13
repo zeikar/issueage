@@ -13,7 +13,7 @@ export const getStaticPaths = (async ({ paginate }) => {
   const posts = (await getCollection("posts")).sort((a, b) =>
     byNewest(a.data, b.data),
   );
-  // collectTags fails the build when two labels share a slug, so each slug names one tag page
+  // tagSlug derives each slug from its name alone, and collectTags throws if two names ever collide, so each slug names exactly one tag page
   return collectTags(posts.map((entry) => entry.data)).flatMap((tag) =>
     paginate(
       posts.filter((entry) =>

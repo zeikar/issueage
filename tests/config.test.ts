@@ -48,17 +48,21 @@ describe("parseSiteConfig", () => {
 
 describe("basePathFor", () => {
   it("serves a project site under the repository name", () => {
-    expect(basePathFor("issueage")).toBe("/issueage");
+    expect(basePathFor("zeikar", "issueage")).toBe("/issueage");
   });
 
   it.each(["zeikar.github.io", "Zeikar.GitHub.IO"])(
-    "serves the user site %j from the root",
+    "serves the owner's user site %j from the root",
     (repoName) => {
-      expect(basePathFor(repoName)).toBe("/");
+      expect(basePathFor("zeikar", repoName)).toBe("/");
     },
   );
 
   it("only treats a .github.io suffix as a user site", () => {
-    expect(basePathFor("github.io-notes")).toBe("/github.io-notes");
+    expect(basePathFor("zeikar", "github.io-notes")).toBe("/github.io-notes");
+  });
+
+  it("serves another repository ending in .github.io under its own name", () => {
+    expect(basePathFor("zeikar", "notes.github.io")).toBe("/notes.github.io");
   });
 });
