@@ -2,7 +2,8 @@
   "websiteTitle": "Repozine",
   "repoOwner": "zeikar",
   "repoName": "repozine",
-  "source": "issues",
+  "source": "discussions",
+  "discussionCategory": "posts",
   "googleAnalyticsId": "",
   "language": "en"
 }
