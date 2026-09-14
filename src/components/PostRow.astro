@@ -40,6 +40,12 @@ const [firstTag] = post.tags;
           {post.excerpt}
         </p>
       )}
+      {/* labels get a line of their own, so the title reads the same however many a post has */}
+      {post.tags.length > 0 && (
+        <div class="mt-1.5 text-[0.8125rem]">
+          <TagList tags={post.tags} />
+        </div>
+      )}
     </div>
     {post.thumbnail && (
       <img
@@ -50,8 +56,7 @@ const [firstTag] = post.tags;
       />
     )}
   </div>
-  <div class="col-start-2 mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm text-muted tabular-nums sm:col-start-3 sm:mt-0 sm:max-w-56 sm:flex-col sm:items-end">
-    <TagList tags={post.tags} />
+  <div class="col-start-2 mt-1.5 flex flex-wrap gap-x-3 text-sm leading-7 text-muted tabular-nums sm:col-start-3 sm:mt-0 sm:flex-col sm:items-end">
     <time
       datetime={post.createdAt}
       data-local-date="short"

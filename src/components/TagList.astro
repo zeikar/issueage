@@ -1,5 +1,4 @@
 ---
-import { tagTextClass } from "../lib/color";
 import { tagPath, withBase } from "../lib/links";
 
 interface Props {
@@ -10,17 +9,20 @@ const { tags } = Astro.props;
 ---
 
 {tags.length > 0 && (
-  <ul class="flex flex-wrap gap-1.5">
+  <ul class="flex flex-wrap gap-x-3 gap-y-1">
     {tags.map((tag) => (
       <li>
+        {/* the label's color only marks a dot, so any GitHub label color keeps the text readable;
+        z-10 lifts the link above a post row's whole-row link */}
         <a
           href={withBase(import.meta.env.BASE_URL, tagPath(tag.slug))}
-          class:list={[
-            "relative z-10 inline-block rounded-full px-2.5 text-xs leading-5 font-semibold break-keep hover:opacity-80",
-            tagTextClass(tag.color),
-          ]}
-          style={`background-color: #${tag.color}`}
+          class="relative z-10 inline-flex items-center gap-1.5 text-muted break-keep hover:text-fg"
         >
+          <span
+            aria-hidden="true"
+            class="size-2 shrink-0 rounded-full ring-1 ring-fg/15 ring-inset"
+            style={`background-color: #${tag.color}`}
+          />
           {tag.name}
         </a>
       </li>

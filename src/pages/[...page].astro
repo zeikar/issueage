@@ -2,7 +2,6 @@
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { getCollection } from "astro:content";
 import PostIndex from "../components/PostIndex.astro";
-import Profile from "../components/Profile.astro";
 import Base from "../layouts/Base.astro";
 import { siteConfig } from "../lib/config";
 import { PAGE_SIZE } from "../lib/pagination";
@@ -22,15 +21,12 @@ const pageSuffix = page.currentPage > 1 ? ` - Page ${page.currentPage}` : "";
 ---
 
 <Base title={`${siteConfig.websiteTitle}${pageSuffix}`}>
-  <Profile />
-  <div class="mt-10">
-    <PostIndex
-      heading="Posts"
-      total={page.total}
-      posts={page.data}
-      currentPage={page.currentPage}
-      lastPage={page.lastPage}
-      prefix=""
-    />
-  </div>
+  <PostIndex
+    heading="Posts"
+    total={page.total}
+    posts={page.data}
+    currentPage={page.currentPage}
+    lastPage={page.lastPage}
+    prefix=""
+  />
 </Base>

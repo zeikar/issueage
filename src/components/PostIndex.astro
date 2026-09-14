@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import Pagination from "./Pagination.astro";
 import PostRow from "./PostRow.astro";
+import Profile from "./Profile.astro";
 import TagFilter from "./TagFilter.astro";
 
 interface Props {
@@ -19,7 +20,8 @@ const { heading, total, posts, currentPage, lastPage, prefix, currentSlug } =
   Astro.props;
 ---
 
-<section>
+<Profile />
+<section class="mt-10">
   <div class="flex flex-wrap items-baseline gap-x-8 gap-y-3">
     <h1 class="min-w-0 text-3xl font-bold tracking-tight break-keep break-words">
       {heading} <span class="font-normal text-faint tabular-nums">{total}</span>

@@ -46,7 +46,11 @@ const chips = [
           >
             {chip.color && (
               <span
-                class="size-2.5 rounded-full"
+                class:list={[
+                  "size-2.5 rounded-full ring-1 ring-inset",
+                  // the current chip is filled with the text color, so its ring switches to the page color to stay visible
+                  chip.current ? "ring-page/40" : "ring-fg/15",
+                ]}
                 style={`background-color: #${chip.color}`}
               />
             )}
