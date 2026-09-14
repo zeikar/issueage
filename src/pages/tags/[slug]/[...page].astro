@@ -1,8 +1,7 @@
 ---
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { getCollection } from "astro:content";
-import Pagination from "../../../components/Pagination.astro";
-import PostCard from "../../../components/PostCard.astro";
+import PostIndex from "../../../components/PostIndex.astro";
 import Base from "../../../layouts/Base.astro";
 import { siteConfig } from "../../../lib/config";
 import { PAGE_SIZE } from "../../../lib/pagination";
@@ -31,19 +30,13 @@ const pageSuffix = page.currentPage > 1 ? ` - Page ${page.currentPage}` : "";
 ---
 
 <Base title={`${tag.name} - ${siteConfig.websiteTitle}${pageSuffix}`}>
-  <h1 class="mb-6 text-2xl font-bold break-keep break-words">
-    Posts tagged “{tag.name}”
-  </h1>
-  <ul class="space-y-4">
-    {page.data.map((entry) => (
-      <li>
-        <PostCard post={entry.data} />
-      </li>
-    ))}
-  </ul>
-  <Pagination
+  <PostIndex
+    heading={tag.name}
+    total={page.total}
+    posts={page.data}
     currentPage={page.currentPage}
     lastPage={page.lastPage}
     prefix={`/tags/${tag.slug}`}
+    currentSlug={tag.slug}
   />
 </Base>

@@ -3,14 +3,14 @@ import { siteConfig } from "../lib/config";
 import { PROJECT_NAME, PROJECT_URL } from "../lib/project";
 ---
 
-<footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-600 dark:border-gray-800 dark:text-gray-400">
-  <p class="font-semibold text-gray-900 dark:text-gray-100">
-    {siteConfig.websiteTitle}
-  </p>
-  <p class="mt-1">
-    Powered by{" "}
-    <a href={PROJECT_URL} class="underline hover:opacity-80">
-      {PROJECT_NAME}
-    </a>
-  </p>
+<footer class="border-t border-rule">
+  <div class="mx-auto flex max-w-5xl flex-wrap justify-between gap-2 px-6 pt-6 pb-12 text-sm text-muted">
+    <p class="font-semibold text-fg break-keep">{siteConfig.websiteTitle}</p>
+    <p>
+      Powered by{" "}
+      <a href={PROJECT_URL} class="underline underline-offset-3 hover:text-fg">
+        {PROJECT_NAME}
+      </a>
+    </p>
+  </div>
 </footer>

@@ -7,6 +7,7 @@ import Toc from "../../components/Toc";
 import Base from "../../layouts/Base.astro";
 import { siteConfig } from "../../lib/config";
 import { formatDate } from "../../lib/datetime";
+import { withBase } from "../../lib/links";
 
 export const getStaticPaths = (async () => {
   const posts = await getCollection("posts");
@@ -21,55 +22,84 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { entry } = Astro.props;
 const { data } = entry;
 const { Content } = await render(entry);
+const sourceName = siteConfig.source === "issues" ? "Issue" : "Discussion";
 ---
 
 <Base title={`${data.title} - ${siteConfig.websiteTitle}`}>
-  <div
-    class:list={[
-      "grid gap-10",
-      data.toc.length > 0
-        ? "lg:grid-cols-[minmax(0,1fr)_14rem]"
-        : "mx-auto max-w-3xl",
-    ]}
-  >
-    <div class="min-w-0">
-      <header class="mb-8 break-keep break-words">
-        {/* Pagefind 1.5.2 also indexes this title metadata, so title-only searches still match even
-        though the h1 sits outside data-pagefind-body; adding that attribute here would pull the title
-        into excerpts below */}
-        <h1 class="text-3xl font-bold" data-pagefind-meta="title">
-          {data.title}
-        </h1>
-        <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">
-          <time datetime={data.createdAt} data-local-date>
-            {formatDate(data.createdAt)}
-          </time>{" "}
-          <span aria-hidden="true">·</span>{" "}
-          {`${data.commentCount} ${data.commentCount === 1 ? "comment" : "comments"}`}{" "}
-          <span aria-hidden="true">·</span>{" "}
-          <a href={data.url} class="underline hover:opacity-80">
-            View on GitHub
+  <nav aria-label="Breadcrumb" class="text-sm text-muted">
+    <a href={withBase(import.meta.env.BASE_URL, "/")} class="hover:text-fg">
+      Posts
+    </a>
+    <span aria-hidden="true" class="mx-2">
+      /
+    </span>
+    <span>#{data.number}</span>
+  </nav>
+  <header class="mt-2 flex flex-wrap items-baseline gap-x-3 border-b border-rule pb-6 break-keep break-words">
+    {/* Pagefind 1.5.2 also indexes this title metadata, so title-only searches still match even
+    though the h1 sits outside data-pagefind-body; adding that attribute here would pull the title
+    into excerpts below. The number stays outside the h1 so it doesn't become part of that title */}
+    <h1
+      class="min-w-0 text-3xl font-bold tracking-tight sm:text-4xl"
+      data-pagefind-meta="title"
+    >
+      {data.title}
+    </h1>
+    <span class="text-3xl text-faint tabular-nums sm:text-4xl">
+      #{data.number}
+    </span>
+  </header>
+  <div class="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_15.5rem] lg:gap-14">
+    <aside
+      class="text-sm lg:sticky lg:top-6 lg:order-last lg:self-start"
+      data-pagefind-ignore
+    >
+      <dl class="grid grid-cols-[5rem_minmax(0,1fr)] gap-x-3 gap-y-2.5 border-b border-rule pb-5">
+        {data.tags.length > 0 && (
+          <>
+            <dt class="text-muted">Labels</dt>
+            <dd>
+              <TagList tags={data.tags} />
+            </dd>
+          </>
+        )}
+        <dt class="text-muted">Posted</dt>
+        <dd>
+          <time datetime={data.createdAt} data-local-date="long">
+            {formatDate(data.createdAt, "long")}
+          </time>
+        </dd>
+        <dt class="text-muted">Comments</dt>
+        <dd class="tabular-nums">{data.commentCount}</dd>
+        <dt class="text-muted">Source</dt>
+        <dd>
+          <a
+            href={data.url}
+            class="underline underline-offset-3 hover:opacity-80"
+          >
+            {sourceName} #{data.number}
           </a>
-        </p>
-        <div class="mt-3">
-          <TagList tags={data.tags} />
+        </dd>
+      </dl>
+      {/* below lg the contents would push the post itself off the first screen */}
+      {data.toc.length > 0 && (
+        <div class="mt-5 hidden lg:block">
+          <p class="mb-2 text-muted">Contents</p>
+          <Toc items={data.toc} client:idle />
         </div>
-      </header>
+      )}
+    </aside>
+    <div class="min-w-0">
       {/* only post bodies go into the search index */}
       <article
-        class="prose max-w-none break-words prose-code:before:content-none prose-code:after:content-none dark:prose-invert"
+        class="prose max-w-none break-keep break-words prose-code:before:content-none prose-code:after:content-none"
         data-pagefind-body
       >
         <Content />
       </article>
-      <div data-pagefind-ignore>
+      <div class="mt-14 border-t border-rule pt-6" data-pagefind-ignore>
         <Comments number={data.number} />
       </div>
     </div>
-    {data.toc.length > 0 && (
-      <aside class="lg:sticky lg:top-8 lg:self-start" data-pagefind-ignore>
-        <Toc items={data.toc} client:idle />
-      </aside>
-    )}
   </div>
 </Base>

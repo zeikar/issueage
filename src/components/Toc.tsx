@@ -17,16 +17,17 @@ const TocList = ({
   activeId: string | null;
   depth: number;
 }) => (
-  <ul className={depth > 0 ? "mt-1 space-y-1 pl-4" : "space-y-1"}>
+  <ul className={depth > 0 ? "pl-3.5" : undefined}>
     {items.map((item) => (
       <li key={item.id}>
         <a
           href={`#${item.id}`}
           aria-current={activeId === item.id ? "true" : undefined}
           className={
-            activeId === item.id
-              ? "font-medium text-gray-900 dark:text-gray-100"
-              : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+            "block border-l-2 py-1 pl-3 leading-snug break-keep break-words " +
+            (activeId === item.id
+              ? "border-fg font-semibold text-fg"
+              : "border-rule text-muted hover:text-fg")
           }
         >
           {item.text}
@@ -109,7 +110,7 @@ export default function Toc({ items }: Props) {
   }
 
   return (
-    <nav aria-label="Table of contents" className="text-sm">
+    <nav aria-label="Table of contents">
       <TocList items={items} activeId={activeId} depth={0} />
     </nav>
   );

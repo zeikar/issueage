@@ -6,10 +6,12 @@ import { withBase } from "../lib/links";
 
 <Base title={`Not Found - ${siteConfig.websiteTitle}`}>
   <section class="py-24 text-center">
-    <h1 class="text-4xl font-bold">404 — Not Found</h1>
+    <h1 class="text-4xl font-bold tracking-tight">
+      <span class="text-faint tabular-nums">404</span> Not Found
+    </h1>
     <a
       href={withBase(import.meta.env.BASE_URL, "/")}
-      class="mt-6 inline-block underline hover:opacity-80"
+      class="mt-6 inline-block underline underline-offset-3 hover:text-muted"
     >
       Go home
     </a>

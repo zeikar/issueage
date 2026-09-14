@@ -4,29 +4,28 @@ import { siteConfig } from "../lib/config";
 import { withBase } from "../lib/links";
 ---
 
-<header class="border-b border-gray-200 dark:border-gray-800">
-  <nav class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+<header class="border-b border-rule">
+  <nav class="mx-auto flex max-w-5xl items-center gap-6 px-6 py-3">
     <a
       href={withBase(import.meta.env.BASE_URL, "/")}
-      class="text-xl font-bold hover:opacity-80"
+      class="min-w-0 font-bold break-keep break-words hover:opacity-80"
     >
       {siteConfig.websiteTitle}
     </a>
-    <div class="flex items-center gap-2">
-      <form
-        method="get"
-        action={withBase(import.meta.env.BASE_URL, "/search/")}
-        role="search"
-      >
-        <input
-          name="q"
-          type="search"
-          placeholder="Search"
-          aria-label="Search posts"
-          class="w-32 rounded border border-gray-300 bg-transparent px-2 py-1 text-sm sm:w-48 dark:border-gray-700"
-        />
-      </form>
-      <ThemeToggle client:load />
-    </div>
+    <form
+      method="get"
+      action={withBase(import.meta.env.BASE_URL, "/search/")}
+      role="search"
+      class="ml-auto max-w-md min-w-32 flex-1"
+    >
+      <input
+        name="q"
+        type="search"
+        placeholder="Search"
+        aria-label="Search posts"
+        class="w-full rounded-md border border-transparent bg-surface px-3 py-1.5 text-sm placeholder:text-muted focus:border-fg focus:outline-none"
+      />
+    </form>
+    <ThemeToggle client:load />
   </nav>
 </header>

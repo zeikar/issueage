@@ -1,0 +1,68 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { formatDate } from "../lib/datetime";
+import { postPath, withBase } from "../lib/links";
+import TagList from "./TagList.astro";
+
+interface Props {
+  post: CollectionEntry<"posts">["data"];
+}
+
+const { post } = Astro.props;
+const [firstTag] = post.tags;
+---
+
+<article class="group relative grid grid-cols-[3rem_minmax(0,1fr)] gap-x-3 border-b border-rule py-4 pl-3 sm:grid-cols-[4rem_minmax(0,1fr)_auto] sm:gap-x-5">
+  {/* the first label's color runs down the row, so a list sorted by date still shows difficulty or topic at a glance */}
+  {firstTag && (
+    <span
+      aria-hidden="true"
+      class="absolute inset-y-4 left-0 w-[3px] rounded-full"
+      style={`background-color: #${firstTag.color}`}
+    />
+  )}
+  <span class="text-right text-lg leading-7 text-faint tabular-nums sm:text-[1.375rem]">
+    {post.number}
+  </span>
+  <div class="flex min-w-0 gap-4">
+    <div class="min-w-0 flex-1 break-keep break-words">
+      <h2 class="text-[1.0625rem] leading-7 font-semibold">
+        {/* the link covers the whole row; tags sit above it so they stay clickable */}
+        <a
+          href={withBase(import.meta.env.BASE_URL, postPath(post.number))}
+          class="after:absolute after:inset-0 group-hover:underline group-hover:underline-offset-3"
+        >
+          {post.title}
+        </a>
+      </h2>
+      {post.excerpt && (
+        <p class="mt-0.5 line-clamp-2 text-sm text-muted sm:line-clamp-1">
+          {post.excerpt}
+        </p>
+      )}
+    </div>
+    {post.thumbnail && (
+      <img
+        src={post.thumbnail}
+        alt=""
+        loading="lazy"
+        class="size-14 shrink-0 rounded-md object-cover"
+      />
+    )}
+  </div>
+  <div class="col-start-2 mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm text-muted tabular-nums sm:col-start-3 sm:mt-0 sm:max-w-56 sm:flex-col sm:items-end">
+    <TagList tags={post.tags} />
+    <time
+      datetime={post.createdAt}
+      data-local-date="short"
+      class="whitespace-nowrap"
+    >
+      {formatDate(post.createdAt, "short")}
+    </time>
+    {post.commentCount > 0 && (
+      <span class="whitespace-nowrap">
+        {`${post.commentCount} ${post.commentCount === 1 ? "comment" : "comments"}`}
+      </span>
+    )}
+  </div>
+</article>

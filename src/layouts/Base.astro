@@ -3,7 +3,7 @@ import "../styles/global.css";
 import Footer from "../components/Footer.astro";
 import Navbar from "../components/Navbar.astro";
 import { siteConfig } from "../lib/config";
-import { DATE_LOCALE, DATE_OPTIONS } from "../lib/datetime";
+import { DATE_FORMATS, DATE_LOCALE } from "../lib/datetime";
 import { withBase } from "../lib/links";
 
 interface Props {
@@ -67,21 +67,22 @@ const { googleAnalyticsId } = siteConfig;
       </>
     )}
   </head>
-  <body class="flex min-h-screen flex-col bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+  <body class="flex min-h-screen flex-col bg-page text-fg">
     <Navbar />
-    <main class="mx-auto w-full max-w-5xl flex-1 px-4 py-8">
+    <main class="mx-auto w-full max-w-5xl flex-1 px-6 pt-8 pb-16">
       <slot />
     </main>
     <Footer />
     <script
       is:inline
-      define:vars={{ dateLocale: DATE_LOCALE, dateOptions: DATE_OPTIONS }}
+      define:vars={{ dateLocale: DATE_LOCALE, dateFormats: DATE_FORMATS }}
     >
-      // dates are built in UTC; re-render them in the reader's own time zone once the page is parsed
+      // dates are built in UTC; re-render them in the reader's own time zone once the page is parsed,
+      // keeping the format each element names in data-local-date (long when it names none)
       for (const time of document.querySelectorAll("time[data-local-date]")) {
         time.textContent = new Date(time.dateTime).toLocaleDateString(
           dateLocale,
-          dateOptions,
+          dateFormats[time.dataset.localDate] ?? dateFormats.long,
         );
       }
     </script>

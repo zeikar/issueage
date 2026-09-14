@@ -9,32 +9,58 @@ interface Props {
 }
 
 const { currentPage, lastPage, prefix } = Astro.props;
+const href = (page: number) =>
+  withBase(import.meta.env.BASE_URL, pagePath(prefix, page));
+// posts are listed newest first, so the previous page holds newer posts
+const newer = currentPage > 1 ? currentPage - 1 : null;
+const older = currentPage < lastPage ? currentPage + 1 : null;
+const stepClass = "hover:underline hover:underline-offset-3";
 ---
 
 {lastPage > 1 && (
-  <nav aria-label="Pagination" class="mt-8">
-    <ul class="flex flex-wrap items-center justify-center gap-1">
-      {getPaginationPages(currentPage, lastPage).map((page) => (
+  <nav
+    aria-label="Pagination"
+    class="mt-6 flex items-center justify-between gap-4 text-sm"
+  >
+    {newer === null ? (
+      <span class="text-faint">Newer</span>
+    ) : (
+      <a href={href(newer)} class={stepClass}>
+        Newer
+      </a>
+    )}
+    <span class="text-muted tabular-nums sm:hidden">
+      Page {currentPage} of {lastPage}
+    </span>
+    <ul class="hidden items-center gap-0.5 sm:flex">
+      {getPaginationPages(currentPage, lastPage).map((item) => (
         <li>
-          {page === "…" ? (
-            <span class="px-3 py-1 text-gray-500">…</span>
+          {item === "…" ? (
+            <span class="block px-2 text-muted">…</span>
           ) : (
             <a
-              href={withBase(import.meta.env.BASE_URL, pagePath(prefix, page))}
-              aria-label={`Page ${page}`}
-              aria-current={page === currentPage ? "page" : undefined}
+              href={href(item)}
+              aria-label={`Page ${item}`}
+              aria-current={item === currentPage ? "page" : undefined}
               class:list={[
-                "block rounded px-3 py-1",
-                page === currentPage
-                  ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900"
-                  : "hover:bg-gray-100 dark:hover:bg-gray-800",
+                "grid h-9 min-w-9 place-items-center rounded-md px-2 tabular-nums",
+                item === currentPage
+                  ? "bg-fg font-semibold text-page"
+                  : "text-muted hover:bg-surface hover:text-fg",
               ]}
             >
-              {page}
+              {item}
             </a>
           )}
         </li>
       ))}
     </ul>
+    {older === null ? (
+      <span class="text-faint">Older</span>
+    ) : (
+      <a href={href(older)} class={stepClass}>
+        Older
+      </a>
+    )}
   </nav>
 )}

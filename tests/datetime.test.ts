@@ -6,7 +6,8 @@ describe("formatDate", () => {
   it.each(["2021-02-18T00:00:00Z", "2021-02-18T23:59:59Z"])(
     "formats %s as its UTC date",
     (dateString) => {
-      expect(formatDate(dateString)).toBe("February 18, 2021");
+      expect(formatDate(dateString, "long")).toBe("February 18, 2021");
+      expect(formatDate(dateString, "short")).toBe("Feb 18, 2021");
     },
   );
 });

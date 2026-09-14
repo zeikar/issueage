@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Pagination from "./Pagination.astro";
+import PostRow from "./PostRow.astro";
+import TagFilter from "./TagFilter.astro";
+
+interface Props {
+  heading: string;
+  total: number;
+  posts: CollectionEntry<"posts">[];
+  currentPage: number;
+  lastPage: number;
+  // pagination links go under this path; "" is the home page
+  prefix: string;
+  currentSlug?: string;
+}
+
+const { heading, total, posts, currentPage, lastPage, prefix, currentSlug } =
+  Astro.props;
+---
+
+<section>
+  <div class="flex flex-wrap items-baseline gap-x-8 gap-y-3">
+    <h1 class="min-w-0 text-3xl font-bold tracking-tight break-keep break-words">
+      {heading} <span class="font-normal text-faint tabular-nums">{total}</span>
+    </h1>
+    <TagFilter currentSlug={currentSlug} />
+  </div>
+  {posts.length > 0 ? (
+    <ol class="mt-5 border-t border-rule">
+      {posts.map((entry) => (
+        <li>
+          <PostRow post={entry.data} />
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <p class="mt-5 border-t border-rule py-10 text-center text-muted">
+      No posts yet.
+    </p>
+  )}
+  <Pagination currentPage={currentPage} lastPage={lastPage} prefix={prefix} />
+</section>

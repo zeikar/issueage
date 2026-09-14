@@ -1,0 +1,67 @@
+---
+import { getCollection } from "astro:content";
+import { tagPath, withBase } from "../lib/links";
+import { collectTags } from "../lib/tags";
+
+interface Props {
+  // the tag whose page this is; the "All" chip is current when omitted
+  currentSlug?: string;
+}
+
+const { currentSlug } = Astro.props;
+const posts = (await getCollection("posts")).map((entry) => entry.data);
+// every page lists all tags, not only those on the posts it shows
+const chips = [
+  {
+    name: "All",
+    color: null,
+    count: posts.length,
+    href: "/",
+    current: currentSlug === undefined,
+  },
+  ...collectTags(posts).map((tag) => ({
+    name: tag.name,
+    color: tag.color,
+    count: tag.count,
+    href: tagPath(tag.slug),
+    current: tag.slug === currentSlug,
+  })),
+];
+---
+
+{chips.length > 1 && (
+  <nav aria-label="Tags">
+    <ul class="flex flex-wrap gap-1.5">
+      {chips.map((chip) => (
+        <li>
+          <a
+            href={withBase(import.meta.env.BASE_URL, chip.href)}
+            aria-current={chip.current ? "page" : undefined}
+            class:list={[
+              "inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm break-keep",
+              chip.current
+                ? "border-fg bg-fg text-page"
+                : "border-rule hover:border-muted",
+            ]}
+          >
+            {chip.color && (
+              <span
+                class="size-2.5 rounded-full"
+                style={`background-color: #${chip.color}`}
+              />
+            )}
+            {chip.name}
+            <span
+              class:list={[
+                "tabular-nums",
+                chip.current ? "opacity-70" : "text-muted",
+              ]}
+            >
+              {chip.count}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
