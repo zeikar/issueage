@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { TocItem } from "../lib/toc";
 
 interface Props {
@@ -61,6 +61,12 @@ export default function Toc({ items }: Props) {
     const visibleIds = new Set<string>();
 
     const pickActive = () => {
+      // after a jump back to the top (the Home key) no heading may cross the band, which would leave the old entry
+      // highlighted; at the top the first section is the closest one
+      if (window.scrollY <= 0) {
+        setActiveId(headings[0].id);
+        return;
+      }
       // a short last section may never reach the band below, so activate it directly once the page can't scroll further;
       // but on a page that doesn't scroll at all, this would always fire and the observer should decide instead
       const scrollable =
@@ -105,12 +111,35 @@ export default function Toc({ items }: Props) {
     };
   }, [ids]);
 
+  const navRef = useRef<HTMLElement>(null);
+
+  // a list taller than the sidebar scrolls on its own, so keep the current section in view as reading moves on;
+  // setting scrollTop moves only the list, where scrollIntoView could scroll the page as well
+  useEffect(() => {
+    const nav = navRef.current;
+    const link = nav?.querySelector<HTMLElement>('a[aria-current="true"]');
+    if (!nav || !link) {
+      return;
+    }
+    const navBox = nav.getBoundingClientRect();
+    const linkBox = link.getBoundingClientRect();
+    if (linkBox.top < navBox.top) {
+      nav.scrollTop -= navBox.top - linkBox.top;
+    } else if (linkBox.bottom > navBox.bottom) {
+      nav.scrollTop += linkBox.bottom - navBox.bottom;
+    }
+  }, [activeId]);
+
   if (items.length === 0) {
     return null;
   }
 
   return (
-    <nav aria-label="Table of contents">
+    <nav
+      ref={navRef}
+      aria-label="Table of contents"
+      className="min-h-0 overflow-y-auto"
+    >
       <TocList items={items} activeId={activeId} depth={0} />
     </nav>
   );

@@ -81,7 +81,7 @@ const image = shareableImage(data.thumbnail);
   </header>
   <div class="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_15.5rem] lg:gap-14">
     <aside
-      class="text-sm lg:sticky lg:top-6 lg:order-last lg:self-start"
+      class="text-sm lg:sticky lg:top-6 lg:order-last lg:flex lg:max-h-[calc(100vh-3rem)] lg:flex-col lg:self-start"
       data-pagefind-ignore
     >
       <dl class="grid grid-cols-[5rem_minmax(0,1fr)] gap-x-3 gap-y-2.5 border-b border-rule pb-5">
@@ -111,9 +111,10 @@ const image = shareableImage(data.thumbnail);
           </a>
         </dd>
       </dl>
-      {/* below lg the contents would push the post itself off the first screen */}
+      {/* below lg the contents would push the post itself off the first screen; at lg the sidebar is capped at the
+      screen's height and a long table of contents scrolls inside it */}
       {data.toc.length > 0 && (
-        <div class="mt-5 hidden lg:block">
+        <div class="mt-5 hidden min-h-0 flex-col lg:flex">
           <p class="mb-2 text-muted">Contents</p>
           <Toc items={data.toc} client:idle />
         </div>
