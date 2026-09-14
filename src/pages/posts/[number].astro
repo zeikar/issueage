@@ -41,7 +41,9 @@ const { Content } = await render(entry);
           {data.title}
         </h1>
         <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">
-          <time datetime={data.createdAt}>{formatDate(data.createdAt)}</time>{" "}
+          <time datetime={data.createdAt} data-local-date>
+            {formatDate(data.createdAt)}
+          </time>{" "}
           <span aria-hidden="true">·</span>{" "}
           {`${data.commentCount} ${data.commentCount === 1 ? "comment" : "comments"}`}{" "}
           <span aria-hidden="true">·</span>{" "}

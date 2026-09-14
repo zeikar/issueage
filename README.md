@@ -98,7 +98,7 @@ GITHUB_TOKEN=$(gh auth token) npm run build && npm run preview
 # Known limitations
 
 - A closed discussion is removed from the site only on the next build, because GitHub Actions has no discussion closed/reopened trigger.
-- Dates are shown in UTC.
+- Without JavaScript, dates are shown in UTC; otherwise they are shown in the reader's time zone.
 - Discussion comment counts include top-level comments only.
 
 # Sites using Repozine

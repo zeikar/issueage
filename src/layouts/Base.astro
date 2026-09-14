@@ -3,6 +3,7 @@ import "../styles/global.css";
 import Footer from "../components/Footer.astro";
 import Navbar from "../components/Navbar.astro";
 import { siteConfig } from "../lib/config";
+import { DATE_LOCALE, DATE_OPTIONS } from "../lib/datetime";
 import { withBase } from "../lib/links";
 
 interface Props {
@@ -72,5 +73,17 @@ const { googleAnalyticsId } = siteConfig;
       <slot />
     </main>
     <Footer />
+    <script
+      is:inline
+      define:vars={{ dateLocale: DATE_LOCALE, dateOptions: DATE_OPTIONS }}
+    >
+      // dates are built in UTC; re-render them in the reader's own time zone once the page is parsed
+      for (const time of document.querySelectorAll("time[data-local-date]")) {
+        time.textContent = new Date(time.dateTime).toLocaleDateString(
+          dateLocale,
+          dateOptions,
+        );
+      }
+    </script>
   </body>
 </html>
