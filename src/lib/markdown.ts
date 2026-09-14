@@ -1,5 +1,5 @@
 import rehypeShiki from "@shikijs/rehype";
-import type { Root } from "hast";
+import type { Nodes, Root } from "hast";
 import { toString } from "hast-util-to-string";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeRaw from "rehype-raw";
@@ -90,6 +90,26 @@ const rehypePrefixFragmentLinks: Plugin<[], Root> = () => (tree) => {
   });
 };
 
+const HEADING_TAG = /^h[1-6]$/;
+// autolinks and links written as their own address show the URL itself as their text
+const ADDRESS_TEXT = /^(?:[a-z][a-z\d+.-]*:\/\/|www\.)\S+$/i;
+
+// the text of a node, like hast-util-to-string, minus what doesn't read as prose in a one-line preview:
+// headings are the post's outline (the toc already shows them), and a bare address is noise
+const excerptText = (node: Nodes): string => {
+  if (
+    node.type === "element" &&
+    (HEADING_TAG.test(node.tagName) ||
+      (node.tagName === "a" && ADDRESS_TEXT.test(toString(node).trim())))
+  ) {
+    return "";
+  }
+  if ("children" in node) {
+    return node.children.map(excerptText).join("");
+  }
+  return node.type === "text" ? node.value : "";
+};
+
 const rehypeCollectPostMeta: Plugin<[], Root> = () => (tree, file) => {
   // GFM appends the footnotes section to the root, and its visually hidden "Footnotes" heading belongs in neither the toc nor the excerpt;
   // rehype-raw turns the marker into an empty string, so test for presence
@@ -108,7 +128,7 @@ const rehypeCollectPostMeta: Plugin<[], Root> = () => (tree, file) => {
     const text = toString(node);
     // an empty heading such as a bare "##" line has nothing to show in the toc
     if (
-      /^h[1-6]$/.test(node.tagName) &&
+      HEADING_TAG.test(node.tagName) &&
       typeof id === "string" &&
       text.trim() !== ""
     ) {
@@ -129,7 +149,7 @@ const rehypeCollectPostMeta: Plugin<[], Root> = () => (tree, file) => {
   file.data.postMeta = {
     headings,
     thumbnail,
-    text: toString(body).replace(/\s+/g, " ").trim(),
+    text: excerptText(body).replace(/\s+/g, " ").trim(),
   };
 };
 

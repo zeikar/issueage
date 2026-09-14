@@ -216,6 +216,56 @@ describe("renderMarkdown excerpt and thumbnail", () => {
     expect(excerpt).toMatch(/^a{199}😀…$/u);
   });
 
+  it("starts at the prose of a post laid out as headings and a link", async () => {
+    const { excerpt, toc } = await renderMarkdown(
+      "# Problem link\nhttps://leetcode.com/problems/two-sum/\n\n# Problem Summary\n배열에서 두 수의 합이 target이 되는 문제.\n\n## Solution\n해시맵을 쓴다.",
+    );
+
+    expect(excerpt).toBe(
+      "배열에서 두 수의 합이 target이 되는 문제. 해시맵을 쓴다.",
+    );
+    // headings are dropped from the excerpt only; the toc keeps them
+    expect(flattenToc(toc).map(({ text }) => text)).toEqual([
+      "Problem link",
+      "Problem Summary",
+      "Solution",
+    ]);
+  });
+
+  it.each([
+    ["an angle-bracket autolink", "see <https://e.com/a> here"],
+    ["a www literal", "see www.e.com here"],
+    [
+      "a link written with its own address",
+      "see [https://e.com/a](https://e.com/a) here",
+    ],
+    [
+      "an address the href percent-encodes",
+      "see https://ko.wikipedia.org/wiki/동적_계획법 here",
+    ],
+    [
+      "a raw html link whose address sits on its own line",
+      'see\n\n<a href="https://e.com/a">\nhttps://e.com/a\n</a>\n\nhere',
+    ],
+    ["a heading nested in a blockquote", "> # Title\n\nsee here"],
+  ])("leaves out %s", async (_, markdown) => {
+    expect((await renderMarkdown(markdown)).excerpt).toBe("see here");
+  });
+
+  it("keeps an address written as inline code, which is not a link", async () => {
+    expect((await renderMarkdown("see `https://e.com/a` here")).excerpt).toBe(
+      "see https://e.com/a here",
+    );
+  });
+
+  it("keeps the words of a link that names its target, so the sentence still reads", async () => {
+    const { excerpt } = await renderMarkdown(
+      "[공식 문서](https://docs.python.org/3/)를 참고했다.",
+    );
+
+    expect(excerpt).toBe("공식 문서를 참고했다.");
+  });
+
   it("handles an empty body", async () => {
     const { excerpt, thumbnail, toc } = await renderMarkdown("");
 
