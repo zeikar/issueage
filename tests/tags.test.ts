@@ -11,35 +11,25 @@ describe("tagSlug", () => {
     expect(tagSlug(name)).toBe(slug);
   });
 
-  it("hashes labels whose base slug loses information", () => {
-    expect(tagSlug("not rated")).toMatch(/^not-rated-[0-9a-f]{8}$/);
-    expect(tagSlug("간단하게 알아보는")).toMatch(
-      /^간단하게-알아보는-[0-9a-f]{8}$/,
-    );
-  });
-
-  it.each([".", ".."])(
-    "hashes the dot segment %s instead of leaving a navigable slug",
-    (name) => {
-      const slug = tagSlug(name);
-      expect(slug).not.toBe(".");
-      expect(slug).not.toBe("..");
-      expect(slug).toMatch(/-[0-9a-f]{8}$/);
+  it.each([
+    ["help wanted", "help-wanted"],
+    ["간단하게 알아보는", "간단하게-알아보는"],
+  ])(
+    "turns the spaces in %s into hyphens, with nothing appended",
+    (name, slug) => {
+      expect(tagSlug(name)).toBe(slug);
     },
   );
 
-  it("hashes a name that already looks like a hashed slug", () => {
-    expect(tagSlug("foo-deadbeef")).toMatch(/^foo-deadbeef-[0-9a-f]{8}$/);
+  it("replaces characters that would end or escape a path segment", () => {
+    expect(tagSlug("area/foo?a#b%c\\d")).toBe("area-foo-a-b-c-d");
   });
 
-  it("gives area/foo, area-foo, and a literal that looks like area/foo's hashed slug three distinct slugs", () => {
-    const areaSlashFoo = tagSlug("area/foo");
-    const areaDashFoo = tagSlug("area-foo");
-    // this literal is exactly what area/foo hashes to, so it already looks like a hashed slug
-    const lookalikeLiteral = tagSlug(areaSlashFoo);
-
-    expect(areaSlashFoo).toMatch(/^area-foo-[0-9a-f]{8}$/);
-    expect(new Set([areaSlashFoo, areaDashFoo, lookalikeLiteral]).size).toBe(3);
+  it.each([
+    [".", "-"],
+    ["..", "--"],
+  ])("turns the dot segment %s into %s, which URLs can reach", (name, slug) => {
+    expect(tagSlug(name)).toBe(slug);
   });
 });
 
@@ -61,16 +51,29 @@ describe("collectTags", () => {
     expect(collectTags([])).toEqual([]);
   });
 
-  it("assigns tagSlug(name) to every tag, with or without other colliding labels present", () => {
-    const name = "not rated";
-    const tag = { name, color: "ffffff" };
+  it("assigns tagSlug(name) to every tag, whatever other labels are present", () => {
+    const tag = { name: "help wanted", color: "008672" };
 
     const alone = collectTags([{ tags: [tag] }]);
     const withOthers = collectTags([
       { tags: [tag, { name: "medium", color: "000000" }] },
     ]);
 
-    expect(alone[0].slug).toBe(tagSlug(name));
-    expect(withOthers.find((t) => t.name === name)?.slug).toBe(tagSlug(name));
+    expect(alone[0].slug).toBe("help-wanted");
+    expect(withOthers.find((t) => t.name === tag.name)?.slug).toBe(
+      "help-wanted",
+    );
+  });
+
+  // one /tags/<slug>/ page can't belong to two labels, and quietly merging them or suffixing one would change a URL that already exists
+  it("fails the build, naming both labels, when they share a slug", () => {
+    const posts = [
+      { tags: [{ name: "help wanted", color: "008672" }] },
+      { tags: [{ name: "help-wanted", color: "008672" }] },
+    ];
+
+    expect(() => collectTags(posts)).toThrow(
+      /"help wanted" and "help-wanted" share the tag slug "help-wanted"/,
+    );
   });
 });
