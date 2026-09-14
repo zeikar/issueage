@@ -1,10 +1,10 @@
 name: Deploy to GitHub Pages
 
 on:
-  # main is this repo's default branch; issueage lets downstream repos push
+  # main is this repo's default branch; repozine lets downstream repos push
   # template updates straight to their tracked branch and have it deploy.
   push:
-    branches: [main, issueage]
+    branches: [main, repozine]
   issues:
     types: [opened, edited, deleted, closed, reopened, labeled, unlabeled, transferred]
   # comment counts are rendered at build time, so new/removed comments must
@@ -41,9 +41,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          # empty ISSUEAGE_REF checks out the triggering ref; downstream repos
-          # set it to "issueage" to build from their tracked branch
-          ref: ${{ vars.ISSUEAGE_REF }}
+          # empty REPOZINE_REF checks out the triggering ref; downstream repos
+          # set it to "repozine" to build from their tracked branch
+          ref: ${{ vars.REPOZINE_REF }}
 
       # vitest and jsdom need Node 22.22.2+, 24.15+ or 26+
       - uses: actions/setup-node@v7

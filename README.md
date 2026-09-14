@@ -14,13 +14,13 @@ Repozine turns a GitHub repository's Issues or Discussions into a static blog, b
 
 # Live Demo
 
-[https://zeikar.dev/issueage/](https://zeikar.dev/issueage/)
+[https://zeikar.dev/repozine/](https://zeikar.dev/repozine/)
 
 # How to use
 
 ## Use this template
 
-[Use this template](https://github.com/zeikar/issueage/generate) to create a repository from this template.
+[Use this template](https://github.com/zeikar/repozine/generate) to create a repository from this template.
 [docs](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template#creating-a-repository-from-a-template)
 
 ```bash
@@ -42,9 +42,9 @@ Pushing to `main` triggers the deploy workflow, which builds the site and publis
 ## Add Repozine to an existing repository
 
 ```bash
-git remote add issueage https://github.com/zeikar/issueage
-git fetch issueage
-git checkout -f -b issueage issueage/main
+git remote add repozine https://github.com/zeikar/repozine
+git fetch repozine
+git checkout -f -b repozine repozine/main
 vi config.json
 ```
 
@@ -53,16 +53,16 @@ Configure your `config.json` ([options](#configuration)) and commit it.
 ```bash
 git add config.json
 git commit -m "Configure Repozine"
-git push origin issueage
+git push origin repozine
 ```
 
-Pushing to the `issueage` branch deploys the same way pushing to `main` does above.
+Pushing to the `repozine` branch deploys the same way pushing to `main` does above.
 
-To also rebuild when issues, discussions or their comments change, copy `.github/workflows/deploy.yml` unchanged to your default branch, then set the repository variable `ISSUEAGE_REF` to `issueage` (Settings → Secrets and variables → Actions → Variables) so that workflow builds from the `issueage` branch instead of the ref that triggered it.
+To also rebuild when issues, discussions or their comments change, copy `.github/workflows/deploy.yml` unchanged to your default branch, then set the repository variable `REPOZINE_REF` to `repozine` (Settings → Secrets and variables → Actions → Variables) so that workflow builds from the `repozine` branch instead of the ref that triggered it.
 
 Set the Pages source to **GitHub Actions** in your repository's Settings → Pages. [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 
-If you add a deployment branch policy to the repository's `github-pages` environment (Settings → Environments), include the `issueage` branch, or deploys from that branch will be rejected.
+If you add a deployment branch policy to the repository's `github-pages` environment (Settings → Environments), include the `repozine` branch, or deploys from that branch will be rejected.
 
 ## Configuration
 
@@ -113,13 +113,13 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/zeikar/issueage.svg?style=for-the-badge
-[contributors-url]: https://github.com/zeikar/issueage/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/zeikar/issueage.svg?style=for-the-badge
-[forks-url]: https://github.com/zeikar/issueage/network/members
-[stars-shield]: https://img.shields.io/github/stars/zeikar/issueage.svg?style=for-the-badge
-[stars-url]: https://github.com/zeikar/issueage/stargazers
-[issues-shield]: https://img.shields.io/github/issues/zeikar/issueage.svg?style=for-the-badge
-[issues-url]: https://github.com/zeikar/issueage/issues
-[license-shield]: https://img.shields.io/github/license/zeikar/issueage.svg?style=for-the-badge
-[license-url]: https://github.com/zeikar/issueage/blob/main/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/zeikar/repozine.svg?style=for-the-badge
+[contributors-url]: https://github.com/zeikar/repozine/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/zeikar/repozine.svg?style=for-the-badge
+[forks-url]: https://github.com/zeikar/repozine/network/members
+[stars-shield]: https://img.shields.io/github/stars/zeikar/repozine.svg?style=for-the-badge
+[stars-url]: https://github.com/zeikar/repozine/stargazers
+[issues-shield]: https://img.shields.io/github/issues/zeikar/repozine.svg?style=for-the-badge
+[issues-url]: https://github.com/zeikar/repozine/issues
+[license-shield]: https://img.shields.io/github/license/zeikar/repozine.svg?style=for-the-badge
+[license-url]: https://github.com/zeikar/repozine/blob/main/LICENSE.txt
