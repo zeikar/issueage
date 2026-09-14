@@ -1,5 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { fetchIssues, githubGraphql, type PostNode } from "../src/lib/github";
+import {
+  fetchIssues,
+  fetchRepositoryDescription,
+  githubGraphql,
+  type PostNode,
+} from "../src/lib/github";
 
 const fetchMock = vi.fn<typeof fetch>();
 
@@ -23,6 +28,7 @@ const node = (number: number): PostNode => ({
   repository: { nameWithOwner: "zeikar/repozine" },
   labels: { nodes: [] },
   comments: { totalCount: 0 },
+  lastEditedAt: null,
   state: "OPEN",
 });
 
@@ -132,5 +138,22 @@ describe("fetchIssues", () => {
     fetchMock.mockResolvedValue(issuesPage([node(1)], null, "Zeikar/RepoZine"));
 
     await expect(fetchIssues("zeikar", "repozine")).resolves.toHaveLength(1);
+  });
+});
+
+describe("fetchRepositoryDescription", () => {
+  it.each([
+    ["the description", "Turn issues into a blog", "Turn issues into a blog"],
+    ["null for a blank description", "  ", null],
+    ["null when there is none", null, null],
+  ])("returns %s", async (_, description, expected) => {
+    fetchMock.mockResolvedValue(
+      json({ data: { repository: { description } } }),
+    );
+
+    await expect(
+      fetchRepositoryDescription("zeikar", "repozine"),
+    ).resolves.toBe(expected);
+    expect(variablesOf(0)).toEqual({ owner: "zeikar", repo: "repozine" });
   });
 });

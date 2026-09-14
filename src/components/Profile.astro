@@ -1,12 +1,9 @@
 ---
-import { getEntry } from "astro:content";
+import { getSite } from "../lib/site";
 
-const site = await getEntry("site", "site");
-if (site === undefined) {
-  throw new Error('the "site" collection has no "site" entry');
-}
-const { login, name, bio, avatarUrl, url, followers, following } =
-  site.data.profile;
+const { login, name, bio, avatarUrl, url, followers, following } = (
+  await getSite()
+).profile;
 const displayName = name ?? login;
 ---
 

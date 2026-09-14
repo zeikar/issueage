@@ -6,6 +6,7 @@ import {
   fetchDiscussions,
   fetchIssues,
   fetchProfile,
+  fetchRepositoryDescription,
 } from "./lib/github";
 import { renderMarkdown } from "./lib/markdown";
 import { isTrustedPost, toPost } from "./lib/posts";
@@ -58,6 +59,7 @@ const posts = defineCollection({
             number: post.number,
             title: post.title,
             createdAt: post.createdAt,
+            updatedAt: post.updatedAt,
             url: post.url,
             commentCount: post.commentCount,
             tags: post.tags.map((tag) => ({ ...tag, slug: tagSlug(tag.name) })),
@@ -78,6 +80,7 @@ const posts = defineCollection({
     number: z.number(),
     title: z.string(),
     createdAt: z.string(),
+    updatedAt: z.string(),
     url: z.string(),
     commentCount: z.number(),
     tags: z.array(
@@ -96,8 +99,9 @@ const posts = defineCollection({
 
 const site = defineCollection({
   loader: async () => {
-    const [profile, discussion] = await Promise.all([
+    const [profile, description, discussion] = await Promise.all([
       fetchProfile(repoOwner),
+      fetchRepositoryDescription(repoOwner, repoName),
       source === "discussions"
         ? fetchDiscussionCategory(
             repoOwner,
@@ -110,6 +114,7 @@ const site = defineCollection({
       {
         id: "site",
         profile,
+        description,
         // giscus needs the repository and category ids, and only discussions mode uses giscus
         repoId: discussion?.repoId ?? null,
         discussionCategory: discussion?.category ?? null,
@@ -126,6 +131,7 @@ const site = defineCollection({
       followers: z.object({ totalCount: z.number() }),
       following: z.object({ totalCount: z.number() }),
     }),
+    description: z.string().nullable(),
     repoId: z.string().nullable(),
     discussionCategory: z
       .object({ id: z.string(), name: z.string(), slug: z.string() })

@@ -1,6 +1,6 @@
 ---
-import { getEntry } from "astro:content";
 import { siteConfig } from "../lib/config";
+import { getSite } from "../lib/site";
 
 interface Props {
   number: number;
@@ -37,11 +37,7 @@ let comments: CommentsData;
 if (source === "issues") {
   comments = { mode: "issues" };
 } else {
-  const site = await getEntry("site", "site");
-  if (site === undefined) {
-    throw new Error('the "site" collection has no "site" entry');
-  }
-  const { repoId, discussionCategory } = site.data;
+  const { repoId, discussionCategory } = await getSite();
   // the loader fills both only in discussions mode; null here means the loader is broken
   if (repoId === null || discussionCategory === null) {
     throw new Error(

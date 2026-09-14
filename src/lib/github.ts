@@ -49,7 +49,7 @@ export type Label = { name: string; color: string };
 
 // Issue and Discussion share these fields, but their open state differs: Issue has state, Discussion has closed and category
 const POST_FIELDS = `
-  __typename number title body createdAt url
+  __typename number title body createdAt lastEditedAt url
   author { login }
   repository { nameWithOwner }
   labels(first: 100) { nodes { name color } }
@@ -63,6 +63,8 @@ export type PostNode = {
   title: string;
   body: string | null;
   createdAt: string;
+  // null until the body is edited
+  lastEditedAt: string | null;
   url: string;
   // null when the author's account was deleted
   author: { login: string } | null;
@@ -181,6 +183,22 @@ export const fetchDiscussions = (
     }`,
     { categoryId },
   );
+
+// the repository's About text, which describes the site when there is one
+export const fetchRepositoryDescription = async (
+  owner: string,
+  repo: string,
+): Promise<string | null> => {
+  const { repository } = await githubGraphql<{
+    repository: { description: string | null };
+  }>(
+    `query ($owner: String!, $repo: String!) {
+      repository(owner: $owner, name: $repo) { description }
+    }`,
+    { owner, repo },
+  );
+  return repository.description?.trim() || null;
+};
 
 type Profile = {
   login: string;

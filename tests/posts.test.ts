@@ -32,6 +32,7 @@ const issue = (overrides: Partial<TrustedPostNode> = {}): TrustedPostNode => ({
   repository: { nameWithOwner: "zeikar/repozine" },
   labels: { nodes: [{ name: "C++", color: "f29513" }] },
   comments: { totalCount: 2 },
+  lastEditedAt: null,
   state: "OPEN",
   ...overrides,
 });
@@ -49,6 +50,7 @@ const discussion = (
   repository: { nameWithOwner: "zeikar/repozine" },
   labels: { nodes: [] },
   comments: { totalCount: 0 },
+  lastEditedAt: null,
   closed: false,
   category: { slug: "general" },
   ...overrides,
@@ -106,6 +108,7 @@ describe("toPost", () => {
       author: "zeikar",
       tags: [{ name: "C++", color: "f29513" }],
       commentCount: 2,
+      updatedAt: "2021-02-18T14:50:29Z",
     });
     expect(toPost(discussion())).toEqual({
       number: 27,
@@ -116,7 +119,14 @@ describe("toPost", () => {
       author: "zeikar",
       tags: [],
       commentCount: 0,
+      updatedAt: "2021-02-18T14:50:29Z",
     });
+  });
+
+  it("dates an edited post by its last body edit", () => {
+    expect(
+      toPost(issue({ lastEditedAt: "2024-05-01T09:00:00Z" })).updatedAt,
+    ).toBe("2024-05-01T09:00:00Z");
   });
 
   it("turns a null body into an empty string", () => {

@@ -10,6 +10,9 @@ const sources = import.meta.glob<string>("../src/**/*", {
   exhaustive: true,
 });
 
+// JSON-LD has to be written raw into its <script>, so this component is the one exception, and only with serializeJsonLd's output
+const JSON_LD = "../src/components/JsonLd.astro";
+
 const SINKS = [
   "set:html",
   "dangerouslySetInnerHTML",
@@ -33,6 +36,13 @@ describe("raw HTML sinks", () => {
       Object.entries(sources)
         .filter(([, source]) => source.includes(sink))
         .map(([path]) => path),
-    ).toEqual([]);
+    ).toEqual(sink === "set:html" ? [JSON_LD] : []);
+  });
+
+  it("lets the JSON-LD component write only serialized JSON", () => {
+    const source = sources[JSON_LD];
+
+    expect(source.split("set:html")).toHaveLength(2);
+    expect(source).toContain("set:html={serializeJsonLd(data)}");
   });
 });

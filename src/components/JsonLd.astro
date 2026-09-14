@@ -1,0 +1,17 @@
+---
+import { serializeJsonLd } from "../lib/seo";
+
+interface Props {
+  data: Record<string, unknown>;
+}
+
+const { data } = Astro.props;
+---
+
+{/* the one raw sink in src (tests/html-sinks.test.ts allows only this line): JSON-LD must be written into the script as is,
+and serializeJsonLd leaves no "<", ">" or "&" that could end the element (tests/seo.test.ts) */}
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={serializeJsonLd(data)}
+></script>

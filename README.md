@@ -75,11 +75,20 @@ If you add a deployment branch policy to the repository's `github-pages` environ
 | `source`             | `"issues"` or `"discussions"`                                                                                                                                     |
 | `discussionCategory` | Discussion category **slug** to publish from. Required when `source` is `"discussions"`. Use an Announcement-format category so only maintainers can create posts |
 | `googleAnalyticsId`  | Google Analytics measurement ID (e.g. `G-XXXXXXXXXX`). Leave empty to disable analytics                                                                           |
+| `language`           | Language of the posts as a tag such as `"en"` or `"ko"`, used for `<html lang>`. Include a region (`"ko-KR"`) to also set `og:locale`. Defaults to `"en"`         |
 
 ## Comments
 
 - `source: "issues"` uses [utterances](https://utteranc.es/), bound to the issue number. Install the [utterances GitHub App](https://github.com/apps/utterances) on the repository.
 - `source: "discussions"` uses [giscus](https://giscus.app/), bound to the discussion number. Install the [giscus GitHub App](https://github.com/apps/giscus) on the repository and enable Discussions.
+
+## Search engines
+
+- Every page gets Open Graph / Twitter card tags and, when the repository's About text or the owner's bio provides one, a description. Every page except search and 404 (both `noindex`) gets a canonical URL. Posts add their dates and labels as article metadata and schema.org `BlogPosting` data.
+- A post's link preview shows its first image. Posts without one get a card rendered by [DOGimg](https://dogimg.vercel.app).
+- `sitemap.xml` and `rss.xml` are built next to the home page, e.g. `https://<owner>.github.io/<repo>/sitemap.xml`.
+- Crawlers read `robots.txt` only at the root of a host, so only a `<owner>.github.io` repository gets one. For a project site, add `Sitemap: https://<host>/<repo>/sitemap.xml` to the root site's `robots.txt`, or submit the sitemap in Google Search Console.
+- The deploy workflow passes the site's real origin, custom domain included, to the build. Local builds assume `https://<owner>.github.io` unless `SITE_ORIGIN` is set.
 
 ## Local development
 

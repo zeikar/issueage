@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { basePathFor, parseSiteConfig } from "../src/lib/config";
+import { basePathFor, parseSiteConfig, siteOriginFor } from "../src/lib/config";
 
 const issuesConfig = {
   websiteTitle: "Repozine",
@@ -21,6 +21,12 @@ describe("parseSiteConfig", () => {
     ["a blank repoOwner", { ...issuesConfig, repoOwner: "" }, /"repoOwner"/],
     ["a missing repoName", without("repoName"), /"repoName"/],
     ["a miscased source", { ...issuesConfig, source: "Issues" }, /"source"/],
+    ["a blank language", { ...issuesConfig, language: "" }, /"language"/],
+    [
+      "a language that is not a tag",
+      { ...issuesConfig, language: "Korean" },
+      /"language"/,
+    ],
     [
       "discussions without a category",
       { ...issuesConfig, source: "discussions" },
@@ -36,7 +42,13 @@ describe("parseSiteConfig", () => {
       source: "discussions",
       discussionCategory: "Blog",
     };
-    expect(parseSiteConfig(config)).toEqual(config);
+    expect(parseSiteConfig(config)).toEqual({ ...config, language: "en" });
+  });
+
+  it("keeps a language tag with a region", () => {
+    expect(
+      parseSiteConfig({ ...issuesConfig, language: "ko-KR" }).language,
+    ).toBe("ko-KR");
   });
 
   it("turns Google Analytics off when the key is missing", () => {
@@ -44,6 +56,31 @@ describe("parseSiteConfig", () => {
       parseSiteConfig(without("googleAnalyticsId")).googleAnalyticsId,
     ).toBe("");
   });
+});
+
+describe("siteOriginFor", () => {
+  it("uses the origin the Pages deployment reports, custom domain included", () => {
+    expect(siteOriginFor("https://zeikar.dev", "zeikar")).toBe(
+      "https://zeikar.dev",
+    );
+    expect(siteOriginFor("https://zeikar.dev/", "zeikar")).toBe(
+      "https://zeikar.dev",
+    );
+  });
+
+  it.each([undefined, "", "  "])(
+    "falls back to the owner's github.io origin when none is reported (%j)",
+    (origin) => {
+      expect(siteOriginFor(origin, "Zeikar")).toBe("https://zeikar.github.io");
+    },
+  );
+
+  it.each(["zeikar.dev", "localhost:4321", "ftp://zeikar.dev"])(
+    "rejects %j, which is not an http(s) origin",
+    (origin) => {
+      expect(() => siteOriginFor(origin, "zeikar")).toThrow(/SITE_ORIGIN/);
+    },
+  );
 });
 
 describe("basePathFor", () => {

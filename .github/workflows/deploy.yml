@@ -38,6 +38,8 @@ jobs:
       contents: read
       issues: read
       discussions: read
+      # actions/configure-pages reads the Pages site's URL
+      pages: read
     steps:
       - uses: actions/checkout@v7
         with:
@@ -55,10 +57,14 @@ jobs:
         run: npm ci
       - name: Test
         run: npm test
+      # the site's real origin, custom domain included, for canonical, Open Graph, sitemap and RSS URLs
+      - id: pages
+        uses: actions/configure-pages@v6
       - name: Build
         run: npm run build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SITE_ORIGIN: ${{ steps.pages.outputs.origin }}
 
       - uses: actions/upload-pages-artifact@v5
         with:

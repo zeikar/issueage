@@ -7,7 +7,12 @@ export type SiteConfig = {
   source: "issues" | "discussions";
   discussionCategory?: string;
   googleAnalyticsId: string;
+  // BCP 47 tag for <html lang>; one with a region (ko-KR) also sets og:locale
+  language: string;
 };
+
+// a language subtag followed by optional script, region or variant subtags
+const LANGUAGE_TAG = /^[a-z]{2,3}(?:-[a-z0-9]{2,8})*$/i;
 
 const isNonEmptyString = (value: unknown): value is string =>
   typeof value === "string" && value.trim() !== "";
@@ -31,7 +36,12 @@ export const parseSiteConfig = (
   const repoOwner = nonEmptyString(config, "repoOwner");
   const repoName = nonEmptyString(config, "repoName");
   // an empty or missing googleAnalyticsId turns analytics off
-  const { source, discussionCategory, googleAnalyticsId = "" } = config;
+  const {
+    source,
+    discussionCategory,
+    googleAnalyticsId = "",
+    language = "en",
+  } = config;
 
   if (source !== "issues" && source !== "discussions") {
     throw new Error(
@@ -46,6 +56,11 @@ export const parseSiteConfig = (
   if (typeof googleAnalyticsId !== "string") {
     throw new Error(`config.json: "googleAnalyticsId" must be a string`);
   }
+  if (typeof language !== "string" || !LANGUAGE_TAG.test(language)) {
+    throw new Error(
+      `config.json: "language" must be a language tag such as "en" or "ko-KR", got ${JSON.stringify(language)}`,
+    );
+  }
 
   return {
     websiteTitle,
@@ -56,10 +71,35 @@ export const parseSiteConfig = (
       ? discussionCategory
       : undefined,
     googleAnalyticsId,
+    language,
   };
 };
 
 export const siteConfig: SiteConfig = parseSiteConfig(rawConfig);
+
+// the deploy workflow passes the origin actions/configure-pages reports, which follows a custom domain;
+// local builds have none, and the owner's github.io origin is the best guess for their absolute URLs
+export const siteOriginFor = (
+  reportedOrigin: string | undefined,
+  repoOwner: string,
+): string => {
+  if (reportedOrigin === undefined || reportedOrigin.trim() === "") {
+    return `https://${repoOwner.toLowerCase()}.github.io`;
+  }
+  let url: URL | undefined;
+  try {
+    url = new URL(reportedOrigin.trim());
+  } catch {
+    // reported below
+  }
+  // "localhost:4321" parses too, as a URL with the scheme "localhost:" and the origin "null"
+  if (url === undefined || !["http:", "https:"].includes(url.protocol)) {
+    throw new Error(
+      `SITE_ORIGIN must be an http(s) origin such as https://example.com, got ${JSON.stringify(reportedOrigin)}`,
+    );
+  }
+  return url.origin;
+};
 
 // GitHub Pages serves a repository from the domain root only when its name matches <repoOwner>.github.io; every other repository is served under /<repoName>
 export const basePathFor = (repoOwner: string, repoName: string): string => {

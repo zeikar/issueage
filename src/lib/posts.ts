@@ -10,6 +10,8 @@ export type Post = {
   author: string;
   tags: Label[];
   commentCount: number;
+  // when the post's body was last edited (GitHub doesn't count title or label changes), for sitemaps and article metadata
+  updatedAt: string;
 };
 
 export type TrustedPostNode = PostNode & { author: { login: string } };
@@ -57,6 +59,7 @@ export const toPost = (node: TrustedPostNode): Post => ({
   author: node.author.login,
   tags: node.labels.nodes,
   commentCount: node.comments.totalCount,
+  updatedAt: node.lastEditedAt ?? node.createdAt,
 });
 
 export const byNewest = (

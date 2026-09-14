@@ -2,12 +2,15 @@
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { getCollection, render } from "astro:content";
 import Comments from "../../components/Comments.astro";
+import JsonLd from "../../components/JsonLd.astro";
 import TagList from "../../components/TagList.astro";
 import Toc from "../../components/Toc";
 import Base from "../../layouts/Base.astro";
 import { siteConfig } from "../../lib/config";
 import { formatDate } from "../../lib/datetime";
 import { withBase } from "../../lib/links";
+import { absoluteUrl, blogPostingJsonLd, shareableImage } from "../../lib/seo";
+import { getSite } from "../../lib/site";
 
 export const getStaticPaths = (async () => {
   const posts = await getCollection("posts");
@@ -23,9 +26,35 @@ const { entry } = Astro.props;
 const { data } = entry;
 const { Content } = await render(entry);
 const sourceName = siteConfig.source === "issues" ? "Issue" : "Discussion";
+const { profile } = await getSite();
+const image = shareableImage(data.thumbnail);
 ---
 
-<Base title={`${data.title} - ${siteConfig.websiteTitle}`}>
+<Base
+  title={`${data.title} - ${siteConfig.websiteTitle}`}
+  description={data.excerpt || undefined}
+  image={image}
+  type="article"
+>
+  <Fragment slot="head">
+    <meta property="article:published_time" content={data.createdAt} />
+    <meta property="article:modified_time" content={data.updatedAt} />
+    {data.tags.map((tag) => (
+      <meta property="article:tag" content={tag.name} />
+    ))}
+    <JsonLd
+      data={blogPostingJsonLd({
+        title: data.title,
+        url: absoluteUrl(Astro.url.pathname, Astro.site),
+        description: data.excerpt,
+        image,
+        publishedAt: data.createdAt,
+        modifiedAt: data.updatedAt,
+        tags: data.tags.map((tag) => tag.name),
+        author: { name: profile.name ?? profile.login, url: profile.url },
+      })}
+    />
+  </Fragment>
   <nav aria-label="Breadcrumb" class="text-sm text-muted">
     <a href={withBase(import.meta.env.BASE_URL, "/")} class="hover:text-fg">
       Posts

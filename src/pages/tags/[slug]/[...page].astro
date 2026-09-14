@@ -29,7 +29,10 @@ const { page, tag } = Astro.props;
 const pageSuffix = page.currentPage > 1 ? ` - Page ${page.currentPage}` : "";
 ---
 
-<Base title={`${tag.name} - ${siteConfig.websiteTitle}${pageSuffix}`}>
+<Base
+  title={`${tag.name} - ${siteConfig.websiteTitle}${pageSuffix}`}
+  description={`Posts labeled “${tag.name}” on ${siteConfig.websiteTitle}.`}
+>
   <PostIndex
     heading={tag.name}
     total={page.total}

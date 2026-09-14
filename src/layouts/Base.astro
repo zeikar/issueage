@@ -5,21 +5,68 @@ import Navbar from "../components/Navbar.astro";
 import { siteConfig } from "../lib/config";
 import { DATE_FORMATS, DATE_LOCALE } from "../lib/datetime";
 import { withBase } from "../lib/links";
+import {
+  absoluteUrl,
+  ogImageFor,
+  ogLocaleFor,
+  siteDescription,
+  siteUrl,
+} from "../lib/seo";
+import { getSite } from "../lib/site";
 
 interface Props {
   title: string;
+  // pages without their own summary are described by the site
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  // for pages that shouldn't appear in search results, such as search results themselves
+  noindex?: boolean;
 }
 
-const { title } = Astro.props;
-const { googleAnalyticsId } = siteConfig;
+const {
+  title,
+  description = siteDescription(await getSite()) ?? undefined,
+  image,
+  type = "website",
+  noindex = false,
+} = Astro.props;
+const { googleAnalyticsId, websiteTitle, language } = siteConfig;
+const pageUrl = absoluteUrl(Astro.url.pathname, Astro.site);
+// a noindex page such as the 404 has no address worth sharing, so it gets no og:url and a card for the site instead
+const cardUrl = noindex
+  ? siteUrl(import.meta.env.BASE_URL, "/", Astro.site)
+  : pageUrl;
+const ogLocale = ogLocaleFor(language);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={language}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    {noindex ? (
+      <meta name="robots" content="noindex" />
+    ) : (
+      <link rel="canonical" href={pageUrl} />
+    )}
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={websiteTitle} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    {!noindex && <meta property="og:url" content={pageUrl} />}
+    <meta property="og:image" content={image ?? ogImageFor(cardUrl)} />
+    {ogLocale && <meta property="og:locale" content={ogLocale} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={websiteTitle}
+      href={withBase(import.meta.env.BASE_URL, "/rss.xml")}
+    />
+    <slot name="head" />
     <link
       rel="icon"
       type="image/png"
