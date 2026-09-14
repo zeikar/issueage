@@ -45,28 +45,22 @@ Pushing to `main` triggers the deploy workflow, which builds the site and publis
 
 ## Add Repozine to an existing repository
 
+Repozine lives on its own `repozine` branch. Before pushing it for the first time, in your repository's Settings:
+
+1. **Pages:** set the source to **GitHub Actions**. [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+2. **Environments → github-pages:** add `repozine` to the deployment branches, since the switch above allows only the default branch.
+3. **Secrets and variables → Actions → Variables:** set `REPOZINE_REF` to `repozine`.
+
 ```bash
 git remote add repozine https://github.com/zeikar/repozine
 git fetch repozine
 git checkout -f -b repozine repozine/main
-vi config.json
+vi config.json   # see Configuration below
+git commit -am "Configure Repozine"
+git push origin repozine   # deploys the site
 ```
 
-Configure your `config.json` ([options](#configuration)) and commit it.
-
-```bash
-git add config.json
-git commit -m "Configure Repozine"
-git push origin repozine
-```
-
-Pushing to the `repozine` branch deploys the same way pushing to `main` does above.
-
-To also rebuild when issues, discussions or their comments change, copy `.github/workflows/deploy.yml` unchanged to your default branch, then set the repository variable `REPOZINE_REF` to `repozine` (Settings → Secrets and variables → Actions → Variables) so that workflow builds from the `repozine` branch instead of the ref that triggered it.
-
-Set the Pages source to **GitHub Actions** in your repository's Settings → Pages. [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
-
-Setting the Pages source to GitHub Actions limits the repository's `github-pages` environment to deploys from the default branch. Add the `repozine` branch to its deployment branches (Settings → Environments → github-pages), or deploys from that branch will be rejected.
+To also rebuild when posts or comments change, copy `.github/workflows/deploy.yml` unchanged to your default branch: issue and discussion events only run workflows from there, and `REPOZINE_REF` makes that copy build the `repozine` branch.
 
 ## Configuration
 
