@@ -39,8 +39,10 @@ const chips = [
             aria-current={chip.current ? "page" : undefined}
             class:list={[
               "inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm break-keep",
+              // the marker fill is faint against a white page, so semibold marks the current chip too;
+              // text selected on it takes the text color, since the marker-colored selection would vanish into the fill
               chip.current
-                ? "border-fg bg-fg text-page"
+                ? "border-transparent bg-marker-fill font-semibold text-on-marker-fill selection:bg-fg selection:text-page"
                 : "border-rule hover:border-muted",
             ]}
           >
@@ -48,8 +50,8 @@ const chips = [
               <span
                 class:list={[
                   "size-2.5 rounded-full ring-1 ring-inset",
-                  // the current chip is filled with the text color, so its ring switches to the page color to stay visible
-                  chip.current ? "ring-page/40" : "ring-fg/15",
+                  // the current chip is filled with the marker, so its ring follows the text on it, keeping a yellow label's dot visible
+                  chip.current ? "ring-on-marker-fill/50" : "ring-fg/15",
                 ]}
                 style={`background-color: #${chip.color}`}
               />

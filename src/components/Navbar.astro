@@ -10,7 +10,10 @@ import { withBase } from "../lib/links";
       href={withBase(import.meta.env.BASE_URL, "/")}
       class="min-w-0 font-bold break-keep break-words hover:opacity-80"
     >
-      {siteConfig.websiteTitle}
+      {/* the favicon's and README hero's highlighter stroke; an inline span keeps it under each line of a wrapped title */}
+      <span class="-mx-[0.12em] px-[0.12em] marker-stroke">
+        {siteConfig.websiteTitle}
+      </span>
     </a>
     <form
       method="get"

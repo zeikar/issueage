@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { type MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 import type { TocItem } from "../lib/toc";
 
 interface Props {
@@ -7,6 +7,35 @@ interface Props {
 
 const flattenIds = (items: TocItem[]): string[] =>
   items.flatMap((item) => [item.id, ...flattenIds(item.children)]);
+
+// glide only for clicks here: scroll-behavior on <html> would also animate opening a shared link to a heading, and
+// back/forward. Keyboard activation (detail 0) keeps the native jump, which also moves where Tab continues to the
+// heading; clicks with a modifier key keep their browser meaning, such as opening a new tab
+const scrollToHeading = (event: MouseEvent<HTMLAnchorElement>, id: string) => {
+  const heading = document.getElementById(id);
+  if (
+    !heading ||
+    event.detail === 0 ||
+    event.button !== 0 ||
+    event.metaKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    event.altKey
+  ) {
+    return;
+  }
+  event.preventDefault();
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  heading.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+  // like a plain fragment link, clicking the entry already in the address bar adds no second history entry;
+  // location.hash is percent-encoded (Korean ids), so compare it with the id encoded the same way
+  const hash = new URL(`#${id}`, window.location.href).hash;
+  if (window.location.hash !== hash) {
+    window.history.pushState(null, "", hash);
+  }
+};
 
 const TocList = ({
   items,
@@ -22,6 +51,7 @@ const TocList = ({
       <li key={item.id}>
         <a
           href={`#${item.id}`}
+          onClick={(event) => scrollToHeading(event, item.id)}
           aria-current={activeId === item.id ? "true" : undefined}
           className={
             "block border-l-2 py-1 pl-3 leading-snug break-keep break-words " +

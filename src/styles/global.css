@@ -23,6 +23,9 @@
   --color-rule: #e2e4e8;
   --color-marker: #ffe66b;
   --color-on-marker: #15171c;
+  /* for a solid fill such as the current tag or page, rather than a stroke under text */
+  --color-marker-fill: #ffe66b;
+  --color-on-marker-fill: #15171c;
 }
 
 .dark {
@@ -34,6 +37,8 @@
   --color-rule: #262a32;
   --color-marker: rgb(255 214 10 / 0.28);
   --color-on-marker: #fff3c4;
+  /* the translucent marker turns olive once it fills a whole chip on the dark page */
+  --color-marker-fill: #e7c20b;
   color-scheme: dark;
 }
 
@@ -89,10 +94,8 @@
   text-decoration-color: var(--color-fg);
 }
 
-/* a highlighter stroke under the lower part of the text, the way a reader marks a study note;
-   Pagefind wraps matched words in <mark>, so search results get the same stroke */
-.prose strong,
-mark {
+/* a highlighter stroke under the lower part of the text, the way a reader marks a study note */
+@utility marker-stroke {
   background: linear-gradient(
     transparent 55%,
     var(--color-marker) 55%,
@@ -103,8 +106,22 @@ mark {
   box-decoration-break: clone;
 }
 
+/* Pagefind wraps matched words in <mark>, so search results get the same stroke */
+.prose strong,
+mark {
+  @apply marker-stroke;
+}
+
 mark {
   color: var(--color-on-marker);
+}
+
+/* in the base layer so a selection: utility can override it on the marker-filled current tag and page */
+@layer base {
+  ::selection {
+    background: var(--color-marker);
+    color: var(--color-on-marker);
+  }
 }
 
 .prose :not(pre) > code {
