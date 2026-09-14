@@ -66,7 +66,7 @@ To also rebuild when issues, discussions or their comments change, copy `.github
 
 Set the Pages source to **GitHub Actions** in your repository's Settings → Pages. [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 
-If you add a deployment branch policy to the repository's `github-pages` environment (Settings → Environments), include the `repozine` branch, or deploys from that branch will be rejected.
+Setting the Pages source to GitHub Actions limits the repository's `github-pages` environment to deploys from the default branch. Add the `repozine` branch to its deployment branches (Settings → Environments → github-pages), or deploys from that branch will be rejected.
 
 ## Configuration
 
