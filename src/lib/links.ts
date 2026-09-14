@@ -1,4 +1,4 @@
-// BASE_URL is "/" for a user site, and "/repozine" or "/repozine/" depending on trailingSlash
+// BASE_URL is "/" for a site served from its domain root, and "/repozine" or "/repozine/" (depending on trailingSlash) under a path
 export const withBase = (base: string, path: string): string => {
   return base.replace(/\/$/, "") + "/" + path.replace(/^\//, "");
 };

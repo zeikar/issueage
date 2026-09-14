@@ -90,8 +90,8 @@ If you add a deployment branch policy to the repository's `github-pages` environ
 - Every page gets Open Graph / Twitter card tags and, when the repository's About text or the owner's bio provides one, a description. Every page except search and 404 (both `noindex`) gets a canonical URL. Posts add their dates and labels as article metadata and schema.org `BlogPosting` data.
 - A post's link preview shows its first image. Posts without one get a card rendered by [DOGimg](https://dogimg.vercel.app).
 - `sitemap.xml` and `rss.xml` are built next to the home page, e.g. `https://<owner>.github.io/<repo>/sitemap.xml`.
-- Crawlers read `robots.txt` only at the root of a host, so only a `<owner>.github.io` repository gets one. For a project site, add `Sitemap: https://<host>/<repo>/sitemap.xml` to the root site's `robots.txt`, or submit the sitemap in Google Search Console.
-- The deploy workflow passes the site's real origin, custom domain included, to the build. Local builds assume `https://<owner>.github.io` unless `SITE_ORIGIN` is set.
+- Crawlers read `robots.txt` only at the root of a host, so a site gets one only when it is served from there: a `<owner>.github.io` repository, or a project repository with its own domain. For a project site under a path, add `Sitemap: https://<host>/<repo>/sitemap.xml` to the root site's `robots.txt`, or submit the sitemap in Google Search Console.
+- The deploy workflow passes the site's real address to the build, so absolute URLs and links follow a custom domain, including one set on the repository itself. Local builds assume `https://<owner>.github.io/<repo>/` unless `SITE_URL` is set, e.g. `SITE_URL=https://blog.example.com`.
 
 ## Local development
 

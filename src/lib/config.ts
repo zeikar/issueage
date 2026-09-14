@@ -77,33 +77,40 @@ export const parseSiteConfig = (
 
 export const siteConfig: SiteConfig = parseSiteConfig(rawConfig);
 
-// the deploy workflow passes the origin actions/configure-pages reports, which follows a custom domain;
-// local builds have none, and the owner's github.io origin is the best guess for their absolute URLs
-export const siteOriginFor = (
-  reportedOrigin: string | undefined,
+// without a custom domain of its own, GitHub Pages serves a repository from the domain root only when its name matches
+// <repoOwner>.github.io; every other repository is served under /<repoName>
+export const basePathFor = (repoOwner: string, repoName: string): string => {
+  return repoName.toLowerCase() === `${repoOwner}.github.io`.toLowerCase()
+    ? "/"
+    : `/${repoName}`;
+};
+
+// where the site is served: the origin for absolute URLs and the base path every link starts with.
+// The deploy workflow passes the base URL actions/configure-pages reports, which follows custom domains (a project
+// repository with a domain of its own is served from that domain's root); local builds have none and assume the
+// default <owner>.github.io address
+export const siteLocationFor = (
+  reportedUrl: string | undefined,
   repoOwner: string,
-): string => {
-  if (reportedOrigin === undefined || reportedOrigin.trim() === "") {
-    return `https://${repoOwner.toLowerCase()}.github.io`;
+  repoName: string,
+): { site: string; base: string } => {
+  if (reportedUrl === undefined || reportedUrl.trim() === "") {
+    return {
+      site: `https://${repoOwner.toLowerCase()}.github.io`,
+      base: basePathFor(repoOwner, repoName),
+    };
   }
   let url: URL | undefined;
   try {
-    url = new URL(reportedOrigin.trim());
+    url = new URL(reportedUrl.trim());
   } catch {
     // reported below
   }
   // "localhost:4321" parses too, as a URL with the scheme "localhost:" and the origin "null"
   if (url === undefined || !["http:", "https:"].includes(url.protocol)) {
     throw new Error(
-      `SITE_ORIGIN must be an http(s) origin such as https://example.com, got ${JSON.stringify(reportedOrigin)}`,
+      `SITE_URL must be an http(s) URL such as https://example.com/blog, got ${JSON.stringify(reportedUrl)}`,
     );
   }
-  return url.origin;
-};
-
-// GitHub Pages serves a repository from the domain root only when its name matches <repoOwner>.github.io; every other repository is served under /<repoName>
-export const basePathFor = (repoOwner: string, repoName: string): string => {
-  return repoName.toLowerCase() === `${repoOwner}.github.io`.toLowerCase()
-    ? "/"
-    : `/${repoName}`;
+  return { site: url.origin, base: url.pathname.replace(/\/+$/, "") || "/" };
 };

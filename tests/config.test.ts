@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { basePathFor, parseSiteConfig, siteOriginFor } from "../src/lib/config";
+import {
+  basePathFor,
+  parseSiteConfig,
+  siteLocationFor,
+} from "../src/lib/config";
 
 const issuesConfig = {
   websiteTitle: "Repozine",
@@ -58,27 +62,43 @@ describe("parseSiteConfig", () => {
   });
 });
 
-describe("siteOriginFor", () => {
-  it("uses the origin the Pages deployment reports, custom domain included", () => {
-    expect(siteOriginFor("https://zeikar.dev", "zeikar")).toBe(
-      "https://zeikar.dev",
-    );
-    expect(siteOriginFor("https://zeikar.dev/", "zeikar")).toBe(
-      "https://zeikar.dev",
-    );
-  });
-
-  it.each([undefined, "", "  "])(
-    "falls back to the owner's github.io origin when none is reported (%j)",
-    (origin) => {
-      expect(siteOriginFor(origin, "Zeikar")).toBe("https://zeikar.github.io");
+describe("siteLocationFor", () => {
+  it.each([
+    ["https://zeikar.dev/repozine", "https://zeikar.dev", "/repozine"],
+    ["https://zeikar.dev/repozine/", "https://zeikar.dev", "/repozine"],
+    ["https://zeikar.github.io", "https://zeikar.github.io", "/"],
+    // a project repository with its own custom domain is served from that domain's root, not under /<repoName>
+    ["https://blog.example.com", "https://blog.example.com", "/"],
+  ])(
+    "splits the Pages URL %s into the site %s and the base %s",
+    (reported, site, base) => {
+      expect(siteLocationFor(reported, "zeikar", "repozine")).toEqual({
+        site,
+        base,
+      });
     },
   );
 
-  it.each(["zeikar.dev", "localhost:4321", "ftp://zeikar.dev"])(
-    "rejects %j, which is not an http(s) origin",
-    (origin) => {
-      expect(() => siteOriginFor(origin, "zeikar")).toThrow(/SITE_ORIGIN/);
+  it.each([undefined, "", "  "])(
+    "falls back to the default github.io address when none is reported (%j)",
+    (reported) => {
+      expect(siteLocationFor(reported, "Zeikar", "repozine")).toEqual({
+        site: "https://zeikar.github.io",
+        base: "/repozine",
+      });
+      expect(siteLocationFor(reported, "zeikar", "zeikar.github.io")).toEqual({
+        site: "https://zeikar.github.io",
+        base: "/",
+      });
+    },
+  );
+
+  it.each(["zeikar.dev/repozine", "localhost:4321", "ftp://zeikar.dev"])(
+    "rejects %j, which is not an http(s) URL",
+    (reported) => {
+      expect(() => siteLocationFor(reported, "zeikar", "repozine")).toThrow(
+        /SITE_URL/,
+      );
     },
   );
 });
