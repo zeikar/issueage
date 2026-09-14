@@ -3,11 +3,11 @@ import { pagePath, postPath, tagPath, withBase } from "../src/lib/links";
 
 describe("withBase", () => {
   it.each([
-    ["/issueage", "/posts/20/", "/issueage/posts/20/"],
-    ["/issueage/", "/posts/20/", "/issueage/posts/20/"],
+    ["/repozine", "/posts/20/", "/repozine/posts/20/"],
+    ["/repozine/", "/posts/20/", "/repozine/posts/20/"],
     ["/", "/posts/20/", "/posts/20/"],
-    ["/issueage", "/", "/issueage/"],
-    ["/issueage", "posts/20/", "/issueage/posts/20/"],
+    ["/repozine", "/", "/repozine/"],
+    ["/repozine", "posts/20/", "/repozine/posts/20/"],
   ])("joins %j and %j into %j", (base, path, expected) => {
     expect(withBase(base, path)).toBe(expected);
   });

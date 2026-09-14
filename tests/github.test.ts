@@ -18,9 +18,9 @@ const node = (number: number): PostNode => ({
   title: `post ${number}`,
   body: "body",
   createdAt: "2021-02-18T14:50:29Z",
-  url: `https://github.com/zeikar/issueage/issues/${number}`,
+  url: `https://github.com/zeikar/repozine/issues/${number}`,
   author: { login: "zeikar" },
-  repository: { nameWithOwner: "zeikar/issueage" },
+  repository: { nameWithOwner: "zeikar/repozine" },
   labels: { nodes: [] },
   comments: { totalCount: 0 },
   state: "OPEN",
@@ -29,7 +29,7 @@ const node = (number: number): PostNode => ({
 const issuesPage = (
   nodes: PostNode[],
   endCursor: string | null,
-  nameWithOwner = "zeikar/issueage",
+  nameWithOwner = "zeikar/repozine",
 ): Response =>
   json({
     data: {
@@ -102,33 +102,35 @@ describe("fetchIssues", () => {
       .mockResolvedValueOnce(issuesPage([node(1), node(2)], "cursor-1"))
       .mockResolvedValueOnce(issuesPage([node(3)], null));
 
-    const nodes = await fetchIssues("zeikar", "issueage");
+    const nodes = await fetchIssues("zeikar", "repozine");
 
     expect(nodes.map(({ number }) => number)).toEqual([1, 2, 3]);
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(variablesOf(0)).toMatchObject({
       owner: "zeikar",
-      repo: "issueage",
+      repo: "repozine",
       cursor: null,
     });
     expect(variablesOf(1)).toMatchObject({
       owner: "zeikar",
-      repo: "issueage",
+      repo: "repozine",
       cursor: "cursor-1",
     });
   });
 
   it("throws when the repository now resolves to another name", async () => {
-    fetchMock.mockResolvedValue(issuesPage([node(1)], null, "zeikar/repozine"));
+    fetchMock.mockResolvedValue(
+      issuesPage([node(1)], null, "zeikar/renamed-repo"),
+    );
 
-    await expect(fetchIssues("zeikar", "issueage")).rejects.toThrow(
-      /zeikar\/repozine/,
+    await expect(fetchIssues("zeikar", "repozine")).rejects.toThrow(
+      /zeikar\/renamed-repo/,
     );
   });
 
   it("accepts the repository name in another letter case", async () => {
-    fetchMock.mockResolvedValue(issuesPage([node(1)], null, "Zeikar/IssueAge"));
+    fetchMock.mockResolvedValue(issuesPage([node(1)], null, "Zeikar/RepoZine"));
 
-    await expect(fetchIssues("zeikar", "issueage")).resolves.toHaveLength(1);
+    await expect(fetchIssues("zeikar", "repozine")).resolves.toHaveLength(1);
   });
 });

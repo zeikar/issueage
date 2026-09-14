@@ -9,13 +9,13 @@ import {
 
 const issuesConfig = {
   repoOwner: "zeikar",
-  repoName: "issueage",
+  repoName: "repozine",
   source: "issues",
 } as const;
 
 const discussionsConfig = {
   repoOwner: "zeikar",
-  repoName: "issueage",
+  repoName: "repozine",
   source: "discussions",
   discussionCategory: "general",
 } as const;
@@ -27,9 +27,9 @@ const issue = (overrides: Partial<TrustedPostNode> = {}): TrustedPostNode => ({
   title: "title",
   body: "body",
   createdAt: "2021-02-18T14:50:29Z",
-  url: "https://github.com/zeikar/issueage/issues/1",
+  url: "https://github.com/zeikar/repozine/issues/1",
   author: { login: "zeikar" },
-  repository: { nameWithOwner: "zeikar/issueage" },
+  repository: { nameWithOwner: "zeikar/repozine" },
   labels: { nodes: [{ name: "C++", color: "f29513" }] },
   comments: { totalCount: 2 },
   state: "OPEN",
@@ -44,9 +44,9 @@ const discussion = (
   title: "title",
   body: "body",
   createdAt: "2021-02-18T14:50:29Z",
-  url: "https://github.com/zeikar/issueage/discussions/27",
+  url: "https://github.com/zeikar/repozine/discussions/27",
   author: { login: "zeikar" },
-  repository: { nameWithOwner: "zeikar/issueage" },
+  repository: { nameWithOwner: "zeikar/repozine" },
   labels: { nodes: [] },
   comments: { totalCount: 0 },
   closed: false,
@@ -62,7 +62,7 @@ describe("isTrustedPost in issues mode", () => {
   it("matches the owner and repository case-insensitively", () => {
     const node = issue({
       author: { login: "ZEIKAR" },
-      repository: { nameWithOwner: "Zeikar/IssueAge" },
+      repository: { nameWithOwner: "Zeikar/RepoZine" },
     });
     expect(isTrustedPost(node, issuesConfig)).toBe(true);
   });
@@ -102,7 +102,7 @@ describe("toPost", () => {
       title: "title",
       body: "body",
       createdAt: "2021-02-18T14:50:29Z",
-      url: "https://github.com/zeikar/issueage/issues/1",
+      url: "https://github.com/zeikar/repozine/issues/1",
       author: "zeikar",
       tags: [{ name: "C++", color: "f29513" }],
       commentCount: 2,
@@ -112,7 +112,7 @@ describe("toPost", () => {
       title: "title",
       body: "body",
       createdAt: "2021-02-18T14:50:29Z",
-      url: "https://github.com/zeikar/issueage/discussions/27",
+      url: "https://github.com/zeikar/repozine/discussions/27",
       author: "zeikar",
       tags: [],
       commentCount: 0,

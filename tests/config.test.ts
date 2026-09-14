@@ -4,7 +4,7 @@ import { basePathFor, parseSiteConfig } from "../src/lib/config";
 const issuesConfig = {
   websiteTitle: "Repozine",
   repoOwner: "zeikar",
-  repoName: "issueage",
+  repoName: "repozine",
   source: "issues",
   googleAnalyticsId: "",
 };
@@ -48,7 +48,7 @@ describe("parseSiteConfig", () => {
 
 describe("basePathFor", () => {
   it("serves a project site under the repository name", () => {
-    expect(basePathFor("zeikar", "issueage")).toBe("/issueage");
+    expect(basePathFor("zeikar", "repozine")).toBe("/repozine");
   });
 
   it.each(["zeikar.github.io", "Zeikar.GitHub.IO"])(

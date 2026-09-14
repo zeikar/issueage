@@ -1,5 +1,6 @@
 # Repozine
 
+[![Deploy][deploy-shield]][deploy-url]
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
@@ -104,7 +105,7 @@ GITHUB_TOKEN=$(gh auth token) npm run build && npm run preview
 # Sites using Repozine
 
 - [https://zeikar.dev/](https://zeikar.dev/)
-- [and many more...](https://github.com/topics/issueage)
+- [and many more...](https://github.com/topics/repozine)
 
 # License
 
@@ -113,13 +114,15 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/zeikar/repozine.svg?style=for-the-badge
+[deploy-shield]: https://github.com/zeikar/repozine/actions/workflows/deploy.yml/badge.svg
+[deploy-url]: https://github.com/zeikar/repozine/actions/workflows/deploy.yml
+[contributors-shield]: https://img.shields.io/github/contributors/zeikar/repozine.svg
 [contributors-url]: https://github.com/zeikar/repozine/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/zeikar/repozine.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/zeikar/repozine.svg
 [forks-url]: https://github.com/zeikar/repozine/network/members
-[stars-shield]: https://img.shields.io/github/stars/zeikar/repozine.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/zeikar/repozine.svg
 [stars-url]: https://github.com/zeikar/repozine/stargazers
-[issues-shield]: https://img.shields.io/github/issues/zeikar/repozine.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/zeikar/repozine.svg
 [issues-url]: https://github.com/zeikar/repozine/issues
-[license-shield]: https://img.shields.io/github/license/zeikar/repozine.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/zeikar/repozine.svg
 [license-url]: https://github.com/zeikar/repozine/blob/main/LICENSE.txt
