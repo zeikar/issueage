@@ -7,7 +7,7 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
-![Repozine logo](https://repository-images.githubusercontent.com/304850825/bac6d700-58cf-11eb-9903-01b46181dcbc)
+![Repozine: your repo, published as a zine](.github/assets/repozine-hero.png)
 
 ---
 
@@ -104,7 +104,7 @@ GITHUB_TOKEN=$(gh auth token) npm run build && npm run preview
 
 # Sites using Repozine
 
-- [https://zeikar.dev/](https://zeikar.dev/)
+- [https://zeikar.dev/leetcode/](https://zeikar.dev/leetcode/)
 - [and many more...](https://github.com/topics/repozine)
 
 # License

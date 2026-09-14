@@ -1,0 +1,236 @@
+<!doctype html>
+<!--
+  Source of repozine-hero.png (README) and the repository social preview.
+  Render with a headless browser: replace __MODE__ with "hero" for the README image
+  (1280x440 viewport at 1.5x, transparent background, then quantize to 256 colors to keep it small)
+  or with "social" plus the size overrides --h:640px; --sheet-w:1120px; --sheet-h:480px;
+  --mark-size:196px; --tag-size:42px; --tag-gap:66px on <body> for the 1280x640 social preview.
+-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Newsreader:ital,opsz,wght@1,6..72,500&family=Newsreader:opsz,wght@6..72,600&display=block"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #e9ece5;
+        --ink-blue: #0078bf;
+        --ink-pink: #ff48b0;
+        --label-yellow: #fbca04;
+        --type: #1c2a4a;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        background: transparent;
+      }
+      body {
+        width: 1280px;
+        height: var(--h, 440px);
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+      }
+      body.social {
+        background: var(--ink-blue);
+      }
+
+      .sheet {
+        position: relative;
+        width: var(--sheet-w, 1180px);
+        height: var(--sheet-h, 372px);
+        background:
+          radial-gradient(
+              circle at 1px 1px,
+              rgba(0, 120, 191, 0.07) 1.1px,
+              transparent 1.4px
+            )
+            0 0 / 7px 7px,
+          var(--paper);
+        transform: rotate(-1.1deg);
+        box-shadow: 7px 9px 0 rgba(28, 42, 74, 0.16);
+        padding: 34px 64px 0 70px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        column-gap: 40px;
+      }
+      /* photocopier grain */
+      .sheet::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.15  0 0 0 0 0.25  0 0 0 0.09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+        mix-blend-mode: multiply;
+        pointer-events: none;
+      }
+      .staple {
+        position: absolute;
+        top: 16px;
+        width: 46px;
+        height: 6px;
+        border-radius: 2px;
+        background: linear-gradient(#b9bfc4, #8d949a);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+      }
+      .staple.a {
+        left: 110px;
+        transform: rotate(-3deg);
+      }
+      .staple.b {
+        right: 150px;
+        transform: rotate(2deg);
+      }
+
+      .mark {
+        position: relative;
+        font-family: "Big Shoulders Display", sans-serif;
+        font-weight: 900;
+        font-size: var(--mark-size, 206px);
+        line-height: 0.8;
+        letter-spacing: -0.005em;
+      }
+      .mark span {
+        display: block;
+        mix-blend-mode: multiply;
+      }
+      .mark .blue {
+        color: var(--ink-blue);
+      }
+      .mark .pink {
+        color: var(--ink-pink);
+        position: absolute;
+        inset: 0;
+        transform: translate(-7px, -5px);
+      }
+
+      .tagline {
+        margin-top: var(--tag-gap, 62px);
+        font-family: "Newsreader", serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: var(--tag-size, 38px);
+        color: var(--type);
+        letter-spacing: 0.005em;
+      }
+
+      .slip {
+        position: relative;
+        width: 330px;
+        background: #fbfcf8;
+        padding: 22px 24px 20px;
+        transform: rotate(3.2deg) translateY(-6px);
+        box-shadow: 4px 5px 0 rgba(28, 42, 74, 0.14);
+        font-family: "Newsreader", serif;
+        color: var(--type);
+      }
+      .tape {
+        position: absolute;
+        top: -14px;
+        left: 50%;
+        width: 110px;
+        height: 30px;
+        transform: translateX(-50%) rotate(-4deg);
+        background: rgba(255, 72, 176, 0.28);
+        mix-blend-mode: multiply;
+      }
+      .issue-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 22px;
+        font-weight: 600;
+      }
+      .issue-head svg {
+        flex: none;
+      }
+      .issue-no {
+        color: #57606a;
+        font-weight: 600;
+      }
+      .issue-title {
+        margin-top: 8px;
+        font-size: 27px;
+        font-weight: 600;
+        line-height: 1.15;
+      }
+      .labels {
+        margin-top: 14px;
+        display: flex;
+        gap: 8px;
+      }
+      .label {
+        font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1;
+        padding: 6px 11px;
+        border-radius: 999px;
+      }
+      .label.medium {
+        background: var(--label-yellow);
+        color: #1f2328;
+      }
+      .label.bfs {
+        background: #bfdadc;
+        color: #1f2328;
+      }
+
+      .corner {
+        display: none;
+      }
+      .social .corner {
+        display: block;
+        position: absolute;
+        right: 60px;
+        bottom: 34px;
+        font-family: "Newsreader", serif;
+        font-weight: 600;
+        font-size: 22px;
+        color: #e9ece5;
+      }
+    </style>
+  </head>
+  <body class="__MODE__">
+    <div class="sheet">
+      <i class="staple a"></i><i class="staple b"></i>
+      <div>
+        <div class="mark" aria-label="Repozine">
+          <span class="blue">Repozine</span>
+          <span class="pink" aria-hidden="true">Repozine</span>
+        </div>
+        <p class="tagline">Your repo, published as a zine.</p>
+      </div>
+      <div class="slip">
+        <i class="tape"></i>
+        <div class="issue-head">
+          <svg width="22" height="22" viewBox="0 0 16 16" aria-hidden="true">
+            <circle
+              cx="8"
+              cy="8"
+              r="6.25"
+              fill="none"
+              stroke="#1a7f37"
+              stroke-width="1.5"
+            />
+            <circle cx="8" cy="8" r="1.6" fill="#1a7f37" />
+          </svg>
+          <span class="issue-no">#20</span>
+        </div>
+        <p class="issue-title">1306. Jump Game III</p>
+        <div class="labels">
+          <span class="label medium">medium</span
+          ><span class="label bfs">bfs</span>
+        </div>
+      </div>
+    </div>
+    <div class="corner">github.com/zeikar/repozine</div>
+  </body>
+</html>
