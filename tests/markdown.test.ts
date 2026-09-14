@@ -1,7 +1,13 @@
 // @vitest-environment jsdom
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { renderMarkdown } from "../src/lib/markdown";
 import { nestHeadings, type TocItem } from "../src/lib/toc";
+
+// the first render loads every Shiki grammar (seconds on a busy CI runner); pay that once here,
+// with a generous timeout, instead of inside whichever test happens to run first
+beforeAll(async () => {
+  await renderMarkdown("```js\nx\n```");
+}, 60_000);
 
 const render = async (markdown: string): Promise<Document> => {
   const { html } = await renderMarkdown(markdown);
