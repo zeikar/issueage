@@ -30,7 +30,7 @@ const [firstTag] = post.tags;
         {/* the link covers the whole row; tags sit above it so they stay clickable */}
         <a
           href={withBase(import.meta.env.BASE_URL, postPath(post.number))}
-          class="after:absolute after:inset-0 group-hover:marker-stroke"
+          class="marker-draw group-hover:stroke-drawn after:absolute after:inset-0"
         >
           {post.title}
         </a>

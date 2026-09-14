@@ -129,7 +129,7 @@ export default function Search({ base }: Props) {
                 >
                   <a
                     href={result.url}
-                    className="text-[1.0625rem] font-semibold hover:underline hover:underline-offset-3"
+                    className="marker-draw text-[1.0625rem] font-semibold hover:stroke-drawn"
                   >
                     {result.meta.title}
                   </a>

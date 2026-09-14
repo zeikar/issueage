@@ -94,6 +94,12 @@
   text-decoration-color: var(--color-fg);
 }
 
+/* a link around an image or inline code keeps the typography plugin's underline: a background line would run beneath
+   the image, and sits less than a pixel below the code's own background, which partly hides it in Safari */
+.prose a:not(:has(img, code)) {
+  @apply pen-link;
+}
+
 /* a highlighter stroke under the lower part of the text, the way a reader marks a study note */
 @utility marker-stroke {
   background: linear-gradient(
@@ -104,6 +110,53 @@
   );
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
+}
+
+/* a background stroke drawn from left to right as it grows to full width (stroke-drawn). Sliced rather than cloned,
+   so a wrapped link is drawn one line after the other; erased faster than drawn, so sweeping the pointer down a list
+   leaves less half-drawn behind */
+@utility stroke-draw {
+  background-repeat: no-repeat;
+  -webkit-box-decoration-break: slice;
+  box-decoration-break: slice;
+  transition: background-size 150ms ease-out;
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+@utility stroke-drawn {
+  background-size: 100% 100%;
+  transition-duration: 300ms;
+}
+
+/* two @apply lines keep stroke-draw's slice after marker-stroke's clone; a single @apply list is re-sorted by Tailwind */
+@utility marker-draw {
+  @apply marker-stroke;
+  @apply stroke-draw;
+  background-size: 0% 100%;
+}
+
+/* a text link rests on a faint line, and a line in its text color is drawn over it on hover;
+   both are backgrounds, since text-decoration can't be drawn partway */
+@utility pen-link {
+  background-image:
+    linear-gradient(transparent calc(100% - 1px), currentColor 0),
+    linear-gradient(transparent calc(100% - 1px), var(--color-faint) 0);
+  background-size:
+    0% 100%,
+    100% 100%;
+  @apply stroke-draw;
+  text-decoration: none;
+  @variant hover {
+    @apply stroke-drawn;
+  }
+  /* forced colors, and printing without background graphics, drop the gradients, so the link falls back to an underline */
+  @media (forced-colors: active), print {
+    background-image: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
 }
 
 /* Pagefind wraps matched words in <mark>, so search results get the same stroke */
