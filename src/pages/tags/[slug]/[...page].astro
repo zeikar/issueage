@@ -31,6 +31,7 @@ const pageSuffix = page.currentPage > 1 ? ` - Page ${page.currentPage}` : "";
 
 <Base
   title={`${tag.name} - ${siteConfig.websiteTitle}${pageSuffix}`}
+  ogTitle={`${tag.name}${pageSuffix}`}
   description={`Posts labeled “${tag.name}” on ${siteConfig.websiteTitle}.`}
 >
   <PostIndex

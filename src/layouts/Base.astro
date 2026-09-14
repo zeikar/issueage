@@ -16,6 +16,8 @@ import { getSite } from "../lib/site";
 
 interface Props {
   title: string;
+  // link previews already show og:site_name, so a page can drop the site name that title ends with
+  ogTitle?: string;
   // pages without their own summary are described by the site
   description?: string;
   image?: string;
@@ -26,6 +28,7 @@ interface Props {
 
 const {
   title,
+  ogTitle = title,
   description = siteDescription(await getSite()) ?? undefined,
   image,
   type = "website",
@@ -54,7 +57,7 @@ const ogLocale = ogLocaleFor(language);
     )}
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={websiteTitle} />
-    <meta property="og:title" content={title} />
+    <meta property="og:title" content={ogTitle} />
     {description && <meta property="og:description" content={description} />}
     {!noindex && <meta property="og:url" content={pageUrl} />}
     <meta property="og:image" content={image ?? ogImageFor(cardUrl)} />

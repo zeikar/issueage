@@ -1,26 +1,40 @@
 <!doctype html>
 <!--
-  Source of repozine-hero.png (README) and the repository social preview.
-  Render with a headless browser: replace __MODE__ with "hero" for the README image
-  (1280x440 viewport at 1.5x, transparent background, then quantize to 256 colors to keep it small)
-  or with "social" plus the size overrides --h:640px; --sheet-w:1120px; --sheet-h:480px;
-  --mark-size:196px; --tag-size:42px; --tag-gap:66px on <body> for the 1280x640 social preview.
+  Source of the README hero (repozine-hero-light.png, repozine-hero-dark.png), the repository
+  social preview (repozine-social-preview.png) and public/favicon.png. It reuses the site's color tokens and IBM Plex Sans,
+  the Latin family the site's IBM Plex Sans KR is drawn from.
+  Serve this directory over HTTP and screenshot it with a headless browser:
+    ?view=hero             1280x440 at device scale 1.5, transparent page background
+    ?view=hero&theme=dark  the same in the site's dark palette
+    ?view=social           1280x640 at scale 1; GitHub has no API for it, so upload it in Settings -> General -> Social preview
+    ?view=favicon          the #favicon element at 192x192, transparent background
+  Quantize the hero PNGs to 256 colors afterwards to keep them small.
 -->
 <html>
   <head>
     <meta charset="utf-8" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Newsreader:ital,opsz,wght@1,6..72,500&family=Newsreader:opsz,wght@6..72,600&display=block"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=block"
       rel="stylesheet"
     />
     <style>
+      /* the site's tokens (src/styles/global.css) */
       :root {
-        --paper: #e9ece5;
-        --ink-blue: #0078bf;
-        --ink-pink: #ff48b0;
-        --label-yellow: #fbca04;
-        --type: #1c2a4a;
+        --page: #ffffff;
+        --fg: #15171c;
+        --muted: #5f6672;
+        --faint: #6e7581;
+        --rule: #e2e4e8;
+        --marker: #ffe66b;
+      }
+      .dark {
+        --page: #0e1014;
+        --fg: #e6e8ec;
+        --muted: #9aa2ad;
+        --faint: #838b97;
+        --rule: #262a32;
+        --marker: rgb(255 214 10 / 0.28);
       }
       * {
         box-sizing: border-box;
@@ -32,205 +46,248 @@
         background: transparent;
       }
       body {
-        width: 1280px;
-        height: var(--h, 440px);
-        display: grid;
-        place-items: center;
-        overflow: hidden;
+        font-family: "IBM Plex Sans", sans-serif;
       }
-      body.social {
-        background: var(--ink-blue);
-      }
-
-      .sheet {
-        position: relative;
-        width: var(--sheet-w, 1180px);
-        height: var(--sheet-h, 372px);
-        background:
-          radial-gradient(
-              circle at 1px 1px,
-              rgba(0, 120, 191, 0.07) 1.1px,
-              transparent 1.4px
-            )
-            0 0 / 7px 7px,
-          var(--paper);
-        transform: rotate(-1.1deg);
-        box-shadow: 7px 9px 0 rgba(28, 42, 74, 0.16);
-        padding: 34px 64px 0 70px;
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: center;
-        column-gap: 40px;
-      }
-      /* photocopier grain */
-      .sheet::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.15  0 0 0 0 0.25  0 0 0 0.09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-        mix-blend-mode: multiply;
-        pointer-events: none;
-      }
-      .staple {
-        position: absolute;
-        top: 16px;
-        width: 46px;
-        height: 6px;
-        border-radius: 2px;
-        background: linear-gradient(#b9bfc4, #8d949a);
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
-      }
-      .staple.a {
-        left: 110px;
-        transform: rotate(-3deg);
-      }
-      .staple.b {
-        right: 150px;
-        transform: rotate(2deg);
-      }
-
-      .mark {
-        position: relative;
-        font-family: "Big Shoulders Display", sans-serif;
-        font-weight: 900;
-        font-size: var(--mark-size, 206px);
-        line-height: 0.8;
-        letter-spacing: -0.005em;
-      }
-      .mark span {
-        display: block;
-        mix-blend-mode: multiply;
-      }
-      .mark .blue {
-        color: var(--ink-blue);
-      }
-      .mark .pink {
-        color: var(--ink-pink);
-        position: absolute;
-        inset: 0;
-        transform: translate(-7px, -5px);
-      }
-
-      .tagline {
-        margin-top: var(--tag-gap, 62px);
-        font-family: "Newsreader", serif;
-        font-style: italic;
-        font-weight: 500;
-        font-size: var(--tag-size, 38px);
-        color: var(--type);
-        letter-spacing: 0.005em;
-      }
-
-      .slip {
-        position: relative;
-        width: 330px;
-        background: #fbfcf8;
-        padding: 22px 24px 20px;
-        transform: rotate(3.2deg) translateY(-6px);
-        box-shadow: 4px 5px 0 rgba(28, 42, 74, 0.14);
-        font-family: "Newsreader", serif;
-        color: var(--type);
-      }
-      .tape {
-        position: absolute;
-        top: -14px;
-        left: 50%;
-        width: 110px;
-        height: 30px;
-        transform: translateX(-50%) rotate(-4deg);
-        background: rgba(255, 72, 176, 0.28);
-        mix-blend-mode: multiply;
-      }
-      .issue-head {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 22px;
-        font-weight: 600;
-      }
-      .issue-head svg {
-        flex: none;
-      }
-      .issue-no {
-        color: #57606a;
-        font-weight: 600;
-      }
-      .issue-title {
-        margin-top: 8px;
-        font-size: 27px;
-        font-weight: 600;
-        line-height: 1.15;
-      }
-      .labels {
-        margin-top: 14px;
-        display: flex;
-        gap: 8px;
-      }
-      .label {
-        font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-        font-size: 15px;
-        font-weight: 600;
-        line-height: 1;
-        padding: 6px 11px;
-        border-radius: 999px;
-      }
-      .label.medium {
-        background: var(--label-yellow);
-        color: #1f2328;
-      }
-      .label.bfs {
-        background: #bfdadc;
-        color: #1f2328;
-      }
-
-      .corner {
+      [data-view] {
         display: none;
       }
-      .social .corner {
+      .view-hero [data-view="hero"],
+      .view-social [data-view="social"],
+      .view-favicon [data-view="favicon"] {
         display: block;
+      }
+
+      .frame {
+        position: relative;
+        overflow: hidden;
+        background: var(--page);
+        border: 1px solid var(--rule);
+      }
+      .hero {
+        width: 1280px;
+        height: 440px;
+        border-radius: 18px;
+      }
+      .social {
+        width: 1280px;
+        height: 640px;
+      }
+
+      /* the site's bold-text highlighter, drawn under the lower half of the name */
+      .wordmark {
+        position: relative;
+        z-index: 0;
+        display: inline-block;
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        line-height: 1;
+        color: var(--fg);
+      }
+      .wordmark::before {
+        content: "";
         position: absolute;
-        right: 60px;
-        bottom: 34px;
-        font-family: "Newsreader", serif;
+        z-index: -1;
+        inset: 0.52em -0.06em -0.04em;
+        background: var(--marker);
+      }
+      .tagline {
+        color: var(--muted);
+        letter-spacing: -0.01em;
+        line-height: 1.35;
+      }
+      .copy {
+        position: absolute;
+      }
+      .hero .copy {
+        left: 72px;
+        top: 92px;
+      }
+      .hero .wordmark {
+        font-size: 108px;
+      }
+      .hero .tagline {
+        margin-top: 30px;
+        font-size: 30px;
+      }
+      .social .copy {
+        left: 80px;
+        top: 84px;
+      }
+      .social .wordmark {
+        font-size: 124px;
+      }
+      .social .tagline {
+        margin-top: 30px;
+        font-size: 36px;
+      }
+
+      /* the site's post index (src/components/PostIndex.astro, PostRow.astro) */
+      .card {
+        position: absolute;
+        width: 580px;
+        background: var(--page);
+        border: 1px solid var(--rule);
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      .hero .card {
+        left: 640px;
+        top: 70px;
+      }
+      .social .card {
+        left: 660px;
+        top: 330px;
+      }
+      .card .head {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        padding: 22px 28px 16px;
+        border-bottom: 1px solid var(--rule);
+        font-size: 26px;
+      }
+      .card .head b {
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--fg);
+      }
+      .card .head span {
+        color: var(--faint);
+      }
+      .row {
+        position: relative;
+        display: grid;
+        grid-template-columns: 56px 1fr auto;
+        gap: 18px;
+        padding: 18px 28px 18px 20px;
+        border-bottom: 1px solid var(--rule);
+      }
+      .row::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 18px;
+        bottom: 18px;
+        width: 4px;
+        border-radius: 2px;
+        background: var(--stripe);
+      }
+      .n {
+        text-align: right;
+        font-size: 25px;
+        line-height: 32px;
+        color: var(--faint);
+        font-variant-numeric: tabular-nums;
+      }
+      .t {
+        font-size: 20px;
         font-weight: 600;
-        font-size: 22px;
-        color: #e9ece5;
+        line-height: 32px;
+        letter-spacing: -0.01em;
+        color: var(--fg);
+        white-space: nowrap;
+      }
+      .x {
+        max-width: 330px;
+        font-size: 15px;
+        line-height: 22px;
+        color: var(--muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .labels {
+        margin-top: 6px;
+        display: flex;
+        gap: 14px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .labels i {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        margin-right: 6px;
+        border-radius: 50%;
+        box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.12);
+      }
+      .d {
+        font-size: 15px;
+        line-height: 32px;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      #favicon {
+        width: 192px;
+        height: 192px;
       }
     </style>
   </head>
-  <body class="__MODE__">
-    <div class="sheet">
-      <i class="staple a"></i><i class="staple b"></i>
-      <div>
-        <div class="mark" aria-label="Repozine">
-          <span class="blue">Repozine</span>
-          <span class="pink" aria-hidden="true">Repozine</span>
+  <body>
+    <template id="card">
+      <div class="card">
+        <div class="head"><b>Posts</b><span>24</span></div>
+        <div class="row" style="--stripe: #0075ca">
+          <span class="n">42</span>
+          <div>
+            <p class="t">Why I write in GitHub Issues</p>
+            <p class="x">Labels, search and comments come built in, so an issue is a good place for a draft.</p>
+            <p class="labels"><span><i style="background: #0075ca"></i>notes</span><span><i style="background: #d4c5f9"></i>workflow</span></p>
+          </div>
+          <span class="d">Sep 12, 2026</span>
         </div>
-        <p class="tagline">Your repo, published as a zine.</p>
+        <div class="row" style="--stripe: #1f883d">
+          <span class="n">37</span>
+          <div>
+            <p class="t">Redeploy on every issue edit</p>
+            <p class="x">GitHub Actions listens for issue events and republishes the site in about a minute.</p>
+            <p class="labels"><span><i style="background: #1f883d"></i>github-actions</span></p>
+          </div>
+          <span class="d">Aug 28, 2026</span>
+        </div>
+        <div class="row" style="--stripe: #d93f0b">
+          <span class="n">31</span>
+          <div>
+            <p class="t">Tag URLs that never collide</p>
+            <p class="x">Slugs come from the label name alone, with a short hash only when characters change.</p>
+            <p class="labels"><span><i style="background: #d93f0b"></i>astro</span><span><i style="background: #fbca04"></i>til</span></p>
+          </div>
+          <span class="d">Aug 3, 2026</span>
+        </div>
       </div>
-      <div class="slip">
-        <i class="tape"></i>
-        <div class="issue-head">
-          <svg width="22" height="22" viewBox="0 0 16 16" aria-hidden="true">
-            <circle
-              cx="8"
-              cy="8"
-              r="6.25"
-              fill="none"
-              stroke="#1a7f37"
-              stroke-width="1.5"
-            />
-            <circle cx="8" cy="8" r="1.6" fill="#1a7f37" />
-          </svg>
-          <span class="issue-no">#20</span>
-        </div>
-        <p class="issue-title">1306. Jump Game III</p>
-        <div class="labels">
-          <span class="label medium">medium</span
-          ><span class="label bfs">bfs</span>
-        </div>
+    </template>
+
+    <div data-view="hero" class="frame hero">
+      <div class="copy">
+        <div class="wordmark">Repozine</div>
+        <p class="tagline">Turn your repo's issues into a blog.</p>
       </div>
     </div>
-    <div class="corner">github.com/zeikar/repozine</div>
+
+    <div data-view="social" class="frame social">
+      <div class="copy">
+        <div class="wordmark">Repozine</div>
+        <p class="tagline">Turn your repo's issues into a blog.</p>
+      </div>
+    </div>
+
+    <div data-view="favicon">
+      <svg id="favicon" viewBox="0 0 64 64">
+        <rect width="64" height="64" rx="14" fill="#fff" />
+        <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="13.25" fill="none" stroke="#e2e4e8" stroke-width="1.5" />
+        <rect x="13" y="33" width="38" height="18" rx="2" fill="#ffe66b" />
+        <text x="32" y="48" text-anchor="middle" font-family="IBM Plex Sans" font-weight="700" font-size="44" fill="#15171c">R</text>
+      </svg>
+    </div>
+
+    <script>
+      const params = new URLSearchParams(location.search);
+      document.body.classList.add(`view-${params.get("view") ?? "hero"}`);
+      if (params.get("theme") === "dark") document.body.classList.add("dark");
+      for (const frame of document.querySelectorAll(".hero, .social")) {
+        frame.append(document.getElementById("card").content.cloneNode(true));
+      }
+    </script>
   </body>
 </html>

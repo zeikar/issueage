@@ -7,7 +7,10 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
-![Repozine: your repo, published as a zine](.github/assets/repozine-hero.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/repozine-hero-dark.png" />
+  <img alt="Repozine: turn your repo's issues into a blog" src=".github/assets/repozine-hero-light.png" />
+</picture>
 
 ---
 

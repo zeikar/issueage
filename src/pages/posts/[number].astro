@@ -32,6 +32,7 @@ const image = shareableImage(data.thumbnail);
 
 <Base
   title={`${data.title} - ${siteConfig.websiteTitle}`}
+  ogTitle={data.title}
   description={data.excerpt || undefined}
   image={image}
   type="article"
