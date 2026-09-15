@@ -27,6 +27,8 @@ Repozine turns a GitHub repository's Issues or Discussions into a static blog, b
 [Use this template](https://github.com/zeikar/repozine/generate) to create a repository from this template.
 [docs](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template#creating-a-repository-from-a-template)
 
+Before pushing to it, set the Pages source to **GitHub Actions** in the new repository's Settings → Pages. [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+
 ```bash
 vi config.json
 ```
@@ -38,8 +40,6 @@ git add config.json
 git commit -m "Configure Repozine"
 git push origin main
 ```
-
-Set the Pages source to **GitHub Actions** in your repository's Settings → Pages. [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 
 Pushing to `main` triggers the deploy workflow, which builds the site and publishes it to GitHub Pages.
 
@@ -68,15 +68,15 @@ GitHub has no API or bulk action for this, so convert each post with **Convert t
 
 ## Configuration
 
-| Key                  | Description                                                                                                                                                       |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `websiteTitle`       | Title shown in the navbar, footer and browser tab                                                                                                                 |
-| `repoOwner`          | Owner of the repository. Only issues or discussions authored by this account are published, so the repository must be owned by a user, not an organization        |
-| `repoName`           | Repository whose issues or discussions become posts                                                                                                               |
-| `source`             | `"issues"` or `"discussions"`                                                                                                                                     |
-| `discussionCategory` | Discussion category **slug** to publish from. Required when `source` is `"discussions"`. Use an Announcement-format category so only maintainers can create posts |
-| `googleAnalyticsId`  | Google Analytics measurement ID (e.g. `G-XXXXXXXXXX`). Leave empty to disable analytics                                                                           |
-| `language`           | Language of the posts as a tag such as `"en"` or `"ko"`, used for `<html lang>`. Include a region (`"ko-KR"`) to also set `og:locale`. Defaults to `"en"`         |
+| Key                  | Description                                                                                                                                                        |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `websiteTitle`       | Title shown in the navbar, footer and browser tab                                                                                                                  |
+| `repoOwner`          | Owner of the repository. Only issues or discussions authored by this account are published, so the repository must be owned by a user, not an organization         |
+| `repoName`           | Repository whose issues or discussions become posts. A build in GitHub Actions stops if `repoOwner`/`repoName` name a different repository from the one it runs in |
+| `source`             | `"issues"` or `"discussions"`                                                                                                                                      |
+| `discussionCategory` | Discussion category **slug** to publish from. Required when `source` is `"discussions"`. Use an Announcement-format category so only maintainers can create posts  |
+| `googleAnalyticsId`  | Google Analytics measurement ID (e.g. `G-XXXXXXXXXX`). Leave empty to disable analytics                                                                            |
+| `language`           | Language of the posts as a tag such as `"en"` or `"ko"`, used for `<html lang>`. Include a region (`"ko-KR"`) to also set `og:locale`. Defaults to `"en"`          |
 
 ## Comments
 

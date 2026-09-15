@@ -77,6 +77,23 @@ export const parseSiteConfig = (
 
 export const siteConfig: SiteConfig = parseSiteConfig(rawConfig);
 
+// a repository made from the template starts with the template's own config.json, which would publish the template's
+// posts and send comments to its repository, so a build in GitHub Actions (which sets GITHUB_REPOSITORY) must name its own
+export const assertBuildingConfiguredRepository = (
+  repoOwner: string,
+  repoName: string,
+  runningRepository: string | undefined,
+): void => {
+  if (
+    runningRepository &&
+    runningRepository.toLowerCase() !== `${repoOwner}/${repoName}`.toLowerCase()
+  ) {
+    throw new Error(
+      `config.json: "repoOwner"/"repoName" name ${repoOwner}/${repoName}, but this build runs in ${runningRepository}; set them to this repository`,
+    );
+  }
+};
+
 // without a custom domain of its own, GitHub Pages serves a repository from the domain root only when its name matches
 // <repoOwner>.github.io; every other repository is served under /<repoName>
 export const basePathFor = (repoOwner: string, repoName: string): string => {
