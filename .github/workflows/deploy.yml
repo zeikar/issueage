@@ -49,6 +49,8 @@ jobs:
           # empty REPOZINE_REF checks out the triggering ref; downstream repos
           # set it to "repozine" to build from their tracked branch
           ref: ${{ vars.REPOZINE_REF }}
+          # nothing below pushes, and npm ci runs dependencies' install scripts, so don't leave the token in .git/config
+          persist-credentials: false
 
       # vitest and jsdom need Node 22.22.2+, 24.15+ or 26+
       - uses: actions/setup-node@v7
