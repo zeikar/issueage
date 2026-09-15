@@ -119,15 +119,15 @@ GitHub has no API or bulk action for this, so convert each post with **Convert t
 
 ## Configuration
 
-| Key                  | Description                                                                                                                                                        |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `websiteTitle`       | Title shown in the navbar, footer and browser tab                                                                                                                  |
-| `repoOwner`          | Owner of the repository. Only issues or discussions authored by this account are published, so the repository must be owned by a user, not an organization         |
-| `repoName`           | Repository whose issues or discussions become posts. A build in GitHub Actions stops if `repoOwner`/`repoName` name a different repository from the one it runs in |
-| `source`             | `"issues"` or `"discussions"`                                                                                                                                      |
-| `discussionCategory` | Discussion category **slug** to publish from. Required when `source` is `"discussions"`. Use an Announcement-format category so only maintainers can create posts  |
-| `googleAnalyticsId`  | Google Analytics measurement ID (e.g. `G-XXXXXXXXXX`). Leave empty to disable analytics                                                                            |
-| `language`           | Language of the posts as a tag such as `"en"` or `"ko"`, used for `<html lang>`. Include a region (`"ko-KR"`) to also set `og:locale`. Defaults to `"en"`          |
+| Key                  | Description                                                                                                                                                                                                                       |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `websiteTitle`       | Title shown in the navbar, footer and browser tab                                                                                                                                                                                 |
+| `repoOwner`          | Owner of the repository. Only issues or discussions authored by this account are published, so the repository must be owned by a user, not an organization                                                                        |
+| `repoName`           | Repository whose issues or discussions become posts. A build in GitHub Actions stops if `repoOwner`/`repoName` name a different repository from the one it runs in                                                                |
+| `source`             | `"issues"` or `"discussions"`                                                                                                                                                                                                     |
+| `discussionCategory` | Discussion category **slug** to publish from. Required when `source` is `"discussions"`. Use an Announcement-format category so only maintainers can create posts                                                                 |
+| `googleAnalyticsId`  | Google Analytics measurement ID (e.g. `G-XXXXXXXXXX`). Leave empty to disable analytics                                                                                                                                           |
+| `language`           | Language of the posts as a tag such as `"en"` or `"ko"`, used for `<html lang>`. Include a region (`"ko-KR"`) to also set `og:locale`. Korean (`"ko"`, `"ko-KR"`) also loads the Hangul faces of the web font. Defaults to `"en"` |
 
 ## Comments
 

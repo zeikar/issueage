@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   assertBuildingConfiguredRepository,
   basePathFor,
+  fontStylesheetFor,
   parseSiteConfig,
   siteLocationFor,
 } from "../src/lib/config";
@@ -150,4 +151,20 @@ describe("basePathFor", () => {
   it("serves another repository ending in .github.io under its own name", () => {
     expect(basePathFor("zeikar", "notes.github.io")).toBe("/notes.github.io");
   });
+});
+
+describe("fontStylesheetFor", () => {
+  it.each(["ko", "KO", "ko-KR"])(
+    "loads the Hangul faces for %j",
+    (language) => {
+      expect(fontStylesheetFor(language)).toBe("/src/styles/fonts-hangul.css");
+    },
+  );
+
+  it.each(["en", "ja", "kok"])(
+    "loads only the Latin faces for %j",
+    (language) => {
+      expect(fontStylesheetFor(language)).toBe("/src/styles/fonts-latin.css");
+    },
+  );
 });

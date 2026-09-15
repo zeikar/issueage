@@ -94,6 +94,12 @@ export const assertBuildingConfiguredRepository = (
   }
 };
 
+// the Hangul faces are about 85KB gzipped of render-blocking @font-face rules, so only a site written in Korean loads them
+export const fontStylesheetFor = (language: string): string =>
+  language.split("-")[0].toLowerCase() === "ko"
+    ? "/src/styles/fonts-hangul.css"
+    : "/src/styles/fonts-latin.css";
+
 // without a custom domain of its own, GitHub Pages serves a repository from the domain root only when its name matches
 // <repoOwner>.github.io; every other repository is served under /<repoName>
 export const basePathFor = (repoOwner: string, repoName: string): string => {

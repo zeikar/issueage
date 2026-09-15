@@ -1,0 +1,4 @@
+/* each Hangul weight adds about 35KB gzipped to the render-blocking stylesheet, so only regular, semibold and bold are loaded */
+@import "@fontsource/ibm-plex-sans-kr/400.css";
+@import "@fontsource/ibm-plex-sans-kr/600.css";
+@import "@fontsource/ibm-plex-sans-kr/700.css";

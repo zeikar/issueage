@@ -1,0 +1,7 @@
+/* the same family without its Hangul faces, which a site not written in Korean doesn't need */
+@import "@fontsource/ibm-plex-sans-kr/latin-400.css";
+@import "@fontsource/ibm-plex-sans-kr/latin-ext-400.css";
+@import "@fontsource/ibm-plex-sans-kr/latin-600.css";
+@import "@fontsource/ibm-plex-sans-kr/latin-ext-600.css";
+@import "@fontsource/ibm-plex-sans-kr/latin-700.css";
+@import "@fontsource/ibm-plex-sans-kr/latin-ext-700.css";

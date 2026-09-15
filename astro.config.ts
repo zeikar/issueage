@@ -3,6 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import {
   assertBuildingConfiguredRepository,
+  fontStylesheetFor,
   siteConfig,
   siteLocationFor,
 } from "./src/lib/config";
@@ -30,5 +31,10 @@ export default defineConfig({
   site,
   base,
   integrations: [react()],
-  vite: { plugins: [tailwindcss()] },
+  vite: {
+    plugins: [tailwindcss()],
+    resolve: {
+      alias: { "repozine:fonts": fontStylesheetFor(siteConfig.language) },
+    },
+  },
 });
