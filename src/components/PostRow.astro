@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { siteConfig } from "../lib/config";
 import { formatDate } from "../lib/datetime";
 import { postPath, withBase } from "../lib/links";
 import TagList from "./TagList.astro";
@@ -62,7 +63,7 @@ const [firstTag] = post.tags;
       data-local-date="short"
       class="whitespace-nowrap"
     >
-      {formatDate(post.createdAt, "short")}
+      {formatDate(post.createdAt, "short", siteConfig.language)}
     </time>
     {post.commentCount > 0 && (
       <span class="whitespace-nowrap">

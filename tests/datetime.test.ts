@@ -6,8 +6,14 @@ describe("formatDate", () => {
   it.each(["2021-02-18T00:00:00Z", "2021-02-18T23:59:59Z"])(
     "formats %s as its UTC date",
     (dateString) => {
-      expect(formatDate(dateString, "long")).toBe("February 18, 2021");
-      expect(formatDate(dateString, "short")).toBe("Feb 18, 2021");
+      expect(formatDate(dateString, "long", "en")).toBe("February 18, 2021");
+      expect(formatDate(dateString, "short", "en")).toBe("Feb 18, 2021");
     },
   );
+
+  it("writes the date in the site's language", () => {
+    expect(formatDate("2021-02-18T00:00:00Z", "long", "ko-KR")).toBe(
+      "2021년 2월 18일",
+    );
+  });
 });

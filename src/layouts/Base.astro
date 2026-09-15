@@ -5,7 +5,7 @@ import "repozine:fonts";
 import Footer from "../components/Footer.astro";
 import Navbar from "../components/Navbar.astro";
 import { siteConfig } from "../lib/config";
-import { DATE_FORMATS, DATE_LOCALE } from "../lib/datetime";
+import { DATE_FORMATS } from "../lib/datetime";
 import { withBase } from "../lib/links";
 import {
   absoluteUrl,
@@ -127,7 +127,7 @@ const ogLocale = ogLocaleFor(language);
     <Footer />
     <script
       is:inline
-      define:vars={{ dateLocale: DATE_LOCALE, dateFormats: DATE_FORMATS }}
+      define:vars={{ dateLocale: language, dateFormats: DATE_FORMATS }}
     >
       // dates are built in UTC; re-render them in the reader's own time zone once the page is parsed,
       // keeping the format each element names in data-local-date (long when it names none)

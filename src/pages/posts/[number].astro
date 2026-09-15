@@ -96,7 +96,7 @@ const image = shareableImage(data.thumbnail);
         <dt class="text-muted">Posted</dt>
         <dd>
           <time datetime={data.createdAt} data-local-date="long">
-            {formatDate(data.createdAt, "long")}
+            {formatDate(data.createdAt, "long", siteConfig.language)}
           </time>
         </dd>
         <dt class="text-muted">Comments</dt>

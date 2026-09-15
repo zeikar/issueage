@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from "../lib/config";
+import { giscusLangFor } from "../lib/giscus";
 import { getSite } from "../lib/site";
 
 interface Props {
@@ -7,7 +8,7 @@ interface Props {
 }
 
 const { number } = Astro.props;
-const { repoOwner, repoName, source } = siteConfig;
+const { repoOwner, repoName, source, language } = siteConfig;
 
 // both widgets follow the OS color scheme, not the site's theme toggle: they are
 // cross-origin iframes, so following the toggle would need a postMessage sync
@@ -65,7 +66,7 @@ if (source === "issues") {
     data-emit-metadata="0"
     data-input-position="bottom"
     data-theme="preferred_color_scheme"
-    data-lang="en"
+    data-lang={giscusLangFor(language)}
     crossorigin="anonymous"
     async
   ></script>

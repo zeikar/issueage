@@ -34,6 +34,11 @@ describe("parseSiteConfig", () => {
       /"language"/,
     ],
     [
+      "a language tag with a repeated region",
+      { ...issuesConfig, language: "en-US-US" },
+      /"language"/,
+    ],
+    [
       "discussions without a category",
       { ...issuesConfig, source: "discussions" },
       /"discussionCategory"/,

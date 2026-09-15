@@ -7,12 +7,22 @@ export type SiteConfig = {
   source: "issues" | "discussions";
   discussionCategory?: string;
   googleAnalyticsId: string;
-  // BCP 47 tag for <html lang>; one with a region (ko-KR) also sets og:locale
+  // BCP 47 tag for <html lang>, dates, the giscus interface and the web font's Hangul faces (ko); one with a region (ko-KR) also sets og:locale
   language: string;
 };
 
 // a language subtag followed by optional script, region or variant subtags
 const LANGUAGE_TAG = /^[a-z]{2,3}(?:-[a-z0-9]{2,8})*$/i;
+
+// dates are formatted in the site's language, and Intl throws on a tag it can't parse, such as one with two regions
+const isLocale = (tag: string): boolean => {
+  try {
+    Intl.getCanonicalLocales(tag);
+    return true;
+  } catch {
+    return false;
+  }
+};
 
 const isNonEmptyString = (value: unknown): value is string =>
   typeof value === "string" && value.trim() !== "";
@@ -56,7 +66,11 @@ export const parseSiteConfig = (
   if (typeof googleAnalyticsId !== "string") {
     throw new Error(`config.json: "googleAnalyticsId" must be a string`);
   }
-  if (typeof language !== "string" || !LANGUAGE_TAG.test(language)) {
+  if (
+    typeof language !== "string" ||
+    !LANGUAGE_TAG.test(language) ||
+    !isLocale(language)
+  ) {
     throw new Error(
       `config.json: "language" must be a language tag such as "en" or "ko-KR", got ${JSON.stringify(language)}`,
     );
