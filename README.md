@@ -60,7 +60,7 @@ git commit -am "Configure Repozine"
 git push origin repozine   # deploys the site
 ```
 
-To also rebuild when posts or comments change, add this workflow to your default branch as `.github/workflows/deploy.yml`, with `OWNER/REPO` replaced by your repository. Issue and discussion events only run workflows from the default branch. This one runs the deploy workflow from your `repozine` branch, so updating Repozine updates it too.
+To also rebuild when posts or comments change, add this workflow to your default branch as `.github/workflows/deploy.yml`, with `OWNER/REPO` replaced by your repository. Issue and discussion events only run workflows from the default branch. This one runs the deploy workflow from your `repozine` branch, so updating Repozine updates it too. That workflow still checks out the code to build from `REPOZINE_REF` (step 3); without it, it would build the default branch, which has no site in it.
 
 <!-- prettier-ignore -->
 ```yaml
