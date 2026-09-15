@@ -1,0 +1,42 @@
+---
+// a plain script rather than a React island: it is on every page, and nothing else on most pages needs React
+---
+
+<button
+  type="button"
+  aria-label="Dark theme"
+  aria-pressed="false"
+  data-theme-toggle
+  class="grid size-9 shrink-0 place-items-center rounded-md border border-rule hover:bg-surface"
+>
+  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+    <circle
+      cx="12"
+      cy="12"
+      r="8.5"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+    ></circle>
+    <path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"></path>
+  </svg>
+</button>
+
+<script>
+  const root = document.documentElement;
+  const button = document.querySelector("[data-theme-toggle]")!;
+  // the class was set by the inline script in Base.astro before the page painted
+  button.setAttribute("aria-pressed", String(root.classList.contains("dark")));
+
+  button.addEventListener("click", () => {
+    const next = !root.classList.contains("dark");
+    // update the class and state first, so a storage write failure below can't leave aria-pressed out of sync with the class
+    root.classList.toggle("dark", next);
+    button.setAttribute("aria-pressed", String(next));
+    try {
+      localStorage.theme = next ? "dark" : "light";
+    } catch {
+      // storage may be blocked; the toggle still works for this session
+    }
+  });
+</script>

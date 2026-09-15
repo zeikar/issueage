@@ -1,5 +1,5 @@
 ---
-import ThemeToggle from "./ThemeToggle";
+import ThemeToggle from "./ThemeToggle.astro";
 import { siteConfig } from "../lib/config";
 import { withBase } from "../lib/links";
 ---
@@ -29,6 +29,6 @@ import { withBase } from "../lib/links";
         class="w-full rounded-md border border-transparent bg-surface px-3 py-1.5 text-sm placeholder:text-muted focus:border-fg focus:outline-none"
       />
     </form>
-    <ThemeToggle client:load />
+    <ThemeToggle />
   </nav>
 </header>

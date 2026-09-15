@@ -108,12 +108,12 @@ const image = shareableImage(data.thumbnail);
           </a>
         </dd>
       </dl>
-      {/* below lg the contents would push the post itself off the first screen; at lg the sidebar is capped at the
-      screen's height and a long table of contents scrolls inside it */}
+      {/* below lg the contents would push the post itself off the first screen, so they stay hidden and unhydrated there;
+      at lg the sidebar is capped at the screen's height and a long table of contents scrolls inside it */}
       {data.toc.length > 0 && (
         <div class="mt-5 hidden min-h-0 flex-col lg:flex">
           <p class="mb-2 text-muted">Contents</p>
-          <Toc items={data.toc} client:idle />
+          <Toc items={data.toc} client:media="(min-width: 64rem)" />
         </div>
       )}
     </aside>
