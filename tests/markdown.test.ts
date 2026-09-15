@@ -168,6 +168,14 @@ describe("renderMarkdown links and ids", () => {
     expect(external.getAttribute("href")).toBe("https://a.example/#body");
   });
 
+  it("keeps in-page links already written with the prefix, as GitHub resolves them", async () => {
+    const doc = await render("[jump](#user-content-body)\n\n## Body");
+
+    expect(doc.querySelector("a")!.getAttribute("href")).toBe(
+      "#user-content-body",
+    );
+  });
+
   it("links footnote references and back-references to existing ids", async () => {
     const { html, toc, excerpt } = await renderMarkdown(
       "Text[^1]\n\n[^1]: Note",
@@ -248,6 +256,7 @@ describe("renderMarkdown excerpt and thumbnail", () => {
       'see\n\n<a href="https://e.com/a">\nhttps://e.com/a\n</a>\n\nhere',
     ],
     ["a heading nested in a blockquote", "> # Title\n\nsee here"],
+    ["a code block", "see\n\n```python\nclass Solution: pass\n```\n\nhere"],
   ])("leaves out %s", async (_, markdown) => {
     expect((await renderMarkdown(markdown)).excerpt).toBe("see here");
   });

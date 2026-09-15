@@ -75,7 +75,8 @@ const rehypeYoutubeOnly: Plugin<[], Root> = () => (tree) => {
   });
 };
 
-// sanitize prefixes every id with its default clobberPrefix but leaves hrefs alone, so in-page links need the same prefix to resolve
+// sanitize prefixes every id with its default clobberPrefix but leaves hrefs alone, so in-page links need the same prefix to resolve;
+// a link copied from GitHub's rendered page already carries it
 const rehypePrefixFragmentLinks: Plugin<[], Root> = () => (tree) => {
   visit(tree, "element", (node) => {
     const { href } = node.properties;
@@ -83,7 +84,8 @@ const rehypePrefixFragmentLinks: Plugin<[], Root> = () => (tree) => {
       node.tagName === "a" &&
       typeof href === "string" &&
       href.startsWith("#") &&
-      href.length > 1
+      href.length > 1 &&
+      !href.startsWith("#user-content-")
     ) {
       node.properties.href = "#user-content-" + href.slice(1);
     }
@@ -95,11 +97,12 @@ const HEADING_TAG = /^h[1-6]$/;
 const ADDRESS_TEXT = /^(?:[a-z][a-z\d+.-]*:\/\/|www\.)\S+$/i;
 
 // the text of a node, like hast-util-to-string, minus what doesn't read as prose in a one-line preview:
-// headings are the post's outline (the toc already shows them), and a bare address is noise
+// headings are the post's outline (the toc already shows them), and a code block or a bare address is noise
 const excerptText = (node: Nodes): string => {
   if (
     node.type === "element" &&
     (HEADING_TAG.test(node.tagName) ||
+      node.tagName === "pre" ||
       (node.tagName === "a" && ADDRESS_TEXT.test(toString(node).trim())))
   ) {
     return "";
