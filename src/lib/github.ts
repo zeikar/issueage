@@ -3,6 +3,45 @@ declare const process: { env: Record<string, string | undefined> };
 
 const GITHUB_GRAPHQL_URL = "https://api.github.com/graphql";
 
+// a GitHub 5xx or a dropped connection is usually momentary, and a failed build on an issue or discussion event leaves
+// the site stale until the next event, so such a request is tried once more; a 4xx (a bad token, a rate limit) would fail again
+const RETRY_DELAY_MS = 5000;
+
+type Reply = { status: number; text: string };
+
+// one attempt reads the whole body: fetch resolves once the headers arrive, and the connection can still drop after that
+const post = async (token: string, body: string): Promise<Reply> => {
+  const response = await fetch(GITHUB_GRAPHQL_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      // without it repository and category ids come back in the deprecated legacy format
+      "X-Github-Next-Global-ID": "1",
+    },
+    body,
+  });
+  return { status: response.status, text: await response.text() };
+};
+
+const postWithRetry = async (token: string, body: string): Promise<Reply> => {
+  let failure: string;
+  try {
+    const reply = await post(token, body);
+    if (reply.status < 500) {
+      return reply;
+    }
+    failure = `status ${reply.status}`;
+  } catch (error) {
+    failure = String(error);
+  }
+  console.warn(
+    `GitHub GraphQL request failed with ${failure}; retrying in ${RETRY_DELAY_MS / 1000}s`,
+  );
+  await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
+  return post(token, body);
+};
+
 export const githubGraphql = async <T>(
   query: string,
   variables: Record<string, unknown>,
@@ -14,23 +53,15 @@ export const githubGraphql = async <T>(
     );
   }
 
-  const response = await fetch(GITHUB_GRAPHQL_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-      // without it repository and category ids come back in the deprecated legacy format
-      "X-Github-Next-Global-ID": "1",
-    },
-    body: JSON.stringify({ query, variables }),
-  });
-  if (response.status !== 200) {
-    throw new Error(
-      `GitHub GraphQL request failed with ${response.status}: ${await response.text()}`,
-    );
+  const { status, text } = await postWithRetry(
+    token,
+    JSON.stringify({ query, variables }),
+  );
+  if (status !== 200) {
+    throw new Error(`GitHub GraphQL request failed with ${status}: ${text}`);
   }
 
-  const { data, errors } = (await response.json()) as {
+  const { data, errors } = JSON.parse(text) as {
     data: T;
     errors?: { type?: string; message: string }[];
   };

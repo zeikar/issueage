@@ -57,8 +57,20 @@ beforeEach(() => {
 afterEach(() => {
   vi.unstubAllEnvs();
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+  vi.useRealTimers();
   fetchMock.mockReset();
 });
+
+// runs a request whose retry waits on a timer, and returns its settled outcome
+const settle = async <T>(request: Promise<T>) => {
+  const outcome = request.then(
+    (value) => ({ value }),
+    (error: Error) => ({ error }),
+  );
+  await vi.runAllTimersAsync();
+  return outcome;
+};
 
 describe("githubGraphql", () => {
   it("names GITHUB_TOKEN when it is not set", async () => {
@@ -81,12 +93,73 @@ describe("githubGraphql", () => {
   });
 
   it("includes the status of a non-200 response", async () => {
-    fetchMock.mockResolvedValue(new Response("Bad Gateway", { status: 502 }));
+    fetchMock.mockResolvedValue(new Response("Unauthorized", { status: 401 }));
 
     await expect(githubGraphql("{ viewer { login } }", {})).rejects.toThrow(
-      /502/,
+      /401/,
     );
   });
+
+  it.each([
+    ["a server error", () => new Response("Bad Gateway", { status: 502 })],
+    [
+      "a dropped connection",
+      () => Promise.reject(new TypeError("fetch failed")),
+    ],
+    [
+      // fetch resolves once the headers arrive, so the body can still fail
+      "a connection dropped while the body streams in",
+      () =>
+        new Response(
+          new ReadableStream({
+            start: (controller) =>
+              controller.error(new TypeError("terminated")),
+          }),
+        ),
+    ],
+  ])("tries once more after %s, following a pause", async (_, failure) => {
+    vi.useFakeTimers();
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    fetchMock
+      .mockImplementationOnce(async () => failure())
+      .mockResolvedValueOnce(json({ data: { viewer: { login: "zeikar" } } }));
+
+    const request = githubGraphql("{ viewer { login } }", {});
+    await vi.advanceTimersByTimeAsync(4999);
+    expect(fetchMock).toHaveBeenCalledOnce();
+    const { value } = (await settle(request)) as { value: unknown };
+
+    expect(value).toEqual({ viewer: { login: "zeikar" } });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(console.warn).toHaveBeenCalledOnce();
+  });
+
+  it("reports the second failure when the retry fails too", async () => {
+    vi.useFakeTimers();
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    fetchMock
+      .mockResolvedValueOnce(new Response("Bad Gateway", { status: 502 }))
+      .mockResolvedValueOnce(new Response("Unavailable", { status: 503 }));
+
+    const { error } = (await settle(
+      githubGraphql("{ viewer { login } }", {}),
+    )) as { error: Error };
+
+    expect(error.message).toMatch(/503/);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it.each([401, 403, 429])(
+    "does not retry a %i, which would fail again",
+    async (status) => {
+      fetchMock.mockResolvedValue(new Response("", { status }));
+
+      await expect(githubGraphql("{ viewer { login } }", {})).rejects.toThrow(
+        String(status),
+      );
+      expect(fetchMock).toHaveBeenCalledOnce();
+    },
+  );
 
   it("includes the type and message of each GraphQL error", async () => {
     fetchMock.mockResolvedValue(
