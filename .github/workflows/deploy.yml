@@ -16,6 +16,9 @@ on:
   discussion_comment:
     types: [created, deleted]
   workflow_dispatch:
+  # issue and discussion events only run workflows from the default branch, so a repo that keeps Repozine on its
+  # repozine branch calls this file there from a short workflow on its default branch (see the README)
+  workflow_call:
 
 concurrency:
   group: pages

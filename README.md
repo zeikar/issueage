@@ -60,7 +60,58 @@ git commit -am "Configure Repozine"
 git push origin repozine   # deploys the site
 ```
 
-To also rebuild when posts or comments change, copy `.github/workflows/deploy.yml` unchanged to your default branch: issue and discussion events only run workflows from there, and `REPOZINE_REF` makes that copy build the `repozine` branch.
+To also rebuild when posts or comments change, add this workflow to your default branch as `.github/workflows/deploy.yml`, with `OWNER/REPO` replaced by your repository. Issue and discussion events only run workflows from the default branch. This one runs the deploy workflow from your `repozine` branch, so updating Repozine updates it too.
+
+<!-- prettier-ignore -->
+```yaml
+name: Deploy to GitHub Pages
+
+on:
+  issues:
+    types: [opened, edited, deleted, closed, reopened, labeled, unlabeled, transferred]
+  issue_comment:
+    types: [created, deleted]
+  discussion:
+    types: [created, edited, deleted, transferred, category_changed, labeled, unlabeled]
+  discussion_comment:
+    types: [created, deleted]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    uses: OWNER/REPO/.github/workflows/deploy.yml@repozine
+    permissions:
+      contents: read
+      issues: read
+      discussions: read
+      pages: write
+      id-token: write
+```
+
+## Updating Repozine
+
+Merge the latest Repozine into the branch your site builds from, keeping your own `config.json`:
+
+```bash
+git remote add repozine https://github.com/zeikar/repozine   # skip if already added
+git switch repozine   # main in a repository made from the template
+git fetch repozine
+git merge --no-commit repozine/main
+git checkout HEAD -- config.json
+git commit -m "Update Repozine"
+git push origin HEAD
+```
+
+A repository made from the template shares no history with Repozine until its first update. For that one, in place of the merge line, run these two, which replace your files with Repozine's. Commit or stash your changes first: unlike a merge, they overwrite uncommitted work without asking.
+
+```bash
+git merge --no-commit --allow-unrelated-histories -s ours repozine/main
+git read-tree -u --reset repozine/main
+```
+
+Before committing, `git status` shows what they delete: files Repozine no longer has, and any you added yourself, which `git checkout HEAD -- <file>` keeps.
+
+If a build then stops on a `config.json` key, add it; see [Configuration](#configuration).
 
 ## Switch from issues to discussions
 
