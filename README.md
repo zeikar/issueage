@@ -62,6 +62,10 @@ git push origin repozine   # deploys the site
 
 To also rebuild when posts or comments change, copy `.github/workflows/deploy.yml` unchanged to your default branch: issue and discussion events only run workflows from there, and `REPOZINE_REF` makes that copy build the `repozine` branch.
 
+## Switch from issues to discussions
+
+GitHub has no API or bulk action for this, so convert each post with **Convert to discussion** on its issue page, into the category you publish. The discussion keeps the title, body, author, labels and date but gets a new number, so the post's URL changes; the issue is left closed and locked. Then set `source` to `"discussions"` and `discussionCategory` in `config.json`.
+
 ## Configuration
 
 | Key                  | Description                                                                                                                                                       |
