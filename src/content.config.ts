@@ -15,16 +15,24 @@ import type { TocItem } from "./lib/toc";
 
 const { repoOwner, repoName, source } = siteConfig;
 
-const fetchPostNodes = async () => {
-  if (source === "issues") {
-    return fetchIssues(repoOwner, repoName);
-  }
-  const { category } = await fetchDiscussionCategory(
+// both collections need the category in discussions mode, and Astro starts their loaders together, so they share one
+// request; it is dropped once settled, so a dev server's later content sync sees a renamed or deleted category
+let categoryRequest: ReturnType<typeof fetchDiscussionCategory> | undefined;
+const discussionCategory = () =>
+  (categoryRequest ??= fetchDiscussionCategory(
     repoOwner,
     repoName,
     // parseSiteConfig requires a category in discussions mode
     siteConfig.discussionCategory!,
-  );
+  ).finally(() => {
+    categoryRequest = undefined;
+  }));
+
+const fetchPostNodes = async () => {
+  if (source === "issues") {
+    return fetchIssues(repoOwner, repoName);
+  }
+  const { category } = await discussionCategory();
   return fetchDiscussions(repoOwner, repoName, category.id);
 };
 
@@ -102,13 +110,7 @@ const site = defineCollection({
     const [profile, description, discussion] = await Promise.all([
       fetchProfile(repoOwner),
       fetchRepositoryDescription(repoOwner, repoName),
-      source === "discussions"
-        ? fetchDiscussionCategory(
-            repoOwner,
-            repoName,
-            siteConfig.discussionCategory!,
-          )
-        : null,
+      source === "discussions" ? discussionCategory() : null,
     ]);
     return [
       {

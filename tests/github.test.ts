@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  fetchDiscussionCategory,
+  fetchDiscussions,
   fetchIssues,
   fetchRepositoryDescription,
   githubGraphql,
@@ -211,6 +213,64 @@ describe("fetchIssues", () => {
     fetchMock.mockResolvedValue(issuesPage([node(1)], null, "Zeikar/RepoZine"));
 
     await expect(fetchIssues("zeikar", "repozine")).resolves.toHaveLength(1);
+  });
+});
+
+describe("fetchDiscussionCategory", () => {
+  const categories = (nodes: { id: string; name: string; slug: string }[]) =>
+    json({
+      data: { repository: { id: "R_1", discussionCategories: { nodes } } },
+    });
+
+  it("finds the category by its slug", async () => {
+    fetchMock.mockResolvedValue(
+      categories([
+        { id: "DIC_1", name: "General", slug: "general" },
+        { id: "DIC_2", name: "Posts", slug: "posts" },
+      ]),
+    );
+
+    await expect(
+      fetchDiscussionCategory("zeikar", "repozine", "posts"),
+    ).resolves.toEqual({
+      repoId: "R_1",
+      category: { id: "DIC_2", name: "Posts", slug: "posts" },
+    });
+  });
+
+  it("lists the available slugs when the configured one is missing", async () => {
+    fetchMock.mockResolvedValue(
+      categories([{ id: "DIC_1", name: "General", slug: "general" }]),
+    );
+
+    await expect(
+      fetchDiscussionCategory("zeikar", "repozine", "Posts"),
+    ).rejects.toThrow(/"Posts".*available slugs: general/);
+  });
+
+  it("says so when the repository has no categories", async () => {
+    fetchMock.mockResolvedValue(categories([]));
+
+    await expect(
+      fetchDiscussionCategory("zeikar", "repozine", "posts"),
+    ).rejects.toThrow(/available slugs: none/);
+  });
+});
+
+describe("fetchDiscussions", () => {
+  it("lists the category's discussions across pages", async () => {
+    fetchMock
+      .mockResolvedValueOnce(issuesPage([node(1)], "cursor-1"))
+      .mockResolvedValueOnce(issuesPage([node(2)], null));
+
+    const nodes = await fetchDiscussions("zeikar", "repozine", "DIC_2");
+
+    expect(nodes.map(({ number }) => number)).toEqual([1, 2]);
+    expect(variablesOf(0)).toMatchObject({ categoryId: "DIC_2", cursor: null });
+    expect(variablesOf(1)).toMatchObject({
+      categoryId: "DIC_2",
+      cursor: "cursor-1",
+    });
   });
 });
 
